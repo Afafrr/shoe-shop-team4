@@ -51,5 +51,12 @@ export default function SignupForm() {
     console.log(data);
   }
 
-  return <Form inputs={inputs} submitFn={signUp} schema={signUpSchema} />;
+  return (
+    <Form
+      inputs={inputs}
+      submitFn={signUp}
+      schema={signUpSchema}
+      buttonText="Sign up"
+    />
+  );
 }
