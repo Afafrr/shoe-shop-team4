@@ -1,21 +1,21 @@
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
-import ErrorText from "../ErrorPages/ErrorText";
-import ErrorButtons from "../ErrorPages/ErrorButtons";
+import ErrorText from "@/components/ErrorPages/ErrorText";
+import ErrorButtons from "@/components/ErrorPages/ErrorButtons";
 
-interface DesktopNotFoundProps {
+type DesktopErrorProps = {
   title: string;
   message: string;
   onGoBack: () => void;
   onHome: () => void;
 }
 
-export default function DesktopNotFound({
+export default function DesktopError({
   title,
   message,
   onGoBack,
   onHome,
-}: DesktopNotFoundProps) {
+}: DesktopErrorProps) {
   return (
     <Box sx={{ display: { xs: "none", md: "block" }, flex: 1 }}>
       <Grid container sx={{ height: "100vh" }}>

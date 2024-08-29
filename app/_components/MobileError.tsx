@@ -1,21 +1,21 @@
 import { Box } from "@mui/material";
 import Image from "next/image";
-import ErrorText from "../ErrorPages/ErrorText";
-import ErrorButtons from "../ErrorPages/ErrorButtons";
+import ErrorText from "@/components/ErrorPages/ErrorText";
+import ErrorButtons from "@/components/ErrorPages/ErrorButtons";
 
-interface MobileNotFoundProps {
+type MobileErrorProps = {
   title: string;
   message: string;
   onGoBack: () => void;
   onHome: () => void;
 }
 
-export default function MobileNotFound({
+export default function MobileError({
   title,
   message,
   onGoBack,
   onHome,
-}: MobileNotFoundProps) {
+}: MobileErrorProps) {
   return (
     <Box
       sx={{

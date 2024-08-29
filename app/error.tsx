@@ -1,20 +1,20 @@
 "use client";
 import { Box } from "@mui/material";
-import DesktopError500 from "../../components/ErrorPages/DesktopError500";
-import MobileError500 from "../../components/ErrorPages/MobileError500";
+import DesktopError from "./_components/DesktopError";
+import MobileError from "./_components/MobileError";
 import { useRouter } from "next/navigation";
 
-interface Error500Props {
+type ErrorProps = {
   title?: string;
   message?: string;
 }
 
-export default function Error500({
-  title = "We lost that page",
-  message = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.",
-}: Error500Props) {
+export default function ErrorFound({
+  title = "Error",
+  message = "Something went wrong",
+}: ErrorProps) {
+  
   const router = useRouter();
-
   const handleGoBack = () => {
     router.back();
   };
@@ -22,6 +22,7 @@ export default function Error500({
   const handleHome = () => {
     router.push("/");
   };
+
   return (
     <Box
       sx={{
@@ -29,17 +30,20 @@ export default function Error500({
         flexDirection: "column",
         minHeight: "100vh",
         width: "100%",
-        position: "relative",
-        overflow: "hidden",
       }}
     >
-      <DesktopError500
+      <DesktopError
         title={title}
         message={message}
         onGoBack={handleGoBack}
         onHome={handleHome}
       />
-      <MobileError500 title={title} message={message} onHome={handleHome} />
+      <MobileError
+        title={title}
+        message={message}
+        onGoBack={handleGoBack}
+        onHome={handleHome}
+      />
     </Box>
   );
 }
