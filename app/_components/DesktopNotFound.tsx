@@ -1,22 +1,23 @@
 "use client";
 
 import { Box, Grid } from "@mui/material";
-import ErrorText from "../../components/ErrorPages/ErrorText";
-import ErrorButtons from "../../components/ErrorPages/ErrorButtons";
+import ErrorText from "@/components/ErrorPages/ErrorText";
+import ErrorButtons from "@/components/ErrorPages/ErrorButtons";
 
 
-type DesktopError500Props = {
+type DesktopNotFoundProps = {
   title: string;
   message: string;
   onGoBack: () => void;
   onHome: () => void;
 };
-export default function DesktopError500({
+
+export default function DesktopNotFound({
   title,
   message,
   onGoBack,
   onHome,
-}: DesktopError500Props) {
+}: DesktopNotFoundProps) {
   return (
     <Box
       sx={{

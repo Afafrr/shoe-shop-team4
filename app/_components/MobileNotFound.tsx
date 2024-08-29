@@ -3,17 +3,17 @@
 import { Box, Typography, Button } from "@mui/material";
 
 
-interface MobileError500Props {
+type MobileNotFoundProps = {
   title: string;
   message: string;
   onHome: () => void;
 }
 
-export default function MobileError500({
+export default function MobileNotFound({
   title,
   message,
   onHome,
-}: MobileError500Props) {
+}: MobileNotFoundProps) {
 
 
   return (
@@ -47,7 +47,7 @@ export default function MobileError500({
           }}
         >
           {title}
-        </Typography>{" "}
+        </Typography>
       </Box>
       <Box
         sx={{
