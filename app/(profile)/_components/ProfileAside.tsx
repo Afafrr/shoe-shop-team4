@@ -1,4 +1,4 @@
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 
 export default function ProfileAside() {
@@ -36,14 +36,8 @@ export default function ProfileAside() {
           </Typography>
         </Box>
       </Box>
-      <hr
-        style={{
-          height: "1px",
-          width: "100%",
-          margin: "32px 0px 32px 0px",
-          border: "none",
-          backgroundColor: "#EAECF0",
-        }}
+      <Divider
+        sx={{ height: "1px", m: "32px 0px 32px 0px", color: "#EAECF0" }}
       />
       <AsideNavbar
         parentsSX={{ ml: "40px", mt: "30px" }}
