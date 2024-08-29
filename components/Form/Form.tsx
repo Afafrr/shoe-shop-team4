@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Stack, Typography } from "@mui/material";
+import { ReactNode } from "react";
+
+import { Button, Stack, Container, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
   FormContainer,
@@ -12,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 
 import Input from "@components/Input/Input";
-import { FormState } from "@/app/sign-up/actions";
+import { FormState } from "@/types/types";
 import WarningIcon from "./WarningIcon";
 
 export interface FormInput {
@@ -24,10 +26,14 @@ export default function Form({
   inputs,
   submitFn,
   schema,
+  buttonText,
+  children,
 }: {
   inputs: FormInput[];
   submitFn: (data: FormData) => Promise<FormState>;
   schema: z.ZodSchema<FieldValues>;
+  buttonText: string;
+  children?: ReactNode;
 }) {
   const defaultValues = inputs.reduce(
     (acc: { [key: string]: string }, input) => {
@@ -69,54 +75,56 @@ export default function Form({
   });
 
   return (
-    <FormContainer
-      formContext={formContext}
-      handleSubmit={handleSubmit((data) => mutate(data))}
-    >
-      <Stack spacing={"24px"}>
-        {error || data ? (
-          <Typography
-            color={"red"}
+    <Container sx={{ padding: { xs: "0", md: "0" }, width: { md: "80%" } }}>
+      <FormContainer
+        formContext={formContext}
+        handleSubmit={handleSubmit((data) => mutate(data))}
+      >
+        <Stack spacing={{ xs: "24px", md: "15px" }}>
+          {error || data ? (
+            <Typography
+              color={"red"}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                fontSize: "16px",
+                fontWeight: 400,
+              }}
+            >
+              <WarningIcon /> {error?.message || data?.error?.message}
+            </Typography>
+          ) : null}
+
+          {inputs.map((input) => (
+            <Input
+              key={input.label}
+              label={input.label}
+              props={input.props}
+              disabled={isPending}
+            />
+          ))}
+          {children}
+          <Button
+            type="submit"
+            disabled={isPending}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              fontSize: "16px",
-              fontWeight: 400,
+              py: "25px",
+              borderRadius: "5.58px",
+              backgroundColor: "#FE645E",
+              color: "white",
+              height: "34px",
+              fontWeight: 500,
+              textTransform: "none",
+            }}
+            style={{
+              marginTop: "54.55px",
             }}
           >
-            <WarningIcon /> {error?.message || data?.error?.message}
-          </Typography>
-        ) : null}
-
-        {inputs.map((input) => (
-          <Input
-            key={input.label}
-            label={input.label}
-            props={input.props}
-            disabled={isPending}
-          />
-        ))}
-
-        <Button
-          type="submit"
-          disabled={isPending}
-          sx={{
-            py: "25px",
-            borderRadius: "5.58px",
-            backgroundColor: "#FE645E",
-            color: "white",
-            height: "34px",
-            fontWeight: 500,
-            textTransform: "none",
-          }}
-          style={{
-            marginTop: "54.55px",
-          }}
-        >
-          Sign up
-        </Button>
-      </Stack>
-    </FormContainer>
+            {buttonText}
+          </Button>
+        </Stack>
+      </FormContainer>
+    </Container>
   );
 }

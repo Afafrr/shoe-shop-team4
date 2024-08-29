@@ -2,7 +2,7 @@
 
 import Form, { FormInput } from "@/components/Form/Form";
 import { signUpSchema } from "@/schemas/signUpSchema";
-import { signUp } from "../../actions";
+import { signUp } from "../actions";
 
 export default function SignupForm() {
   const inputs: FormInput[] = [
@@ -46,5 +46,12 @@ export default function SignupForm() {
     },
   ];
 
-  return <Form inputs={inputs} submitFn={signUp} schema={signUpSchema} />;
+  return (
+    <Form
+      inputs={inputs}
+      submitFn={signUp}
+      schema={signUpSchema}
+      buttonText="Sign up"
+    />
+  );
 }

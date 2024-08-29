@@ -1,13 +1,7 @@
 "use server";
 
 import { signUpSchema } from "@/schemas/signUpSchema";
-
-export type FormState = {
-  data: Object;
-  error?: {
-    message: string;
-  };
-};
+import { FormState } from "@/types/types";
 
 export async function signUp(data: FormData): Promise<FormState> {
   try {

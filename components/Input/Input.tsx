@@ -64,7 +64,7 @@ export default function Input({
         }}
         inputProps={{
           style: {
-            height: "15px",
+            height: "8px",
             border: "0.7px solid #221f1f",
             borderRadius: "5.58px",
           },
