@@ -3,7 +3,7 @@ import { Typography, Box } from "@mui/material";
 import ProfileAside from "../_components/ProfileAside";
 import AvatarBox from "./_components/AvatarBox";
 
-const Page = () => {
+export default function Page() {
   return (
     <Box sx={{ display: "flex", width: 1 }}>
       <ProfileAside />
@@ -30,6 +30,4 @@ const Page = () => {
       </Box>
     </Box>
   );
-};
-
-export default Page;
+}

@@ -1,4 +1,5 @@
 import { Stack, Typography, Link, SxProps } from "@mui/material";
+import { useTheme } from "@mui/material";
 //icons imports
 import { LogoutIcon } from "@/public/svg/LogoutIcon";
 import { ProductsBagIcon } from "@/public/svg/ProductsBagIcon";
@@ -13,9 +14,9 @@ export const AsideNavbar = ({
   parentsSX: SxProps;
   activeBtnPath?: routes;
 }) => {
-  //colors will be overwritten
-  const activeBtnColor = "orange";
-  const defaultColor = "black";
+  const { palette } = useTheme();
+  const activeBtnColor = palette.primary.main;
+  const defaultColor = "#000000";
   const asideButtons = [
     {
       label: "My Products",

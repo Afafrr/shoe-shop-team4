@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 
-const ProfileAside = () => {
+export default function ProfileAside() {
   return (
     <Box
       sx={{
@@ -51,6 +51,4 @@ const ProfileAside = () => {
       />
     </Box>
   );
-};
-
-export default ProfileAside;
+}

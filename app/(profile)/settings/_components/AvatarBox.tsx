@@ -1,7 +1,7 @@
 import { Avatar, Box, Button } from "@mui/material";
 import React from "react";
 
-const AvatarBox = () => {
+export default function AvatarBox() {
   return (
     <Box sx={{ display: "flex", mt: { xs: "12px", md: "35px" } }}>
       <Avatar
@@ -10,7 +10,7 @@ const AvatarBox = () => {
           width: { xs: "100px", md: "150px" },
           height: { xs: "100px", md: "150px" },
           padding: "15px",
-          border: "4px solid",
+          border: "4px solid #fff",
         }}
       />
       <Box
@@ -22,11 +22,9 @@ const AvatarBox = () => {
           gap: { xs: "16px", md: "24px" },
         }}
       >
-        <Button sx={{ backgroundColor: "lightgrey" }}>Change Photo</Button>
-        <Button sx={{ backgroundColor: "lightgrey" }}>Delete</Button>
+        <Button variant="outlined">Change Photo</Button>
+        <Button variant="contained">Delete</Button>
       </Box>
     </Box>
   );
-};
-
-export default AvatarBox;
+}
