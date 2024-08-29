@@ -1,18 +1,18 @@
 "use client";
 import { Box } from "@mui/material";
-import DesktopNotFound from "./_components/DesktopNotFound";
-import MobileNotFound from "./_components/MobileNotFound";
+import DesktopError500 from "../../components/ErrorPages/DesktopError500";
+import MobileError500 from "../../components/ErrorPages/MobileError500";
 import { useRouter } from "next/navigation";
 
-type NotFoundProps = {
+interface Error500Props {
   title?: string;
   message?: string;
 }
 
-export default function NotFound({
+export default function Error500({
   title = "We lost that page",
-  message = "Sorry, but the page you’re looking for is not here anymore.",
-}: NotFoundProps) {
+  message = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.",
+}: Error500Props) {
   const router = useRouter();
 
   const handleGoBack = () => {
@@ -33,13 +33,13 @@ export default function NotFound({
         overflow: "hidden",
       }}
     >
-      <DesktopNotFound
+      <DesktopError500
         title={title}
         message={message}
         onGoBack={handleGoBack}
         onHome={handleHome}
       />
-      <MobileNotFound title={title} message={message} onHome={handleHome} />
+      <MobileError500 title={title} message={message} onHome={handleHome} />
     </Box>
   );
 }
