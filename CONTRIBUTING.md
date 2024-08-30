@@ -122,18 +122,24 @@ Please follow these steps when submitting a pull request:
 
 3. **Make Your Changes**: Implement your feature or fix the bug in your newly created branch. Make sure to test your changes locally before proceeding to the next steps.
 
-4. **Commit Your Changes**: Write clear and concise commit messages that describe your changes.
+4. **Run a Build**: Before pushing your code to the repository, run a build of the application to ensure that everything is working fine and there are no build errors. This step helps catch any issues early and maintain the stability of the codebase.
 
-5. **Push to Your Fork**: Push your changes to the repo:
+   ```bash
+   npm run build
+   ```
+
+5. **Commit Your Changes**: Write clear and concise commit messages that describe your changes.
+
+6. **Push to Your Fork**: Push your changes to the repo:
 
    ```bash
    git push origin your-branch-name
    ```
 
-6. **Create a Pull Request**: Navigate to the original repository on GitHub and create a pull request from your fork to the `develop` branch. Make sure to add a descriptive title and include any relevant information or context in the description of the pull request. If necessary, mention specific changes or areas that require attention. Also, add reviewers who can help review your changes.
+7. **Create a Pull Request**: Navigate to the original repository on GitHub and create a pull request from your fork to the `develop` branch. Make sure to add a descriptive title and include any relevant information or context in the description of the pull request. If necessary, mention specific changes or areas that require attention. Also, add reviewers who can help review your changes.
 
-7. **Review Process**: A minimum of two project maintainers must review and approve your pull request before it is merged. Maintain communication with the reviewers if further clarifications or changes are needed.
+8. **Review Process**: A minimum of two project maintainers must review and approve your pull request before it is merged. Maintain communication with the reviewers if further clarifications or changes are needed.
 
-8. **Respond to Feedback**: Be prepared to make changes based on the feedback received during the review process. Update your branch with the requested changes and push the updates. The pull request will be updated automatically with your changes. Continue the cycle of feedback and updates until your pull request is approved.
+9. **Respond to Feedback**: Be prepared to make changes based on the feedback received during the review process. Update your branch with the requested changes and push the updates. The pull request will be updated automatically with your changes. Continue the cycle of feedback and updates until your pull request is approved.
 
-9. **Merge the Pull Request**: Once the pull request has received the necessary approvals, a project maintainer will merge it into the `develop` branch.
+10. **Merge the Pull Request**: Once the pull request has received the necessary approvals, a project maintainer will merge it into the `develop` branch.
