@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
-
-import "./globals.css";
-import { Providers } from "./providers";
+import theme from "@/theme";
+import { ThemeProvider } from "@mui/material/styles";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -22,7 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={workSans.className}>
-        <Providers>{children}</Providers>
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
