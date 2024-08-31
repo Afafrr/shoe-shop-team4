@@ -1,8 +1,13 @@
 import AuthPage from "@/components/AuthPage/AuthPage";
 import AuthFooter from "@/components/AuthPage/AuthFooter";
 import SigninForm from "./_components/SigninForm";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export default function SignIn() {
+export default async function SignIn() {
+  const session = await getServerSession(authOptions);
+  if (session) redirect("/");
   const footer = () => (
     <AuthFooter
       text="Don’t have an account?"

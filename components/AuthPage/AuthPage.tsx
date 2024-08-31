@@ -16,6 +16,14 @@ type imageProps = {
       layout: string;
     }
 );
+type AuthPageProps = {
+  header: string;
+  subheader: string;
+  image: imageProps;
+  Footer?: React.ComponentType;
+  CardModal?: React.ComponentType;
+  children?: ReactNode;
+};
 
 export default function AuthPage({
   header,
@@ -24,14 +32,7 @@ export default function AuthPage({
   Footer,
   CardModal,
   children,
-}: {
-  header: string;
-  subheader: string;
-  image: imageProps;
-  Footer?: React.ComponentType;
-  CardModal?: React.ComponentType;
-  children?: ReactNode;
-}) {
+}: AuthPageProps) {
   return (
     <Container
       sx={{

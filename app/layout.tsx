@@ -4,6 +4,7 @@ import theme from "@/theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import CssBaseline from "@mui/material/CssBaseline";
+import { Providers } from "./providers";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            {children}
+            <Providers>{children}</Providers>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

@@ -16,7 +16,7 @@ export async function signIn(
 ): Promise<ActionResponse> {
   // Recieve data from form
   const formData = Object.fromEntries(data);
-
+  console.log("context: ", context);
   // Backend form structure validation. Check if recieved form data follows signIn schema
   // Booleans have been converted to strings by this point. So it's necessary to change the original Login schema
   const extendedSignInSchema = signInSchema.extend({
@@ -66,7 +66,8 @@ export async function signIn(
 
   // Check if user was redirected to Login page from other page.
   // If so, redirect to the latter. If not, redirect to home
-  const callBack = "callBack" in context ? (context.callBack as string) : "/";
+  const callBack =
+    "callbackUrl" in context ? (context.callbackUrl as string) : "/";
 
   return { user: emptyUser, redirect: callBack };
 }

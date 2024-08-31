@@ -1,15 +1,13 @@
 import { Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
-export default function AuthFooter({
-  text,
-  anchor,
-  href,
-}: {
+type FooterProps = {
   text?: string;
   anchor: string;
   href: string;
-}) {
+};
+
+export default function AuthFooter({ text, anchor, href }: FooterProps) {
   return (
     <Stack mt={"16px"} sx={{ alignSelf: "center" }}>
       <Link

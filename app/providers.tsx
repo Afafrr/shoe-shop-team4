@@ -42,12 +42,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryStreamedHydration>
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <SessionAuthProvider>{children}</SessionAuthProvider>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <SessionAuthProvider>{children}</SessionAuthProvider>
       </ReactQueryStreamedHydration>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
