@@ -14,13 +14,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 
 import Input from "@components/Input/Input";
-import { FormState } from "@/types/types";
+import { ActionResponse } from "@/types/types";
 import WarningIcon from "./WarningIcon";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export interface FormInput {
   label: string;
   props: TextFieldElementProps;
 }
+
+type FormProps = {
+  inputs: FormInput[];
+  submitFn: (data: FormData, context: {}) => Promise<ActionResponse>;
+  schema: z.ZodSchema<FieldValues>;
+  buttonText: string;
+  children?: ReactNode;
+};
 
 export default function Form({
   inputs,
@@ -28,13 +38,11 @@ export default function Form({
   schema,
   buttonText,
   children,
-}: {
-  inputs: FormInput[];
-  submitFn: (data: FormData) => Promise<FormState>;
-  schema: z.ZodSchema<FieldValues>;
-  buttonText: string;
-  children?: ReactNode;
-}) {
+}: FormProps) {
+  const searchParams = useSearchParams();
+  const context = Object.fromEntries(searchParams.entries());
+  const router = useRouter();
+
   const defaultValues = inputs.reduce(
     (acc: { [key: string]: string }, input) => {
       acc[input.props.name] = "";
@@ -47,30 +55,30 @@ export default function Form({
     defaultValues,
     resolver: zodResolver(schema),
   });
-  const { handleSubmit, reset } = formContext;
+  const { handleSubmit } = formContext;
 
-  const { mutate, data, error, isPending } = useMutation<
-    FormState,
+  const { mutate, error, isPending } = useMutation<
+    ActionResponse,
     Error,
     FieldValues
   >({
     mutationKey: ["signUp"],
     mutationFn: async (data: FieldValues) => {
       const formData = new FormData();
-
+      console.log("recieved data: ", data);
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
+      const result = await submitFn(formData, context);
 
-      const result = await submitFn(formData);
+      if ("error" in result) throw new Error(result.error.message);
       return result;
     },
-    onSuccess: ({ data }) => {
-      console.log(data);
-      // reset();
+    onSuccess: (response: ActionResponse) => {
+      if ("redirect" in response) router.push(response.redirect);
     },
     onError: (error) => {
-      console.log(error);
+      console.log("Error in mutation: ", error);
     },
   });
 
@@ -81,7 +89,7 @@ export default function Form({
         handleSubmit={handleSubmit((data) => mutate(data))}
       >
         <Stack spacing={{ xs: "24px", md: "15px" }}>
-          {error || data ? (
+          {error && (
             <Typography
               color={"red"}
               sx={{
@@ -92,9 +100,9 @@ export default function Form({
                 fontWeight: 400,
               }}
             >
-              <WarningIcon /> {error?.message || data?.error?.message}
+              <WarningIcon /> {error.message}
             </Typography>
-          ) : null}
+          )}
 
           {inputs.map((input) => (
             <Input

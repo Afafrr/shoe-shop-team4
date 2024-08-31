@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import { CheckboxElement } from "react-hook-form-mui";
 import Form, { FormInput } from "@/components/Form/Form";
 import { signInSchema } from "@/schemas/signInSchema";
+import { signIn } from "../actions";
 import Link from "next/link";
 
 export default function SigninForm() {
@@ -30,10 +31,6 @@ export default function SigninForm() {
     },
   ];
 
-  function signIn(data: any) {
-    console.log(data);
-  }
-
   return (
     <Form
       inputs={inputs}
@@ -49,7 +46,7 @@ export default function SigninForm() {
         }}
       >
         <CheckboxElement name="rememberMe" label="Remember me" />
-        <Link href={"../forgot-password"} style={{ color: "red" }}>
+        <Link href={"../auth/forgot-password"} style={{ color: "red" }}>
           Forgot password?
         </Link>
       </Box>

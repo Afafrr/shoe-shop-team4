@@ -7,7 +7,7 @@ export default function SignIn() {
     <AuthFooter
       text="Don’t have an account?"
       anchor="Sign up"
-      href="../sign-up"
+      href="../auth/sign-up"
     />
   );
   const SignInProps = {

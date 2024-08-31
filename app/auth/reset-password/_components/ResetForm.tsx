@@ -2,6 +2,7 @@
 
 import Form, { FormInput } from "@/components/Form/Form";
 import { resetSchema } from "@/schemas/resetSchema";
+import { recoverFn } from "../actions";
 
 export default function ResetForm() {
   const inputs: FormInput[] = [
@@ -27,14 +28,10 @@ export default function ResetForm() {
     },
   ];
 
-  function resetFn(data: any) {
-    console.log(data);
-  }
-
   return (
     <Form
       inputs={inputs}
-      submitFn={resetFn}
+      submitFn={recoverFn}
       schema={resetSchema}
       buttonText="Reset password"
     />

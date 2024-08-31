@@ -3,7 +3,9 @@ import AuthFooter from "@/components/AuthPage/AuthFooter";
 import RecoverForm from "./_components/RecoverForm";
 
 export default function recover() {
-  const footer = () => <AuthFooter anchor="Back to Log in" href="../sign-in" />;
+  const footer = () => (
+    <AuthFooter anchor="Back to Log in" href="../auth/sign-in" />
+  );
   const recoverProps = {
     image: {
       src: "/auth/shoes-password-auth.png",

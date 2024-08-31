@@ -2,6 +2,7 @@
 
 import Form, { FormInput } from "@/components/Form/Form";
 import { recoverSchema } from "@/schemas/recoverSchema";
+import { recoverFn } from "../actions";
 
 export default function RecoverForm() {
   const inputs: FormInput[] = [
@@ -16,10 +17,6 @@ export default function RecoverForm() {
       },
     },
   ];
-
-  function recoverFn(data: any) {
-    console.log(data);
-  }
 
   return (
     <Form

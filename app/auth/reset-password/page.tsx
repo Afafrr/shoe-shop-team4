@@ -3,7 +3,9 @@ import AuthFooter from "@/components/AuthPage/AuthFooter";
 import ResetForm from "./_components/ResetForm";
 
 export default function resetPassword() {
-  const footer = () => <AuthFooter anchor="Back to Log in" href="../sign-in" />;
+  const footer = () => (
+    <AuthFooter anchor="Back to Log in" href="../auth/sign-in" />
+  );
   const resetProps = {
     image: {
       src: "/auth/shoes-password-auth.png",

@@ -2,13 +2,18 @@ import AuthPage from "@/components/AuthPage/AuthPage";
 import AuthFooter from "@/components/AuthPage/AuthFooter";
 import SignupCard from "./_components/SignupCard";
 import SignupForm from "./_components/SignupForm";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export default function SignUp() {
+export default async function SignUp() {
+  const session = await getServerSession(authOptions);
+  if (session) redirect("/");
   const footer = () => (
     <AuthFooter
       text="Already have an account?"
       anchor="Log in"
-      href="../sign-in"
+      href="../auth/sign-in"
     />
   );
   const SignupProps = {

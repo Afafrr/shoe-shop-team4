@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export const recoverSchema: z.ZodSchema<{
-  email: string;
-}> = z.object({
+export const recoverSchema = z.object({
   email: z
     .string()
     .trim()
