@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Box, Container, Divider, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
+import { Suspense } from "react";
+import LoadingPage from "../Loading/LoadingPage";
 
 type imageProps = {
   src: string;
@@ -88,7 +90,7 @@ export default function AuthPage({
 
             <Typography fontWeight={300}>{subheader}</Typography>
           </Stack>
-          {children}
+          <Suspense fallback={<LoadingPage />}>{children}</Suspense>
         </Stack>
         {Footer ? <Footer /> : ""}
       </Container>

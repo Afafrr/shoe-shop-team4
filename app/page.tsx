@@ -7,11 +7,16 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import LoadingPage from "@/components/Loading/LoadingPage";
 
 export default function Home() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [age, setAge] = React.useState("");
+
+  if (status === "loading") {
+    return <LoadingPage />;
+  }
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);

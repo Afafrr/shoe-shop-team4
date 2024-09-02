@@ -28,5 +28,5 @@ export const resetSchema: z.ZodSchema<{
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["repeatPassword"],
+    path: ["confirmPassword"],
   });

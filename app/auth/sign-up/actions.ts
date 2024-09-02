@@ -1,12 +1,12 @@
 "use server";
 
 import { signUpSchema } from "@/schemas/signUpSchema";
-import { BackResponse } from "@/types/types";
+import { BackResponse, ContextType } from "@/types/types";
 import { ActionResponse } from "@/types/types";
 
 export async function signUp(
   data: FormData,
-  context: {}
+  context: ContextType
 ): Promise<ActionResponse> {
   // Recieve data from form
   const formData = Object.fromEntries(data);

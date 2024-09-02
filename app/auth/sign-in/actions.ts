@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { signInSchema } from "@/schemas/signInSchema";
-import { ActionResponse } from "@/types/types";
+import { ActionResponse, ContextType } from "@/types/types";
 import { signIn as Authorize } from "next-auth/react";
 
 type AuthorizeResponse = {
@@ -12,11 +12,10 @@ type AuthorizeResponse = {
 
 export async function signIn(
   data: FormData,
-  context: {}
+  context: ContextType
 ): Promise<ActionResponse> {
   // Recieve data from form
   const formData = Object.fromEntries(data);
-  console.log("context: ", context);
   // Backend form structure validation. Check if recieved form data follows signIn schema
   // Booleans have been converted to strings by this point. So it's necessary to change the original Login schema
   const extendedSignInSchema = signInSchema.extend({
@@ -59,7 +58,7 @@ export async function signIn(
   But Login function does not return userData when succesfull, so an empty default must created.
   */
   const emptyUser = {
-    id: "",
+    id: 0,
     username: "",
     email: "",
   };
@@ -67,7 +66,9 @@ export async function signIn(
   // Check if user was redirected to Login page from other page.
   // If so, redirect to the latter. If not, redirect to home
   const callBack =
-    "callbackUrl" in context ? (context.callbackUrl as string) : "/";
+    "callbackUrl" in context.searchParams
+      ? (context.searchParams.callbackUrl as string)
+      : "/";
 
   return { user: emptyUser, redirect: callBack };
 }

@@ -1,8 +1,13 @@
 import AuthPage from "@/components/AuthPage/AuthPage";
 import AuthFooter from "@/components/AuthPage/AuthFooter";
 import RecoverForm from "./_components/RecoverForm";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/auth";
+import { redirect } from "next/navigation";
 
-export default function recover() {
+export default async function recover() {
+  const session = await getServerSession(authOptions);
+  if (session) redirect("/");
   const footer = () => (
     <AuthFooter anchor="Back to Log in" href="../auth/sign-in" />
   );

@@ -14,10 +14,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 
 import Input from "@components/Input/Input";
-import { ActionResponse } from "@/types/types";
+import { ActionResponse, ContextType } from "@/types/types";
 import WarningIcon from "./WarningIcon";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export interface FormInput {
   label: string;
@@ -26,7 +27,7 @@ export interface FormInput {
 
 type FormProps = {
   inputs: FormInput[];
-  submitFn: (data: FormData, context: {}) => Promise<ActionResponse>;
+  submitFn: (data: FormData, context: ContextType) => Promise<ActionResponse>;
   schema: z.ZodSchema<FieldValues>;
   buttonText: string;
   children?: ReactNode;
@@ -40,7 +41,11 @@ export default function Form({
   children,
 }: FormProps) {
   const searchParams = useSearchParams();
-  const context = Object.fromEntries(searchParams.entries());
+  const { data: session } = useSession();
+  const context = {
+    searchParams: Object.fromEntries(searchParams.entries()),
+    session,
+  };
   const router = useRouter();
 
   const defaultValues = inputs.reduce(
@@ -65,7 +70,6 @@ export default function Form({
     mutationKey: ["signUp"],
     mutationFn: async (data: FieldValues) => {
       const formData = new FormData();
-      console.log("recieved data: ", data);
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value as string);
       });

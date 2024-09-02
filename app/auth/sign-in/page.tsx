@@ -3,10 +3,11 @@ import AuthFooter from "@/components/AuthPage/AuthFooter";
 import SigninForm from "./_components/SigninForm";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/auth";
 
 export default async function SignIn() {
   const session = await getServerSession(authOptions);
+  console.log("SESIONNN: ", session);
   if (session) redirect("/");
   const footer = () => (
     <AuthFooter

@@ -1,12 +1,10 @@
-"use server";
-
 import { recoverSchema } from "@/schemas/recoverSchema";
-import { BackResponse } from "@/types/types";
+import { BackResponse, ContextType } from "@/types/types";
 import { ActionResponse } from "@/types/types";
 
 export async function recoverFn(
   data: FormData,
-  context: {}
+  context: ContextType
 ): Promise<ActionResponse> {
   // Recieve data from form
   const formData = Object.fromEntries(data);
