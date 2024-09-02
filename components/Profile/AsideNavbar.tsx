@@ -5,7 +5,7 @@ import { LogoutIcon } from "@/public/svg/LogoutIcon";
 import { ProductsBagIcon } from "@/public/svg/ProductsBagIcon";
 import { SettingsIcon } from "@/public/svg/SettingsIcon";
 
-type routes = "my-products" | "settings";
+export type routes = "my-products" | "settings";
 
 export const AsideNavbar = ({
   parentsSX,
