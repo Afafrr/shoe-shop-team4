@@ -7,7 +7,6 @@ import { authOptions } from "@/utils/auth";
 
 export default async function SignIn() {
   const session = await getServerSession(authOptions);
-  console.log("SESIONNN: ", session);
   if (session) redirect("/");
   const footer = () => (
     <AuthFooter

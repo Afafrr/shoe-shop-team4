@@ -12,7 +12,6 @@ export async function recoverFn(
 
   // Backend form structure validation. Check if recieved form data follows recover schema
   const parsed = resetSchema.safeParse(formData);
-  console.log("Parsed: ", parsed);
   if (!parsed.success) {
     return {
       data: {},
@@ -43,7 +42,6 @@ export async function recoverFn(
     }
   );
   const result: BackResponse = await response.json();
-  console.log("RESULT!! => ", result);
 
   if ("error" in result) {
     return result;

@@ -21,6 +21,7 @@
       "@/*": ["./*"],
       "@components/*": ["./components/*"],
       "@schemas/*": ["./schemas/*"],
+      "@public/*": ["./public/*"],
       "@types/*": ["./types/*"]
     }
   },

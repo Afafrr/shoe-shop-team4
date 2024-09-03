@@ -26,7 +26,6 @@ export const authOptions: AuthOptions = {
           }
         );
         let data: BackResponse = await response.json();
-        console.log("user: ", data);
         if ("error" in data) throw new Error(data.error.message);
         data = data as SuccessResponse;
         return {
