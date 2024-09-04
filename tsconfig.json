@@ -19,9 +19,9 @@
     ],
     "paths": {
       "@/*": ["./*"],
+      "@public/*": ["./public/*"],
       "@components/*": ["./components/*"],
       "@schemas/*": ["./schemas/*"],
-      "@public/*": ["./public/*"],
       "@types/*": ["./types/*"]
     }
   },
