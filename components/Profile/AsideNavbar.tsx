@@ -2,8 +2,8 @@ import { Stack, Typography, Link, SxProps } from "@mui/material";
 import { useTheme } from "@mui/material";
 //icons imports
 import { LogoutIcon } from "@/public/svg/LogoutIcon";
-import { ProductsBagIcon } from "@/public/svg/ProductsBagIcon";
 import { SettingsIcon } from "@/public/svg/SettingsIcon";
+import CartIcon from "@/app/(with-navbar)/_components/CartIcon";
 
 type routes = "my-products" | "settings";
 
@@ -20,7 +20,7 @@ export const AsideNavbar = ({
   const asideButtons = [
     {
       label: "My Products",
-      Icon: ProductsBagIcon,
+      Icon: CartIcon,
       href: "my-products",
     },
     {

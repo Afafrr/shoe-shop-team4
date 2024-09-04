@@ -20,6 +20,12 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const LOCAL_STORAGE_KEY = "cart";
 
+/**
+ * A React context provider for managing cart items.
+ *
+ * @param {React.ReactNode} children - The child components to be wrapped by the CartProvider.
+ * @return {JSX.Element} The CartContext.Provider component with the cart items and related functions.
+ */
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -32,11 +38,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
+  /**
+   * Calculates the total number of items in the cart.
+   *
+   * @return {number} The total number of items in the cart.
+   */
   const getCartItemCount = (): number => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  const addItem = (item: CartItem) => {
+  /**
+   * Adds an item to the cart, updating the quantity if the item already exists.
+   *
+   * @param {CartItem} item - The item to add to the cart.
+   * @return {void}
+   */
+  const addItem = (item: CartItem): void => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.id === item.id);
 
@@ -50,17 +67,35 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  const updateItemQuantity = (id: number, quantity: number) => {
+  /**
+   * Updates the quantity of an item in the cart.
+   *
+   * @param {number} id - The ID of the item to update.
+   * @param {number} quantity - The new quantity of the item.
+   * @return {void}
+   */
+  const updateItemQuantity = (id: number, quantity: number): void => {
     setCartItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
-  const removeItem = (id: number) => {
+  /**
+   * Removes an item from the cart based on the provided ID.
+   *
+   * @param {number} id - The ID of the item to be removed.
+   * @return {void}
+   */
+  const removeItem = (id: number): void => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const clearCart = () => {
+  /**
+   * Clears the cart by setting the cart items to an empty array.
+   *
+   * @return {void} This function does not return anything.
+   */
+  const clearCart = (): void => {
     setCartItems([]);
   };
 
@@ -80,7 +115,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useCart = () => {
+/**
+ * Retrieves the cart context.
+ *
+ * @return {CartContextType} The cart context.
+ */
+export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
 
   if (!context) {

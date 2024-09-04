@@ -9,7 +9,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
-import { SessionAuthProvider } from "@/context/SessionAuthProvider";
+import { SessionAuthProvider } from "@/contexts/SessionAuthProvider";
+import { CartProvider } from "@/contexts/Cart";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -38,7 +39,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryStreamedHydration>
-        <SessionAuthProvider>{children}</SessionAuthProvider>
+        <SessionAuthProvider>
+          <CartProvider>{children}</CartProvider>
+        </SessionAuthProvider>
       </ReactQueryStreamedHydration>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
