@@ -8,14 +8,13 @@ export default function BackgroundImage() {
   let breakPointMd = theme.breakpoints.values.md;
   let breakPointSm = theme.breakpoints.values.sm;
   const isDesktop = useMediaQuery(theme.breakpoints.up(breakPointMd));
-  const isSmall = useMediaQuery(theme.breakpoints.up(breakPointSm));
   //background image changes to smaller on small breakpoint
   return (
     <Box
       sx={{
+        position: "relative",
         width: "100%",
         height: { xs: "132px", md: "262px" },
-        overflow: "hidden",
       }}
     >
       <Image
@@ -23,12 +22,8 @@ export default function BackgroundImage() {
         quality={100}
         src={background}
         alt="User abstract background image"
-        style={{
-          height: "100%",
-          width: `${
-            isDesktop ? "100%" : `${isSmall ? breakPointMd : breakPointSm}px`
-          }`,
-        }}
+        fill
+        style={{ objectFit: `${isDesktop ? "fill" : "cover"}` }}
       />
     </Box>
   );

@@ -34,7 +34,7 @@ export default function NoProductsInfo({
         fontSize={{ xs: "16px", md: "20px" }}
         fontWeight={500}
       >
-        You don't have any products yet
+        You don&apos;t have any products yet
       </Typography>
       <Typography
         textAlign="center"
