@@ -7,17 +7,7 @@ import LoadingPage from "../Loading/LoadingPage";
 type imageProps = {
   src: string;
   alt: string;
-} & (
-  | {
-      size: {
-        width: number;
-        height: number;
-      };
-    }
-  | {
-      layout: string;
-    }
-);
+};
 type AuthPageProps = {
   header: string;
   subheader: string;
@@ -102,7 +92,7 @@ export default function AuthPage({
           margin: 0,
         }}
       >
-        <Image {...image}></Image>
+        <Image {...image} priority sizes="50vw" fill></Image>
         {CardModal ? <CardModal /> : ""}
       </Container>
     </Container>

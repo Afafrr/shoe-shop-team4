@@ -10,7 +10,6 @@ export default async function resetPassword() {
     image: {
       src: "/auth/shoes-password-auth.png",
       alt: "shoe image",
-      layout: "fill",
     },
     header: "Reset Password",
     subheader: "Please create new password here",

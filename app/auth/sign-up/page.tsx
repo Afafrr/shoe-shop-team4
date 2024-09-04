@@ -21,7 +21,6 @@ export default async function SignUp() {
     image: {
       src: "/auth/shoes-register.png",
       alt: "shoe-image-register",
-      layout: "fill",
     },
     header: "Create an account",
     subheader: "Create an account to get an easy access to your dream shopping",

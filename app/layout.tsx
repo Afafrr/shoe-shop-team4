@@ -10,6 +10,7 @@ const workSans = Work_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
 });
+console.log("classname: ", workSans.className);
 
 export const metadata: Metadata = {
   title: "Create Next App",

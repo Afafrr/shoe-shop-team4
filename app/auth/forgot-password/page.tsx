@@ -15,7 +15,6 @@ export default async function recover() {
     image: {
       src: "/auth/shoes-password-auth.png",
       alt: "shoe image",
-      layout: "fill",
     },
     header: "Forgot Password?",
     subheader: "Don’t worry, we’ll send you reset instructions.",

@@ -19,7 +19,6 @@ export default async function SignIn() {
     image: {
       src: "/auth/shoes-log-in.png",
       alt: "shoe-image-register",
-      layout: "fill",
     },
     header: "Welcome back!",
     subheader:
