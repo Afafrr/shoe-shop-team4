@@ -5,8 +5,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import LoadingPage from "@/components/Loading/LoadingPage";
+
 export default function Home() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [age, setAge] = React.useState("");
+
+  if (status === "loading") {
+    return <LoadingPage />;
+  }
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
@@ -28,6 +38,11 @@ export default function Home() {
             <MenuItem value={30}>Thirty</MenuItem>
           </Select>
         </FormControl>
+        {session ? (
+          <button onClick={() => signOut()}>Sign Out</button>
+        ) : (
+          <button onClick={() => router.push("/auth/sign-in")}>Sign In</button>
+        )}
       </Box>
     </main>
   );
