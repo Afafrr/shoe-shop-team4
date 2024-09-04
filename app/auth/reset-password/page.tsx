@@ -1,8 +1,6 @@
 import AuthPage from "@/components/AuthPage/AuthPage";
 import AuthFooter from "@/components/AuthPage/AuthFooter";
 import ResetForm from "./_components/ResetForm";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/auth";
 
 export default async function resetPassword() {
   const footer = () => (

@@ -6,10 +6,10 @@ export async function recoverFn(
   data: FormData,
   context: ContextType
 ): Promise<ActionResponse> {
-  // Recieve data from form
+  // receive data from form
   const formData = Object.fromEntries(data);
 
-  // Backend form structure validation. Check if recieved form data follows forgot-password schema.
+  // Backend form structure validation. Check if received form data follows forgot-password schema.
   const parsed = recoverSchema.safeParse(formData);
   if (!parsed.success) {
     return {

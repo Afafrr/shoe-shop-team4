@@ -14,9 +14,9 @@ export async function signIn(
   data: FormData,
   context: ContextType
 ): Promise<ActionResponse> {
-  // Recieve data from form
+  // receive data from form
   const formData = Object.fromEntries(data);
-  // Backend form structure validation. Check if recieved form data follows signIn schema
+  // Backend form structure validation. Check if received form data follows signIn schema
   // Booleans have been converted to strings by this point. So it's necessary to change the original Login schema
   const extendedSignInSchema = signInSchema.extend({
     rememberMe: z.enum(["true", "undefined"]),
@@ -31,9 +31,9 @@ export async function signIn(
     };
   }
 
-  // Call the signIn function. If successfull, it creates a user session. If not, it returns an object with an error property.
-  // NOTE: This behaviour is independent on what we do here, it is handled by next-auth in the function itself. For example,
-  //    If the function was succesfull but we would throw an error in this file after the function call, it will still create a session.
+  // Call the signIn function. If successful, it creates a user session. If not, it returns an object with an error property.
+  // NOTE: This behavior is independent on what we do here, it is handled by next-auth in the function itself. For example,
+  //    If the function was successful but we would throw an error in this file after the function call, it will still create a session.
   //    Same for the opposite case.
   const { email, password } = parsed.data;
   const response: AuthorizeResponse | undefined = await Authorize(
@@ -55,7 +55,7 @@ export async function signIn(
     }, 
       redirect: string
     }
-  But Login function does not return userData when succesfull, so an empty default must created.
+  But Login function does not return userData when successful, so an empty default must created.
   */
   const emptyUser = {
     id: 0,

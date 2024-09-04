@@ -8,9 +8,9 @@ export async function signUp(
   data: FormData,
   context: ContextType
 ): Promise<ActionResponse> {
-  // Recieve data from form
+  // receive data from form
   const formData = Object.fromEntries(data);
-  // Backend form structure validation. Check if recieved form data follows signUp schema
+  // Backend form structure validation. Check if received form data follows signUp schema
   const parsed = signUpSchema.safeParse(formData);
   if (!parsed.success) {
     return {

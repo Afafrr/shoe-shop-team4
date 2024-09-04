@@ -7,10 +7,10 @@ export async function recoverFn(
   data: FormData,
   context: ContextType
 ): Promise<ActionResponse> {
-  // Recieve data from form
+  // receive data from form
   const formData = Object.fromEntries(data);
 
-  // Backend form structure validation. Check if recieved form data follows recover schema
+  // Backend form structure validation. Check if received form data follows recover schema
   const parsed = resetSchema.safeParse(formData);
   if (!parsed.success) {
     return {
@@ -21,7 +21,7 @@ export async function recoverFn(
     };
   }
 
-  // Reset password proccess requires a code for security purposes. That code is passed by the backend in the url.
+  // Reset password process requires a code for security purposes. That code is passed by the backend in the url.
   const code =
     "code" in context.searchParams ? (context.searchParams.code as string) : "";
 

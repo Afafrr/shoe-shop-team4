@@ -25,8 +25,8 @@ const defaultMessages = [
   },
   {
     message: LOREM[2],
-    user: "Jhon Doe",
-    location: "Brazil, Brazilia",
+    user: "John Doe",
+    location: "Brazil, Brasilia",
     rating: 5,
   },
 ];
