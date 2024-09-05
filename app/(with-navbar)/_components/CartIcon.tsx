@@ -28,7 +28,7 @@ export default function CartIcon({ count }: { count?: number }) {
             fill="#494949"
           />
           <text x="7.5" y="16" fontSize="8" fill="#494949">
-            {count}
+            {count > 99 ? "99+" : count}
           </text>
         </svg>
       ) : (
