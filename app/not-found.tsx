@@ -1,7 +1,6 @@
 "use client";
 import { Box } from "@mui/material";
-import DesktopNotFound from "./_components/DesktopNotFound";
-import MobileNotFound from "./_components/MobileNotFound";
+import NotFoundComponent from "@/app/_components/NotFoundComponent";
 import { useRouter } from "next/navigation";
 
 type NotFoundProps = {
@@ -10,7 +9,7 @@ type NotFoundProps = {
 }
 
 export default function NotFound({
-  title = "We lost that page",
+  title = "We lost that page...",
   message = "Sorry, but the page you’re looking for is not here anymore.",
 }: NotFoundProps) {
   const router = useRouter();
@@ -33,13 +32,12 @@ export default function NotFound({
         overflow: "hidden",
       }}
     >
-      <DesktopNotFound
+      <NotFoundComponent
         title={title}
         message={message}
         onGoBack={handleGoBack}
         onHome={handleHome}
       />
-      <MobileNotFound title={title} message={message} onHome={handleHome} />
     </Box>
   );
 }
