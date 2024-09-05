@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+"use client";
+
+>>>>>>> effe1cf (refactor errorpages)
 import { Box, Typography, Button } from "@mui/material";
 import ErrorButtons from "./ErrorButtons";
 

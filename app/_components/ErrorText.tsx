@@ -10,14 +10,20 @@ type ErrorTextProps = {
 export default function ErrorText({ title, message }: ErrorTextProps) {
   return (
     <Box>
-      <Typography
-        variant="h2"
-        gutterBottom
-        sx={{ fontSize: { xs: "30px", md: "45px" }, fontWeight: 500 }}
+      <Box
+        sx={{
+          maxWidth: "538px",
+          mx: { xs: "auto", md: 0 },
+          textAlign: { xs: "center", md: "left" },
+        }}
       >
-        {title}
-      </Typography>
-      <Box sx={{ maxWidth: "538px", mx: "auto" }}>
+        <Typography
+          variant="h2"
+          gutterBottom
+          sx={{ fontSize: { xs: "30px", md: "45px" }, fontWeight: 500 }}
+        >
+          {title}
+        </Typography>
         <Typography
           variant="body1"
           sx={{
