@@ -1,5 +1,5 @@
-"use client";
 import { Typography, Box } from "@mui/material";
+
 import ProfileAside from "../_components/ProfileAside";
 import AvatarBox from "./_components/AvatarBox";
 

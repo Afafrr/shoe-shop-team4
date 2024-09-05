@@ -1,3 +1,5 @@
+"use client";
+
 import { Stack, Typography, Link, SxProps } from "@mui/material";
 import { useTheme } from "@mui/material";
 //icons imports
