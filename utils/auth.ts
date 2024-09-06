@@ -1,6 +1,7 @@
 import { BackResponse, SuccessResponse } from "@/types/types";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -32,6 +33,7 @@ export const authOptions: AuthOptions = {
           id: data.user.id,
           name: data.user.username,
           email: data.user.email,
+          jwt: data.jwt,
         };
       },
     }),
@@ -40,17 +42,19 @@ export const authOptions: AuthOptions = {
     signIn: "/auth/sign-in",
   },
   callbacks: {
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-      }
-      return session;
-    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.jwt = user.jwt;
       }
       return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.jwt = token.jwt as JWT;
+      }
+      return session;
     },
   },
 };
