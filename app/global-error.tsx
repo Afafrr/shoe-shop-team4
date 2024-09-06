@@ -25,7 +25,7 @@ export default function GlobalError({
       <body>
         <ErrorComponent
           title="Error"
-          message={error.message || "Something went wrong"}
+          message="Something went wrong"
           onGoBack={handleGoBack}
           onHome={handleHome}
         />

@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-"use client";
->>>>>>> effe1cf (refactor errorpages)
+
 import { Box } from "@mui/material";
 import Image from "next/image";
 import ErrorText from "@/app/_components/ErrorText";

@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-"use client";
-
->>>>>>> effe1cf (refactor errorpages)
 import { Box, Typography, Button } from "@mui/material";
 import ErrorButtons from "./ErrorButtons";
 
@@ -136,7 +131,10 @@ export default function ErrorPage({
       <Box
         sx={{
           position: "absolute",
-          bottom: "-450px",
+          bottom: {
+            xs: "-470px", 
+            sm: "-510px", 
+          },
           left: 0,
           width: "100%",
           textAlign: "center",
