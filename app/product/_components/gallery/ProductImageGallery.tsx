@@ -51,15 +51,19 @@ export default function ProductImageGallery({
     <Box
       sx={{
         display: "flex",
-        flexDirection: "column", 
-        alignItems: "center", 
-        gap: 2, 
+        flexDirection: "row", 
+        alignItems: "flex-start", 
         width: "100%", 
         // padding: { xs: 2, md: 4 }, 
       }}
     >
-      <MainProductImage image={mainImage} />
       <ThumbnailGallery images={imageList} />
+  <Box
+        sx={{
+          marginLeft: { md: 2 }, 
+        }}
+      ></Box>      
+      <MainProductImage image={mainImage} />
     </Box>
   );
 }

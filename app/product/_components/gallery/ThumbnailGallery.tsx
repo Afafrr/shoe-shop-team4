@@ -15,10 +15,13 @@ export default function ThumbnailGallery({ images }: ThumbnailGalleryProps) {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center", 
+        display: { xs: "none", md: "flex" },
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        gap: 2,
+        height: "auto",
+        paddingTop: 0,
       }}
     >
       {images.map((image, index) => (
@@ -26,10 +29,10 @@ export default function ThumbnailGallery({ images }: ThumbnailGalleryProps) {
           key={index}
           src={image.thumbnailUrl}
           alt={image.alternativeText}
-          width={100}
-          height={100}
+          width={76}
+          height={76}
           style={{
-            borderRadius: 4, 
+
             objectFit: "cover",
           }}
         />

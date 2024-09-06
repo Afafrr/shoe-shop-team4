@@ -18,22 +18,18 @@ export default function MainProductImage({ image }: { image: ImageProps }) {
       sx={{
         display: "flex",
         justifyContent: "center",
-        width: "100%",
         margin: 0,
         padding: 0,
-        maxWidth: { xs: "100%", md: 800 },
+        maxWidth: { xs: "100%", md: 588 },
+        height: { xs: "auto", md: 628 },
         overflow: "hidden",
       }}
     >
       <Image
         src={image.url}
         alt={image.alternativeText || "Product Image"}
-        width={image.width || 800}
-        height={image.height || 600}
-        style={{
-          width: "100%", 
-          height: "auto", 
-        }}
+        width={588}
+        height={628}
       />
     </Box>
   );

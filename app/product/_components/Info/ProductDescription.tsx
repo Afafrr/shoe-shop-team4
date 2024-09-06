@@ -10,9 +10,12 @@ export default function ProductDescription({
   return (
     <Box
       display="flex"
-      flexDirection="row"
+      flexDirection="column"
       sx={{ width: "100%", padding: "0 16px" }}
     >
+      <Typography variant="h6" gutterBottom>
+        Description
+      </Typography>
       <Typography>{description}</Typography>
     </Box>
   );

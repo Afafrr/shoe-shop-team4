@@ -53,23 +53,33 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        alignItems: "center",
-        gap: 2,
-        // padding: { xs: 2, md: 4 },
+        alignItems: { xs: "center", md: "flex-start" },
+        justifyContent: "space-between",
+
+        width: "100%",
+        paddingTop: { md: "100px" },
+        paddingLeft: { md: "300px" },
+        paddingRight: { md: "300px" },
       }}
     >
-      <ProductImageGallery images={images} />
-      <ProductTitle name={name} price={price} />
-      {/* <ProductInfo
-        name={name}
-        price={price}
-        subtitle={subtitle}
-        categories={categories}
-      /> */}
-      <SizeSelector sizes={mappedSizes} />
-      <ActionButtons />
-      <ProductDescription description={description} />
-      {/* <RelatedProducts categories={categories} /> */}
+      <Box sx={{ width: { xs: "100%", md: "50%" } }}>
+        <ProductImageGallery images={images} />
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          width: { xs: "100%", md: "50%" },
+          paddingLeft: { md: 4 }, // Añade espacio entre la imagen y el contenido en escritorio
+        }}
+      >
+        <ProductTitle name={name} price={price} />
+        <SizeSelector sizes={mappedSizes} />
+        <ActionButtons />
+        <ProductDescription description={description} />
+      </Box>
     </Box>
   );
 };
