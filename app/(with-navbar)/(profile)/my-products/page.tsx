@@ -4,7 +4,7 @@ import BackgroundImage from "./_components/BackgroundImage";
 import ProfileAside from "../_components/ProfileAside";
 import AvatarBox from "./_components/AvatarBox";
 import { useState } from "react";
-import NoProductsInfo from "./_components/NoProductsInfo";
+import NoProductsInfo from "../../_components/NoProductsInfo";
 export default function Page() {
   const [products, setProducts] = useState([]);
   const handleAddBtn = () => {
