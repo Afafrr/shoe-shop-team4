@@ -50,6 +50,7 @@ export default function NoProductsInfo({
           width: "152px",
           height: "40px",
           mt: { xs: "32px", md: "42px" },
+          mb: { xs: "30px", md: "60px" },
         }}
         onClick={() => onBtnClick()}
       >
