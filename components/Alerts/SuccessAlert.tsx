@@ -6,9 +6,10 @@ export default function SuccessAlert({ message }: { message: string }) {
 
   useEffect(() => {
     setIsVisible(true);
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setIsVisible(false);
     }, 4000);
+    return () => clearTimeout(timeout);
   }, []);
 
   return isVisible
