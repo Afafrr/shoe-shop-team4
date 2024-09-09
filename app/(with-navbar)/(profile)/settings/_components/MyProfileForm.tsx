@@ -31,8 +31,6 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
         session
       );
       setResponse(res);
-      console.log(res);
-
       if (!res.error) setShow(true);
     },
   });
