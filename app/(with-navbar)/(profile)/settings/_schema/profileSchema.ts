@@ -36,7 +36,6 @@ export const inputs: FormInput[] = [
     label: "Email",
     props: {
       name: "email",
-      value: "asdasds@wp.pl",
       placeholder: "Meldrum",
       type: "text",
       InputProps: {

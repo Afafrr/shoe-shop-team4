@@ -4,14 +4,16 @@ import { useState } from "react";
 import ProfileAside from "../../_components/ProfileAside";
 import AvatarBox from "./AvatarBox";
 import MyProfileForm from "./MyProfileForm";
-import { UserDataRes, UserData } from "../actions";
+import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { UserData } from "@/types/types";
 import { inputs } from "../_schema/profileSchema";
+import WarningIcon from "@/components/Form/WarningIcon";
 
 export type FormObj = Partial<Record<string, string>>;
 export default function PageClient({
   initialData,
 }: {
-  initialData: UserDataRes;
+  initialData: ResData<UserData>;
 }) {
   const reducedData: FormObj = {};
   const inputsName = inputs.map((input) => input.props.name);
@@ -49,7 +51,11 @@ export default function PageClient({
           </Typography>
         </Box>
         <Box sx={{ mt: { xs: "24px", md: "48px" }, maxWidth: "436px" }}>
-          {error ? <Typography>{error}</Typography> : null}
+          {error ? (
+            <Typography color="red">
+              <WarningIcon /> {error}
+            </Typography>
+          ) : null}
           <MyProfileForm formData={formData} />
         </Box>
       </Box>

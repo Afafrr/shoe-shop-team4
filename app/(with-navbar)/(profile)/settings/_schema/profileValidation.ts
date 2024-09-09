@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const profileValidation: z.ZodSchema<{
-  name: string;
-  surname?: string;
-  phone?: string;
+  firstName: string;
+  lastName?: string;
+  phoneNumber?: string;
 }> = z.object({
   firstName: z
     .string()
@@ -14,7 +14,7 @@ export const profileValidation: z.ZodSchema<{
     .regex(/^[a-zA-Z\s]+$/, {
       message: "Name can only contain letters and spaces",
     }),
-    lastName: z
+  lastName: z
     .optional(
       z
         .string()

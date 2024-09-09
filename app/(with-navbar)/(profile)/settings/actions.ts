@@ -1,58 +1,25 @@
 import { FormObj } from "./_components/PageClient";
-export type UserData = {
-  id: number;
-  username: string;
-  email: string;
-  provider: string;
-  confirmed: boolean;
-  blocked: boolean;
-  createdAt: string;
-  updatedAt: string;
-  phoneNumber: string;
-  firstName: string;
-  lastName: string;
-};
-export type UserDataRes = { data: UserData | null; error: string };
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTk0LCJpYXQiOjE3MjQ4NjE0MjMsImV4cCI6MTcyNzQ1MzQyM30.JaEeavlYENGxJmu55pD0ZEoXTl5kJWQROvXiqxD3Mio";
-const id = 594;
-export async function getUserData(): Promise<{
-  data: UserData | null;
-  error: string;
-}> {
-  try {
-    const res = await fetch(
-      `https://shoes-shop-strapi.herokuapp.com/api/users/me`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    if (!res.ok) {
-      console.error(res);
-      return {
-        data: null,
-        error: `There was a problem with getting the data - ${res.statusText} `,
-      };
-    }
-    const data = await res.json();
-    return { data: data, error: "" };
-  } catch (error) {
-    console.error(error);
-    return { data: null, error: "There was a problem" };
-  }
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/auth";
+import { getData } from "../../_actions/getData";
+import { UserData } from "@/types/types";
+import { postData } from "../../_actions/postData";
+
+export async function getUserInfo() {
+  const session = await getServerSession(authOptions);
+  return getData<UserData>("users/me", session?.user.jwt);
 }
-export async function updateUserData(formData: FormObj) {
-  const res = await fetch(
-    `https://shoes-shop-strapi.herokuapp.com/api/users/${id}`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        body: JSON.stringify(formData),
-      },
-    }
+
+export async function updateUserData(formData: FormObj, { data }: any) {
+  //removing undefined values
+  const reducedData = Object.fromEntries(
+    Object.entries(formData).filter(([key, val]) => val !== undefined)
   );
-  if (!res.ok) {
-    console.error(res);
-    throw new Error(`Failed to update - ${res.statusText}`);
-  }
-  return await res.json();
+  const res = await postData({
+    url: `users/${data.user.id}`,
+    method: "PUT",
+    token: data.user.jwt,
+    data: reducedData,
+  });
+  return res;
 }

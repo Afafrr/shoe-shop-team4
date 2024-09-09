@@ -1,20 +1,40 @@
-import { Stack, Button } from "@mui/material";
-import React from "react";
+import { Stack, Button, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { FieldValues, FormContainer, useForm } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/Input/Input";
 import { FormObj } from "./PageClient";
 import { inputs } from "../_schema/profileSchema";
 import { profileValidation } from "../_schema/profileValidation";
-import { updateUserData } from "../actions";
 import { useMutation } from "@tanstack/react-query";
+import { UserData } from "@/types/types";
+import WarningIcon from "@/components/Form/WarningIcon";
+import SuccessAlert from "@/components/Alerts/SuccessAlert";
+import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { updateUserData } from "../actions";
+import { useSession } from "next-auth/react";
 
 export default function MyProfileForm({ formData }: { formData: FormObj }) {
-  //TODO: wait for queryClientProvider on development
+  const [response, setResponse] = useState<ResData<UserData>>();
+  const [show, setShow] = useState(false);
+  const session = useSession();
+
   const { mutate } = useMutation({
     mutationKey: ["userData"],
-    mutationFn: (userData: FormObj) =>
-      updateUserData({ ...formData, ...userData }),
+    mutationFn: async (userData: FormObj) => {
+      setShow(false);
+      const res = await updateUserData(
+        {
+          ...formData,
+          ...userData,
+        },
+        session
+      );
+      setResponse(res);
+      console.log(res);
+
+      if (!res.error) setShow(true);
+    },
   });
 
   const formContext = useForm<FieldValues>({
@@ -32,6 +52,12 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
       formContext={formContext}
       handleSubmit={handleSubmit((data) => mutate(data))}
     >
+      {show ? <SuccessAlert message="Changes saved!" /> : null}
+      {response?.error ? (
+        <Typography color="red">
+          <WarningIcon /> {response?.error}
+        </Typography>
+      ) : null}
       <Stack spacing={"24px"}>
         {inputs.map((input) => (
           <Input key={input.label} label={input.label} props={input.props} />

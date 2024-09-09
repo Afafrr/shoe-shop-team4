@@ -1,8 +1,8 @@
+"use server";
 import PageClient from "./_components/PageClient";
-import { getUserData } from "./actions";
-import { UserDataRes } from "./actions";
+import { getUserInfo } from "./actions";
 
 export default async function Page() {
-  const data: UserDataRes = await getUserData();
+  const data = await getUserInfo();
   return <PageClient initialData={data} />;
 }

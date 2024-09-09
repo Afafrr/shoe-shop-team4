@@ -30,3 +30,17 @@ export type ContextType = {
   searchParams: { [k: string]: string };
   session: Session | null;
 };
+
+export type UserData = {
+  id: number;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+};
