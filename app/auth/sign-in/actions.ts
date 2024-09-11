@@ -1,5 +1,3 @@
-"use server";
-
 import { z } from "zod";
 import { signInSchema } from "@/schemas/signInSchema";
 import { ActionResponse, ContextType } from "@/types/types";
