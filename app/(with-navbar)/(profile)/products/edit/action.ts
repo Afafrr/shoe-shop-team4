@@ -1,0 +1,86 @@
+import { ContextType, ErrorResponse } from "@/types/types";
+//1345
+import {
+  ImageUpload,
+  ProductActionResponse,
+  ProductResponse,
+  SuccessfulImageUpload,
+  SuccessfulProductAdd,
+} from "@/types/productTypes";
+
+export async function editProductAction(
+  formData: FormData,
+  context: ContextType
+): Promise<ProductActionResponse> {
+  const { session } = context;
+  if (!session || !session.user.jwt)
+    return {
+      data: {},
+      error: {
+        message: "Unauthorized",
+      },
+    };
+
+  formData.append("path", "");
+  formData.append("refId", "");
+  formData.append("ref", "");
+  formData.append("field", "");
+
+  // Fetch backend signUp endpoint. If form is valid, it returns the created user. If not, it returns an object with an error property.
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/upload`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${session.user.jwt}`,
+    },
+    body: formData,
+  });
+  let result: ImageUpload = await response.json();
+  console.log("Fetched Data: ", result);
+  if ("error" in result) return result;
+  result = result as SuccessfulImageUpload;
+  const idImages = result.map((image) => image.id);
+
+  const productValues: Record<string, any> = {};
+  formData.forEach((value, key) => {
+    try {
+      productValues[key] = JSON.parse(value as string);
+    } catch {
+      productValues[key] = value;
+    }
+  });
+
+  const { name, price, color, gender, brand, description } = productValues;
+
+  let productResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/products/1345`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.user.jwt}`,
+      },
+      body: JSON.stringify({
+        data: {
+          name,
+          images: idImages,
+          description,
+          brand,
+          categories: [5],
+          color,
+          gender,
+          sizes: [13, 14],
+          price,
+          userID: session.user.id,
+          teamName: "team-4",
+        },
+      }),
+    }
+  );
+  let productResult: ProductResponse = await productResponse.json();
+  console.log("result: ", result);
+
+  if ("error" in result) return productResult as ErrorResponse;
+  productResult = productResult as SuccessfulProductAdd;
+  console.log("FINAL RESPONSE: ", productResult);
+  return { ...productResult, redirect: "/settings" };
+}

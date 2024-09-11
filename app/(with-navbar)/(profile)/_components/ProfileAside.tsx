@@ -1,11 +1,18 @@
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 
-export default function ProfileAside() {
+type ProfileAsideProps = {
+  breakpoint?: string;
+};
+
+export default function ProfileAside({ breakpoint = "md" }: ProfileAsideProps) {
   return (
     <Box
       sx={{
-        display: { xs: "none", md: "flex" },
+        display: {
+          xs: "none",
+          [breakpoint]: "flex",
+        },
         mt: "35px",
         flexDirection: "column",
         width: "320px",
