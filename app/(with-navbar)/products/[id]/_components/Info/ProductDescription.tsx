@@ -11,12 +11,12 @@ export default function ProductDescription({
     <Box
       display="flex"
       flexDirection="column"
-      sx={{ width: "100%", padding: "0 16px" }}
+      sx={{ width: "100%", padding: "0 0 30px 0" }}
     >
       <Typography variant="h6" gutterBottom>
         Description
       </Typography>
-      <Typography>{description}</Typography>
+      <Typography sx={{fontSize:"16px", fontWeight:"300", color:"#494949"}}>{description}</Typography>
     </Box>
   );
 }

@@ -1,0 +1,32 @@
+.image-gallery-thumbnail {
+  width: 76px !important;
+  height: 76px !important;
+  position: relative;
+  overflow: hidden;
+  border: none !important; 
+  transition: none !important;
+  margin-bottom: 8px;
+}
+
+.image-gallery-thumbnail:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.image-gallery-thumbnails-wrapper.image-gallery-thumbnails-left {
+  width: 76px;
+}
+.image-gallery-slide-wrapper.image-gallery-thumbnails-left {
+  width: calc(100% - 88px);
+  float: right;
+}
+
+
+

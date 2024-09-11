@@ -12,11 +12,19 @@ type SizeSelectorProps = {
 
 export default function SizeSelector({ sizes }: SizeSelectorProps) {
   return (
-    <Box sx={{ width: "100%", padding: "0 16px" }}>
+    <Box sx={{ width: "100%", padding: "0" }}>
       <Typography variant="h6" gutterBottom>
         Select Size
       </Typography>
-      <Box display="flex" flexDirection="row" flexWrap="wrap" gap={1}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        flexWrap="wrap"
+        justifyContent="flex-start"
+        sx={{
+          gap: { xs:"15px", md: "15px", lg: "20px", xl: "25px" },
+        }}
+      >
         {sizes.map((size) => (
           <Button
             key={size.id}
@@ -28,11 +36,10 @@ export default function SizeSelector({ sizes }: SizeSelectorProps) {
               backgroundColor: "#FFFFFF",
               textAlign: "center",
               justifyContent: "center",
-              width: "85px",
-              height: "55px",
+              width: { xs: "70px", md: "60px", lg: "75px", xl: "90px" },
+              height: { xs: "40px", md: "35px", lg: "45px", xl: "55px" },
               padding: 0,
-              fontSize: "15px",
-              gap:4,
+              fontSize: { xs: "14px", md: "12px", xl: "15px" },
             }}
           >
             EU - {size.attributes.value}

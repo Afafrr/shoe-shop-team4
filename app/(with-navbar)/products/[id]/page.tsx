@@ -1,17 +1,19 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+//import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Box } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
 
-import useProductDetails from "@/app/hooks/useProductDetails";
-import ProductInfo from "@/app/product/_components/Info/ProductInfo";
-import ProductImageGallery from "@/app/product/_components/gallery/ProductImageGallery";
-import SizeSelector from "@/app/product/_components/actions/SizeSelector";
-import ActionButtons from "@/app/product/_components/actions/ActionButtons";
-import ProductDescription from "@/app/product/_components/Info/ProductDescription";
-import ProductTitle from "../_components/Info/ProductTitle";
-// import RelatedProducts from "@/app/product/_components/RelatedProducts";
+import LoadingPage from "@/components/Loading/LoadingPage";
+import ProductDetails, { PopulateField } from "@/utils/api/singleProduct";
+//import useProductDetails from "@/app/(with-navbar)/products/[id]/hooks/useProductDetails";
+  
+import ProductImageGallery from "@/app/(with-navbar)/products/[id]/_components/gallery/ProductImageGallery";
+import SizeSelector from "@/app/(with-navbar)/products/[id]/_components/actions/SizeSelector";
+import ActionButtons from "@/app/(with-navbar)/products/[id]/_components/actions/ActionButtons";
+import ProductDescription from "@/app/(with-navbar)/products/[id]/_components/Info/ProductDescription";
+import ProductTitle from "./_components/Info/ProductTitle";
+//import { Providers } from "@/app/providers";
 
 type SizeAPIResponse = {
   id: number;
@@ -24,15 +26,26 @@ type SizesAPIResponse = {
   data: SizeAPIResponse[];
 };
 
-const queryClient = new QueryClient();
+//const queryClient = new QueryClient();
 
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const { data, error, isLoading } = useProductDetails(id);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  if (isLoading) return "Loading...";
+  const fieldsToPopulate: PopulateField[] = [
+    "images",
+    "brand",
+    "categories",
+    "sizes",
+    "gender",
+    "color",
+  ];
+
+  const { data, error, isLoading } = ProductDetails(id, fieldsToPopulate);
+  
+  if (isLoading) return <LoadingPage />;
   if (error) return "An error has occurred: " + (error as Error).message;
 
   if (!data) return null;
@@ -54,15 +67,15 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         alignItems: { xs: "center", md: "flex-start" },
-        justifyContent: "space-between",
 
-        width: "100%",
+        width: { xs: "100%", md: "800px", lg: "1000px", xl: "1300px" },
         paddingTop: { md: "100px" },
-        paddingLeft: { md: "300px" },
-        paddingRight: { md: "300px" },
+        margin: { md: "0 auto" },
       }}
     >
-      <Box sx={{ width: { xs: "100%", md: "50%" } }}>
+      <Box
+        sx={{ width: { xs: "100%", md: "50%" } }} //, backgroundColor: "#FFCCA9"
+      >
         <ProductImageGallery images={images} />
       </Box>
 
@@ -72,8 +85,10 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
           flexDirection: "column",
           gap: 2,
           width: { xs: "100%", md: "50%" },
-          paddingLeft: { md: 4 }, // Añade espacio entre la imagen y el contenido en escritorio
-        }}
+          paddingLeft: { xs: "20px", md: "50px", lg: "80px", xl: "100px" },
+          paddingRight: { xs: "20px", md: "0" },
+          paddingTop: { xs: "30px" },
+        }} //backgroundColor: "#cccccc",
       >
         <ProductTitle name={name} price={price} />
         <SizeSelector sizes={mappedSizes} />
@@ -86,8 +101,8 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
 export default function Page({ params }: { params: { id: string } }) {
   return (
-    <QueryClientProvider client={queryClient}>
+
       <ProductPage params={params} />
-    </QueryClientProvider>
+
   );
 }
