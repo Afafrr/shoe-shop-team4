@@ -1,4 +1,5 @@
 import { Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 export type ErrorResponse = {
   data: {};
@@ -8,7 +9,7 @@ export type ErrorResponse = {
 };
 
 export type SuccessResponse = {
-  jwt?: string;
+  jwt?: JWT;
   user: {
     id: number;
     username: string;
@@ -24,12 +25,6 @@ export type ActionSuccess = SuccessResponse & {
 };
 
 export type ActionResponse = ErrorResponse | ActionSuccess;
-
-export type SessionData = {
-  name?: string | null | undefined;
-  email?: string | null | undefined;
-  image?: string | null | undefined;
-};
 
 export type ContextType = {
   searchParams: { [k: string]: string };
