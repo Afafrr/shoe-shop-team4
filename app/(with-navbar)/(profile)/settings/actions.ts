@@ -35,15 +35,17 @@ export async function updateUserData(formData: ReducedData, { data }: any) {
   if (formData.deleteImg) {
     reducedData["avatar"] = undefined;
   }
-  //getting actual imageId assigned to profile
-  const userData = await getData<UserData>(
-    "users/me?populate=avatar",
-    data.user.jwt
-  );
-  const prevAvatarId = userData.data?.avatar?.id;
-  //delete image from DB
-  if (prevAvatarId)
-    deleteImage({ token: data.user.jwt, imageId: prevAvatarId as number });
+  //delete image from DB if image changed or deleted
+  if (formData.deleteImage || formData.avatar) {
+    //getting actual imageId assigned to profile
+    const userData = await getData<UserData>(
+      "users/me?populate=avatar",
+      data.user.jwt
+    );
+    const prevAvatarId = userData.data?.avatar?.id;
+    if (prevAvatarId)
+      deleteImage({ token: data.user.jwt, imageId: prevAvatarId as number });
+  }
   // update users profile
   const res = await postData({
     url: `users/${data.user.id}`,
