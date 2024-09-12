@@ -3,15 +3,17 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { useRef } from "react";
 import { ChangeEvent } from "react";
 import WarningIcon from "@/components/Form/WarningIcon";
-import { FormObj } from "./PageClient";
+import { ReducedData } from "./PageClient";
+import { validateFile } from "../_helpers/validateFile";
+
 export default function AvatarBox({
   formData,
   setFormData,
   image,
   setImage,
 }: {
-  formData: FormObj;
-  setFormData: Dispatch<SetStateAction<FormObj>>;
+  formData: ReducedData;
+  setFormData: Dispatch<SetStateAction<ReducedData>>;
   image: string | undefined;
   setImage: Dispatch<SetStateAction<string | undefined>>;
 }) {
@@ -29,15 +31,15 @@ export default function AvatarBox({
 
     if (file) {
       //file size check
-      if (file?.size > 204800) {
-        setError("Image size should not exceed 200 KB.");
+      const validate = validateFile(file);
+      if (validate) {
+        setError(validate);
         return;
       }
       //display just picked image
       setImage(URL.createObjectURL(file));
-      //pass actual selected image
-      const { deleteImg, ...newFormData } = formData;
 
+      const { deleteImg, ...newFormData } = formData;
       setFormData({
         ...newFormData,
         avatar: file,
@@ -88,7 +90,14 @@ export default function AvatarBox({
         </Box>
       </Box>
       {error ? (
-        <Typography color="red" textAlign="center">
+        <Typography
+          color="red"
+          textAlign="center"
+          sx={{
+            mt: "20px",
+            maxWidth: { xs: "320px", sm: "100%" },
+          }}
+        >
           <WarningIcon /> {error}
         </Typography>
       ) : null}

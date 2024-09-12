@@ -1,4 +1,4 @@
-import { FormObj } from "./_components/PageClient";
+import { ReducedData } from "./_components/PageClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
 import { getData } from "../../../../utils/getData";
@@ -12,17 +12,11 @@ export async function getUserInfo() {
   return getData<UserData>("users/me?populate=avatar", session?.user.jwt);
 }
 
-export function deleteAvatar(id: number, token: JWT) {
-  deleteImage({ token: token, imageId: id });
-}
-
-export async function updateUserData(formData: FormObj, { data }: any) {
+export async function updateUserData(formData: ReducedData, { data }: any) {
   //removing undefined values
   const reducedData = Object.fromEntries(
     Object.entries(formData).filter(([key, val]) => val !== undefined)
   );
-  let prevAvatarId = formData.prevAvatarId;
-
   // if formData has avatar -> image has been changed
   if (formData.avatar) {
     const avatar = reducedData?.avatar;
@@ -31,28 +25,25 @@ export async function updateUserData(formData: FormObj, { data }: any) {
       token: data.user.jwt,
       data: avatar,
     });
-    if (imgRes.error) {
-      return imgRes;
-    } else {
-      //if uploading image is successful get actual user image and delete it
-      if (!prevAvatarId) {
-        const userData = await getData<UserData>(
-          "users/me?populate=avatar",
-          data.user.jwt
-        );
-        prevAvatarId = userData.data?.avatar?.id;
-      }
-      deleteAvatar(prevAvatarId as number, data.user.jwt);
-
+    if (!imgRes.error) {
       reducedData["avatar"] = imgRes?.data[0].id;
+    } else {
+      return imgRes;
     }
   }
-  //if formData has deleteImg:true and -> avatar will be deleted
-  if (formData.deleteImg && prevAvatarId) {
-    deleteAvatar(prevAvatarId as number, data.user.jwt);
+  // if formData has deleteImg:true and -> avatar will be deleted
+  if (formData.deleteImg) {
     reducedData["avatar"] = undefined;
   }
-
+  //getting actual imageId assigned to profile
+  const userData = await getData<UserData>(
+    "users/me?populate=avatar",
+    data.user.jwt
+  );
+  const prevAvatarId = userData.data?.avatar?.id;
+  //delete image from DB
+  if (prevAvatarId)
+    deleteImage({ token: data.user.jwt, imageId: prevAvatarId as number });
   // update users profile
   const res = await postData({
     url: `users/${data.user.id}`,

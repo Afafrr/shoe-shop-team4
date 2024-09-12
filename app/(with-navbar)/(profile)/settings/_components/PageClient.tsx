@@ -12,7 +12,6 @@ import WarningIcon from "@/components/Form/WarningIcon";
 export type ReducedData = Partial<
   Record<string, UserData[keyof UserData] | File>
 >;
-export type FormObj = ReducedData & { prevAvatarId?: number };
 export default function PageClient({
   initialData,
 }: {
@@ -29,10 +28,7 @@ export default function PageClient({
       reducedData[key] = value;
     }
   }
-  const [formData, setFormData] = useState<FormObj>({
-    ...reducedData,
-    prevAvatarId: data?.avatar?.id,
-  });
+  const [formData, setFormData] = useState<ReducedData>(reducedData);
   const [image, setImage] = useState<string | undefined>(
     initialData.data?.avatar?.url
   );
