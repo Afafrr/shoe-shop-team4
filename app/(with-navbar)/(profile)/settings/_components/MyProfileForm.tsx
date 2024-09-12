@@ -68,6 +68,7 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
           height: "40px",
           float: "right",
           mt: { xs: "36px", md: "56px" },
+          mb: "30px",
         }}
       >
         {isPending ? "Loading..." : " Save changes"}
