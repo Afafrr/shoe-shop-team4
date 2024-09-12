@@ -9,7 +9,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
-import { SessionAuthProvider } from "@/context/SessionAuthProvider";
+
+import ContextWrapper from "@/contexts/ContextWrapper";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -38,7 +39,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryStreamedHydration>
-        <SessionAuthProvider>{children}</SessionAuthProvider>
+        <ContextWrapper>{children}</ContextWrapper>
       </ReactQueryStreamedHydration>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
