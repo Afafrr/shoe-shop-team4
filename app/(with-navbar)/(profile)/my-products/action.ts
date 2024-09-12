@@ -1,7 +1,6 @@
-"use server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
-import { getData } from "../../_actions/getData";
+import { getData } from "../../../../utils/getData";
 
 export async function getMyProducts() {
   const session = await getServerSession(authOptions);

@@ -1,4 +1,3 @@
-"use server";
 import { getMyProducts } from "./action";
 import MyProductsClient from "./_components/MyProductsClient";
 

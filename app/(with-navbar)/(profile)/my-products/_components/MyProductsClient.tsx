@@ -7,7 +7,7 @@ import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
-import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { ResData } from "@/utils/getData";
 
 export default function MyProductsClient({ data }: { data: ResData<any> }) {
   const router = useRouter();
@@ -15,6 +15,7 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
   const handleAddBtn = () => {
     router.push("/add-products");
   };
+  console.log(data);
 
   return (
     <Box sx={{ display: "flex", width: 1, flexShrink: 0 }}>
