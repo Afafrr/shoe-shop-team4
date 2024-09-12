@@ -4,28 +4,38 @@ import { useState } from "react";
 import ProfileAside from "../../_components/ProfileAside";
 import AvatarBox from "./AvatarBox";
 import MyProfileForm from "./MyProfileForm";
-import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { ResData } from "@/utils/getData";
 import { UserData } from "@/types/types";
 import { inputs } from "../_schema/profileSchema";
 import WarningIcon from "@/components/Form/WarningIcon";
 
-export type FormObj = Partial<Record<string, string>>;
+export type ReducedData = Partial<
+  Record<string, UserData[keyof UserData] | File>
+>;
+export type FormObj = ReducedData & { prevAvatarId?: number };
 export default function PageClient({
   initialData,
 }: {
   initialData: ResData<UserData>;
 }) {
-  const reducedData: FormObj = {};
+  const reducedData: ReducedData = {};
   const inputsName = inputs.map((input) => input.props.name);
+  //add avatar key to formData
   const { data, error } = initialData;
   //fetched data obj is reduced to keys that are used in inputs array
   if (data) {
     for (const key of inputsName) {
-      const value = data[key as keyof UserData];
-      if (value) reducedData[key] = String(value);
+      const value = data[key as keyof typeof data];
+      reducedData[key] = value;
     }
   }
-  const [formData, setFormData] = useState(reducedData);
+  const [formData, setFormData] = useState<FormObj>({
+    ...reducedData,
+    prevAvatarId: data?.avatar?.id,
+  });
+  const [image, setImage] = useState<string | undefined>(
+    initialData.data?.avatar?.url
+  );
 
   return (
     <Box sx={{ display: "flex", width: 1 }}>
@@ -41,13 +51,13 @@ export default function PageClient({
           <Typography variant="h1" fontSize={30} fontWeight={500}>
             My Profile
           </Typography>
-          <AvatarBox setFormData={setFormData} formData={formData} />
+          <AvatarBox {...{ formData, setFormData }} {...{ image, setImage }} />
           <Typography
             fontSize={{ xs: "12px", md: "15px" }}
             fontWeight={300}
             sx={{ mt: { xs: "12px", md: "49px" } }}
           >
-            Welcome back! Please enter your details to log into your account.
+            Welcome back! Please enter your details into your profile.
           </Typography>
         </Box>
         <Box sx={{ mt: { xs: "24px", md: "48px" }, maxWidth: "436px" }}>

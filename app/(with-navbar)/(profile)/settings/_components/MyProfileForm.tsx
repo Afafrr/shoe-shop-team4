@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { UserData } from "@/types/types";
 import WarningIcon from "@/components/Form/WarningIcon";
 import SuccessAlert from "@/components/Alerts/SuccessAlert";
-import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { ResData } from "@/utils/getData";
 import { updateUserData } from "../actions";
 import { useSession } from "next-auth/react";
 
@@ -19,7 +19,7 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
   const [show, setShow] = useState(false);
   const session = useSession();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["userData"],
     mutationFn: async (userData: FormObj) => {
       setShow(false);
@@ -40,10 +40,7 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
     resolver: zodResolver(profileValidation),
   });
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = formContext;
+  const { handleSubmit } = formContext;
 
   return (
     <FormContainer
@@ -64,7 +61,7 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
       <Button
         variant="contained"
         type="submit"
-        disabled={isSubmitting}
+        disabled={isPending}
         sx={{
           position: "relative",
           width: "152px",
@@ -73,7 +70,7 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
           mt: { xs: "36px", md: "56px" },
         }}
       >
-        Save changes
+        {isPending ? "Loading..." : " Save changes"}
       </Button>
     </FormContainer>
   );
