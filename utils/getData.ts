@@ -1,4 +1,3 @@
-"use server";
 import { JWT } from "next-auth/jwt";
 export type ResData<T> = { data: T | null; error: string };
 
