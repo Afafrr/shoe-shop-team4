@@ -6,7 +6,7 @@ import AvatarBox from "./_components/AvatarBox";
 export default function Page() {
   return (
     <Box sx={{ display: "flex", width: 1 }}>
-      <ProfileAside />
+      <ProfileAside activeBtnPath="settings" />
       <Box
         sx={{
           m: { xs: "auto", md: 0 },
