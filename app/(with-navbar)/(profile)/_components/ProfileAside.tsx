@@ -1,13 +1,6 @@
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { routes } from "@/components/Profile/AsideNavbar";
-
-export default function ProfileAside({
-  activeBtnPath,
-}: {
-  activeBtnPath: routes;
-}) {
-import { routes } from "@/components/Profile/AsideNavbar";
 export default function ProfileAside({
   activeBtnPath,
 }: {
@@ -52,7 +45,6 @@ export default function ProfileAside({
       />
       <AsideNavbar
         parentsSX={{ ml: "40px", mt: "30px" }}
-        activeBtnPath={activeBtnPath}
         activeBtnPath={activeBtnPath}
       />
     </Box>
