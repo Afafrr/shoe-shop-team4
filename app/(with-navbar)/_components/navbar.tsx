@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+
+import Image from "next/image";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,16 +10,16 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import Image from "next/image";
-import { ShoppingCart } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
-import { useState } from "react";
 
 import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
+import CartIcon from "./CartIcon";
+import { useCart } from "@/contexts/Cart";
 
 export default function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { getCartItemCount } = useCart();
 
   return (
     <AppBar position="static" color="inherit">
@@ -62,7 +65,7 @@ export default function NavBar() {
 
             <SearchInput />
             <IconButton size="large" color="inherit">
-              <ShoppingCart />
+              <CartIcon count={getCartItemCount()} />
             </IconButton>
             {isLoggedIn && (
               <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
@@ -73,7 +76,7 @@ export default function NavBar() {
 
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
             <IconButton size="large" color="inherit">
-              <ShoppingCart />
+              <CartIcon count={getCartItemCount()} />
             </IconButton>
             <SearchInput />
             <SideBar isLoggedIn={isLoggedIn} />

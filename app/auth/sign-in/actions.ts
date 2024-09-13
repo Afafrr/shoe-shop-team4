@@ -49,10 +49,10 @@ export async function signIn(
   /*
   Form expects data to be returned in the format: {
     user: {
-      id: string, 
-      username: string, 
+      id: string,
+      username: string,
       email: string
-    }, 
+    },
       redirect: string
     }
   But Login function does not return userData when successful, so an empty default must created.
