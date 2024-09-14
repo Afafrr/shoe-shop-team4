@@ -1,3 +1,11 @@
+.image-gallery-thumbnail.active {
+  position: relative;
+  overflow: hidden;
+  border: none !important;
+  transition: none !important;
+  background-color: rgba(0, 0, 0, 0.2); 
+}
+
 .image-gallery-thumbnail {
   width: 76px !important;
   height: 76px !important;
@@ -26,7 +34,15 @@
 .image-gallery-slide-wrapper.image-gallery-thumbnails-left {
   width: calc(100% - 88px);
   float: right;
+
 }
-
-
-
+@media (min-width: 960px) {
+  .image-gallery-swipe {
+    height: 500px;
+  }
+}
+@media (min-width: 1920px) {
+    .image-gallery-swipe {
+    height: 628px;
+  }
+}

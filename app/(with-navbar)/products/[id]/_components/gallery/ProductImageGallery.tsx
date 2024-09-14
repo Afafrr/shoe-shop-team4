@@ -44,8 +44,6 @@ export default function ProductImageGallery({
       image.attributes.formats?.thumbnail?.url || image.attributes.url,
   }));
 
-  const mainImage = imageList[0];
-
   return (
     <Box
       sx={{
