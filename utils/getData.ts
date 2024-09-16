@@ -3,11 +3,15 @@ export type ResData<T> = { data: T | null; error: string };
 
 export async function getData<T>(
   url: string,
-  token: JWT | null | undefined
+  token: JWT | null | undefined,
+  options?: RequestInit
 ): Promise<ResData<T>> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      ...options,
     });
 
     if (!res.ok) {

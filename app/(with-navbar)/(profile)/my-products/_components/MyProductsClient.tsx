@@ -8,14 +8,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { ResData } from "@/utils/getData";
+import { useUserData } from "@/contexts/UserDataProvider";
 
 export default function MyProductsClient({ data }: { data: ResData<any> }) {
   const router = useRouter();
   const [products, setProducts] = useState(data.data?.products);
+  const userData = useUserData(); //just to show output for provider
   const handleAddBtn = () => {
     router.push("/add-products");
   };
   console.log(data);
+  console.log(userData);//just to show output for provider
 
   return (
     <Box sx={{ display: "flex", width: 1, flexShrink: 0 }}>
