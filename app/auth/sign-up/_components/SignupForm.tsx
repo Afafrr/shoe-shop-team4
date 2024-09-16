@@ -2,6 +2,7 @@
 
 import Form, { FormInput } from "@/components/Form/Form";
 import { signUpSchema } from "@/schemas/signUpSchema";
+import { signUp } from "../actions";
 
 export default function SignupForm() {
   const inputs: FormInput[] = [
@@ -32,7 +33,6 @@ export default function SignupForm() {
         required: true,
         type: "password",
         placeholder: "at least 8 characters",
-        autoComplete: "new-password",
       },
     },
     {
@@ -42,14 +42,16 @@ export default function SignupForm() {
         required: true,
         type: "password",
         placeholder: "at least 8 characters",
-        autoComplete: "new-password",
       },
     },
   ];
 
-  function signUp(data: any) {
-    console.log(data);
-  }
-
-  return <Form inputs={inputs} submitFn={signUp} schema={signUpSchema} />;
+  return (
+    <Form
+      inputs={inputs}
+      submitFn={signUp}
+      schema={signUpSchema}
+      buttonText="Sign up"
+    />
+  );
 }
