@@ -2,7 +2,7 @@
 import { Button, InputAdornment, MenuItem, Stack } from "@mui/material";
 import Input from "../inputs/Input";
 import { Box } from "@mui/material";
-import useIsMobile from "../useIsMobile";
+import useIsMobile from "../../useIsMobile";
 
 import ChipSelect from "../inputs/ChipSelect";
 import FileHandler from "../FileHandler/FileHandler";
@@ -93,7 +93,7 @@ export default function ProductForm({ isPending, options }: ProductFormProps) {
               placeholder: "Nike",
               multiline: true,
               autoComplete: "description",
-              rows: isMobile ? 1 : 10,
+              minRows: isMobile ? 1 : 10,
             }}
           />
           <SizeSelect

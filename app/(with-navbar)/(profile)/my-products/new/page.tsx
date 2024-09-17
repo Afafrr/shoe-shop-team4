@@ -3,7 +3,7 @@ import { Container, Button } from "@mui/material";
 import { ReactNode, useState } from "react";
 import { addProductSchema } from "@/schemas/addProductSchema";
 import { addProductAction } from "./action";
-import ProductManager from "../_components/ProductManager";
+import ProductManager from "../_components/ProductManager/ProductManager";
 import { useSession } from "next-auth/react";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import EditModal from "../_components/modals/edit-modal/EditModal";

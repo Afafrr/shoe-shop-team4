@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 import FilePreviewContainer from "./FilePreviewContainer";
 import FileSelector from "./FileSelector";
 import { ReactNode, useEffect, useReducer } from "react";
-import useIsMobile from "../useIsMobile";
+import useIsMobile from "../../useIsMobile";
 import { Box, Stack, Typography } from "@mui/material";
 
 // Top component to handle file selection and show previews of selected files

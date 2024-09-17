@@ -1,7 +1,7 @@
 import { Button, Modal, Box } from "@mui/material";
 import { addProductSchema } from "@/schemas/addProductSchema";
 import { editProductAction } from "./action";
-import ProductManager from "../../ProductManager";
+import ProductManager from "../../ProductManager/ProductManager";
 import { ActionFunction, ProductFormSchema } from "@/types/Product";
 
 import "./modal.css";
