@@ -4,6 +4,9 @@ import { Box } from "@mui/material";
 import Image from "next/image";
 import "./styles.css";
 import { useState } from "react";
+import DeleteModal from "../modals/DeleteModal";
+
+// Component to store file previews. Takes a Url to show an Image and an onClick handler.
 
 type ImageContainerProps = {
   imageUrl: string;
@@ -14,11 +17,23 @@ export default function FilePreviewContainer({
   imageUrl,
   handleClick,
 }: ImageContainerProps) {
+  //Logic to manage the DeleteModal once Preview is clicked
+  const [open, setOpen] = useState(false);
+  const handleClose = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  // Logic to manage hover state of component
   let [selected, setSelected] = useState(false);
-  let shadow = "0px 0px 41px 0px rgb(22, 22, 22) inset";
+  let shadow = "0px 0px 400px 34px rgba(0,0,0,0.75) inset";
   let style = selected
     ? { opacity: "0.5", shadow, display: "block" }
     : { opacity: "1", shadow: "", display: "none" };
+
   return (
     <Box
       sx={{
@@ -26,7 +41,7 @@ export default function FilePreviewContainer({
         width: "100%",
         aspectRatio: "0.84",
       }}
-      onClick={handleClick}
+      onClick={handleOpen}
     >
       <Box
         id="main-container"
@@ -50,22 +65,41 @@ export default function FilePreviewContainer({
           onMouseOut={() => setSelected(false)}
         />
       </Box>
-      <Image
+      <Box
         className="pointer"
-        style={{
+        sx={{
+          width: "25%",
+          aspectRatio: 1,
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 1)",
+          opacity: "0.75",
           display: style.display,
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
-        src={"/svg/trashCan.svg"}
-        alt="remove item"
-        width={70}
-        height={70}
-        sizes="15px 15px"
         onMouseOver={() => setSelected(true)}
-      />
+      >
+        <Image
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+          src={"/svg/trashIcon.svg"}
+          alt="remove item"
+          width={20}
+          height={20}
+          sizes="20px 20px"
+        />
+      </Box>
+      <DeleteModal
+        open={open}
+        handleClose={handleClose}
+        deleteFn={handleClick}
+      ></DeleteModal>
     </Box>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { useEffect, useState } from "react";
 
 import { Stack, Container, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -11,41 +11,70 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import { ContextType } from "@/types/types";
+import { ProductFormSchema, ProductOptions } from "@/types/Product";
 import WarningIcon from "@/components/Form/WarningIcon";
 import ProductForm from "./Form";
-import { ProductActionResponse } from "@/types/productTypes";
+import { ProductActionResponse, ActionFunction } from "@/types/Product";
+import { getOptions } from "@/utils/getOptions";
+import { JWT } from "next-auth/jwt";
+import LoadingPage from "@/components/Loading/LoadingPage";
 
-export type ProductFormSchema = {
-  name: string;
-  price: number;
-  color: string[];
-  gender: string;
-  brand: string;
-  description: string;
-  sizes: string[];
-  image: File[];
-};
-
+/* This component contains the main structure of the product form and works as the form's manager:
+ * global form states, form initialization, submit actions, etc.
+ * This are then made accessible to the actual form with all inputs
+ * Takes schema for validation, submitFn for submission,
+ *  defaultForm(optional) for preloading the form with values, and productId(optional) for handling submissions
+ */
 type FormProps = {
-  submitFn: (
-    data: FormData,
-    context: ContextType
-  ) => Promise<ProductActionResponse>;
+  submitFn: ActionFunction;
   schema: z.ZodSchema<FieldValues>;
-  children?: ReactNode;
+  defaultForm?: ProductFormSchema;
+  productId?: string;
 };
 
-export default function Form({ submitFn, schema, children }: FormProps) {
+export default function ProductFormPage({
+  submitFn,
+  schema,
+  defaultForm,
+  productId,
+}: FormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  // Store session and Url parameters for the ServerActions
   const context = {
     searchParams: Object.fromEntries(searchParams.entries()),
     session,
   };
 
-  const defaultValues = {
+  const initialValue = {
+    colors: null,
+    brands: null,
+    genders: null,
+    sizes: null,
+  };
+  // Initialize state for product options(colors, brands, genders, etc.)
+  const [options, setOptions] = useState<ProductOptions>(initialValue);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch options from backend
+  useEffect(() => {
+    async function fetchOptions() {
+      try {
+        let data = await getOptions(session!.user.jwt as JWT);
+        setOptions(data);
+      } catch (error) {
+        console.error("Failed to fetch options", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (status == "loading") return;
+    fetchOptions();
+  }, [status, session]);
+
+  const defaultValues = defaultForm || {
     name: "",
     price: 0,
     color: [],
@@ -56,6 +85,7 @@ export default function Form({ submitFn, schema, children }: FormProps) {
     image: [],
   };
 
+  // React-hook-form
   const formContext = useForm<ProductFormSchema>({
     defaultValues,
     resolver: zodResolver(schema),
@@ -64,11 +94,15 @@ export default function Form({ submitFn, schema, children }: FormProps) {
 
   const mutateFn = async (data: ProductFormSchema) => {
     const formData = toFormData(data);
-    const result = await submitFn(formData, context);
+
+    let result = productId
+      ? await submitFn(formData, context, productId)
+      : await submitFn(formData, context);
     if ("error" in result) throw new Error(result.error.message);
     return result;
   };
 
+  // tanstack query for submission
   const { mutate, error, isPending } = useMutation<
     ProductActionResponse,
     Error,
@@ -84,6 +118,11 @@ export default function Form({ submitFn, schema, children }: FormProps) {
       console.log("Error in mutation: ", error);
     },
   });
+
+  // wait for options to be loaded
+  if (loading) {
+    return <LoadingPage width="100%" height="800px" />;
+  }
 
   return (
     <Container disableGutters sx={{ width: { lg: "100%" } }}>
@@ -106,7 +145,11 @@ export default function Form({ submitFn, schema, children }: FormProps) {
               <WarningIcon /> {error.message}
             </Typography>
           )}
-          <ProductForm isPending={isPending}></ProductForm>
+          <ProductForm
+            isPending={isPending}
+            isLoading={loading}
+            options={options}
+          ></ProductForm>
         </Stack>
       </FormContainer>
     </Container>

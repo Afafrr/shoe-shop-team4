@@ -1,12 +1,12 @@
+"use server";
 import { ContextType, ErrorResponse } from "@/types/types";
-
 import {
   ImageUpload,
   ProductActionResponse,
   ProductResponse,
   SuccessfulImageUpload,
   SuccessfulProductAdd,
-} from "@/types/productTypes";
+} from "@/types/Product";
 
 export async function addProductAction(
   formData: FormData,
@@ -35,7 +35,6 @@ export async function addProductAction(
     body: formData,
   });
   let result: ImageUpload = await response.json();
-  console.log("Fetched Data: ", result);
   if ("error" in result) return result;
   result = result as SuccessfulImageUpload;
   const idImages = result.map((image) => image.id);
@@ -77,10 +76,8 @@ export async function addProductAction(
     }
   );
   let productResult: ProductResponse = await productResponse.json();
-  console.log("result: ", result);
 
   if ("error" in result) return productResult as ErrorResponse;
   productResult = productResult as SuccessfulProductAdd;
-  console.log("FINAL RESPONSE: ", productResult);
   return { ...productResult, redirect: "/settings" };
 }

@@ -1,26 +1,31 @@
 "use client";
 import { Button, InputAdornment, MenuItem, Stack } from "@mui/material";
-import Input from "../Input";
+import Input from "../inputs/Input";
 import { Box } from "@mui/material";
 import useIsMobile from "../useIsMobile";
 
-import productData from "../../data/productData";
-import ChipSelect from "../ChipSelect";
+import ChipSelect from "../inputs/ChipSelect";
 import FileHandler from "../FileHandler/FileHandler";
-import SizeSelect from "../SizeSelect";
+import SizeSelect from "../inputs/SizeSelect";
+import { ProductOptions } from "@/types/Product";
+import CustomSelect from "../inputs/CustomSelect";
+
+// This component contains the main form inputs for the product form.
 
 type ProductFormProps = {
   isPending: boolean;
+  isLoading: boolean;
+  options: ProductOptions;
 };
 
-export default function ProductForm({ isPending }: ProductFormProps) {
+export default function ProductForm({ isPending, options }: ProductFormProps) {
   const isMobile = useIsMobile();
 
   return (
     <>
       <Stack
         direction={{ lg: "row", xs: "column" }}
-        spacing={{ lg: 15, xs: 10 }}
+        spacing={{ lg: 11.5, xs: 10 }}
         sx={{
           alignItems: { xs: "center", lg: "flex-start" },
           width: "100%",
@@ -29,7 +34,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
         <Stack
           id="default-form"
           spacing={{ xs: "24px", lg: "15px" }}
-          sx={{ width: { xs: "100%", lg: "40%" } }}
+          sx={{ width: { xs: "100%", lg: "40%" }, minWidth: { lg: "300px" } }}
         >
           <Input
             key="Product name"
@@ -61,49 +66,23 @@ export default function ProductForm({ isPending }: ProductFormProps) {
             }}
           />
           <ChipSelect
-            options={productData.colors}
+            options={options.colors}
             label="Colors"
             props={{ name: "color", required: true }}
           />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Input
-              key="Gender"
+            <CustomSelect
               label="Gender"
-              props={{
-                name: "gender",
-                required: true,
-                placeholder: "Male",
-                type: "text",
-                select: true,
-                autoComplete: "gender",
-              }}
-              size="48%"
-            >
-              {productData.genders.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Input>
-            <Input
-              key="Brand"
+              name="gender"
+              sizes={{ width: "48%" }}
+              options={options.genders}
+            />
+            <CustomSelect
               label="Brand"
-              props={{
-                name: "brand",
-                required: true,
-                placeholder: "Nike",
-                type: "text",
-                select: true,
-                autoComplete: "brand",
-              }}
-              size="48%"
-            >
-              {productData.brands.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Input>
+              name="brand"
+              sizes={{ width: "48%" }}
+              options={options.brands}
+            />
           </Box>
           <Input
             key="description"
@@ -117,10 +96,13 @@ export default function ProductForm({ isPending }: ProductFormProps) {
               rows: isMobile ? 1 : 10,
             }}
           />
-          <SizeSelect props={{ name: "Sizes", required: true }} />
+          <SizeSelect
+            props={{ name: "Sizes", required: true }}
+            options={options.sizes}
+          />
         </Stack>
         <Box sx={{ marginRight: "45px" }}>
-          <FileHandler name="image" fieldName="Product images" required />
+          <FileHandler label="Product images" required />
         </Box>
       </Stack>
       <Button

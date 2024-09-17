@@ -1,14 +1,16 @@
+"use client";
 import { useFormContext } from "react-hook-form";
 import FilePreviewContainer from "./FilePreviewContainer";
 import FileSelector from "./FileSelector";
-import SquareGrid from "./SquareGrid";
-import { ReactNode, useReducer } from "react";
+import { ReactNode, useEffect, useReducer } from "react";
 import useIsMobile from "../useIsMobile";
 import { Box, Stack, Typography } from "@mui/material";
 
+// Top component to handle file selection and show previews of selected files
+// Hierarchy: FileHandler => FilePreviewContainer & FileSelector => FileExplorer
+
 type FileHandlerProps = {
-  name: string;
-  fieldName: string;
+  label: string;
   required: boolean;
 };
 
@@ -18,43 +20,46 @@ type StateAction =
   | { type: "append"; file: FileType }
   | { type: "remove"; name: string };
 
-export default function FileHandler({
-  name,
-  fieldName,
-  required,
-}: FileHandlerProps) {
+export default function FileHandler({ label, required }: FileHandlerProps) {
   const [imageList, setImageList] = useReducer(reducer, []);
-  const {
-    formState: { errors },
-    setError,
-    clearErrors,
-    setValue,
-  } = useFormContext();
+  const { setError, clearErrors, setValue } = useFormContext();
   const isMobile = useIsMobile(900);
 
-  setValue(
-    "image",
-    imageList.map((image) => image.content)
-  );
+  // Updates form field 'image' every time imageList state changes
+  useEffect(() => {
+    setValue(
+      "image",
+      imageList.map((image) => image.content),
+      { shouldValidate: imageList.length == 0 ? false : true }
+    );
+  }, [imageList, setValue]);
 
+  // Handles image preview click
   function handleClick(name: string) {
     setImageList({ type: "remove", name: name });
   }
 
+  /* Handles file selection.
+   * Checks if selected file is valid
+   * Extracts Url from file to show a preview if possible
+   * Updates ImageList state
+   */
   async function handleFileChange(
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> {
     const file = event.target.files?.[0];
     if (file) {
-      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-      if (!(file instanceof File) || !allowedTypes.includes(file.type)) {
+      if (!isValidFile(file)) {
         setError("image", {
           type: "manual",
           message: "Invalid file",
         });
+        let timeoutId = setTimeout(() => {
+          clearErrors("image");
+          clearTimeout(timeoutId);
+        }, 2000);
         return;
       }
-      if (errors.image) clearErrors("image");
 
       let fileUrl;
       try {
@@ -64,9 +69,26 @@ export default function FileHandler({
       }
       const new_file = { content: file, url: fileUrl };
       setImageList({ type: "append", file: new_file });
+      setValue(
+        "image",
+        imageList.map((image) => image.content),
+        { shouldValidate: true }
+      );
     }
   }
 
+  // Check if file is instance of file and of an allowed type of file.
+  function isValidFile(file: File): boolean {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    return (
+      file instanceof File &&
+      allowedTypes.includes(file.type) &&
+      imageList.every((image) => image.content.name !== file.name)
+    );
+  }
+
+  // All previews of selected files. First item of list is always FileSelector, which contains the UI and logic for file selection
   const items = [
     {
       id: "selector",
@@ -95,7 +117,7 @@ export default function FileHandler({
       }}
     >
       <Typography fontWeight={500} marginBottom={{ xs: "10px", lg: "6px" }}>
-        {fieldName}
+        {label}
         {required ? (
           <Typography variant="caption" color={"red"} fontWeight={500}>
             *
@@ -113,6 +135,7 @@ export default function FileHandler({
   );
 }
 
+// Mobile container for file previews
 type ColumnProps = {
   items: { id: string; content: ReactNode }[];
 };
@@ -142,6 +165,23 @@ function CenteredColumn({ items }: ColumnProps) {
   );
 }
 
+// Desktop container for file previews
+type GridProps = {
+  items: { id: string; content: ReactNode }[];
+};
+function SquareGrid({ items }: GridProps) {
+  return (
+    <div className="gridContainer">
+      {items.map((item) => (
+        <div key={item.id} className="gridItem">
+          {item.content}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Function to extract url from a file
 function readAsUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -159,17 +199,19 @@ function readAsUrl(file: File): Promise<string> {
   });
 }
 
+/*
+ * State reducer. Two possible actions:
+ * "append" => Add file and url to imageList
+ * "remove" => Filter the imageList to remove a file.
+ */
 function reducer(state: StateType, action: StateAction): StateType {
   switch (action.type) {
     case "append":
       return [...state, action.file];
     case "remove":
-      console.log("REMOVING!!");
       const new_list = state.filter(
         (file) => file.content.name !== action.name
       );
-      console.log("new_list: ", new_list);
-      console.log("Passing name: ", action.name);
       return new_list;
     default:
       return state;

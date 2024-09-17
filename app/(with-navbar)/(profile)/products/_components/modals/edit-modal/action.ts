@@ -1,17 +1,19 @@
+"use server";
 import { ContextType, ErrorResponse } from "@/types/types";
-//1345
 import {
   ImageUpload,
   ProductActionResponse,
   ProductResponse,
   SuccessfulImageUpload,
   SuccessfulProductAdd,
-} from "@/types/productTypes";
+} from "@/types/Product";
 
 export async function editProductAction(
   formData: FormData,
-  context: ContextType
+  context: ContextType,
+  id: string
 ): Promise<ProductActionResponse> {
+  // If no session return
   const { session } = context;
   if (!session || !session.user.jwt)
     return {
@@ -21,12 +23,13 @@ export async function editProductAction(
       },
     };
 
+  //Required body on backend
   formData.append("path", "");
   formData.append("refId", "");
   formData.append("ref", "");
   formData.append("field", "");
 
-  // Fetch backend signUp endpoint. If form is valid, it returns the created user. If not, it returns an object with an error property.
+  // Post request to backend. Upload images before posting the product.
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/upload`, {
     method: "POST",
     headers: {
@@ -35,11 +38,11 @@ export async function editProductAction(
     body: formData,
   });
   let result: ImageUpload = await response.json();
-  console.log("Fetched Data: ", result);
   if ("error" in result) return result;
   result = result as SuccessfulImageUpload;
   const idImages = result.map((image) => image.id);
 
+  // Format the formData to satisfy product POST request.
   const productValues: Record<string, any> = {};
   formData.forEach((value, key) => {
     try {
@@ -49,10 +52,12 @@ export async function editProductAction(
     }
   });
 
-  const { name, price, color, gender, brand, description } = productValues;
+  const { name, price, color, gender, brand, description, sizes } =
+    productValues;
 
+  // POST request to edit product on backend
   let productResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/products/1345`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`,
     {
       method: "PUT",
       headers: {
@@ -68,7 +73,7 @@ export async function editProductAction(
           categories: [5],
           color,
           gender,
-          sizes: [13, 14],
+          sizes,
           price,
           userID: session.user.id,
           teamName: "team-4",
@@ -77,10 +82,8 @@ export async function editProductAction(
     }
   );
   let productResult: ProductResponse = await productResponse.json();
-  console.log("result: ", result);
 
   if ("error" in result) return productResult as ErrorResponse;
   productResult = productResult as SuccessfulProductAdd;
-  console.log("FINAL RESPONSE: ", productResult);
   return { ...productResult, redirect: "/settings" };
 }

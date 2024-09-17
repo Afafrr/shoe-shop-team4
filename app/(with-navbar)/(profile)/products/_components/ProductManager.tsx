@@ -1,34 +1,32 @@
 "use client";
 import { Container, Stack, Typography } from "@mui/material";
-import { ReactNode } from "react";
-import AddProductForm from "./Form/FormPage";
-import { addProductAction } from "../action";
-import { addProductSchema } from "@/schemas/addProductSchema";
+import ProductFormPage from "./ProductForm/FormPage";
 import { z } from "zod";
 import { FieldValues } from "react-hook-form";
-import { ContextType } from "@/types/types";
-import { ProductActionResponse } from "@/types/productTypes";
+import { ProductFormSchema, ActionFunction } from "@/types/Product";
+
+// This page is a template for a product form. Works for both Add product and Edit product components.
+
 type pageType = {
-  children?: ReactNode;
   props: {
     header: string;
     subheader?: string;
   };
   formActions: {
     schema: z.ZodSchema<FieldValues>;
-    submitAction: (
-      data: FormData,
-      context: ContextType
-    ) => Promise<ProductActionResponse>;
+    submitAction: ActionFunction;
+    defaultForm?: ProductFormSchema;
   };
+  productId?: string;
 };
 
-export default function ProductFormPage({ children, props }: pageType) {
-  const addProductProps = {
-    header: "Add a Product",
-    subheader:
-      "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:",
-  };
+export default function ProductManager({
+  props,
+  formActions,
+  productId,
+}: pageType) {
+  const { schema, submitAction, defaultForm } = formActions;
+
   return (
     <Container
       id="form-page-container"
@@ -47,15 +45,18 @@ export default function ProductFormPage({ children, props }: pageType) {
         sx={{ alignItems: { md: "flex-start" } }}
       >
         <PageTitle props={props} />
-        <AddProductForm
-          schema={addProductSchema}
-          submitFn={addProductAction}
-        ></AddProductForm>{" "}
+        <ProductFormPage
+          schema={schema}
+          submitFn={submitAction}
+          defaultForm={defaultForm}
+          productId={productId}
+        ></ProductFormPage>
       </Stack>
     </Container>
   );
 }
 
+//Page title
 type TitleProps = {
   props: { header: string; subheader?: string };
 };

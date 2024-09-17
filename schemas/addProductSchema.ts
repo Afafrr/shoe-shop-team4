@@ -26,10 +26,10 @@ export const addProductSchema = z.object({
     .refine((array) => !array.some((value) => isNaN(Number(value))), {
       message: "Invalid colors",
     }),
-  gender: z.string().refine((val) => ["3", "4"].includes(val), {
+  gender: z.string().refine((val) => !isNaN(Number(val)), {
     message: "Invalid gender",
   }),
-  brand: z.string().refine((val) => ["9", "10", "12"].includes(val), {
+  brand: z.string().refine((val) => !isNaN(Number(val)), {
     message: "Invalid brand",
   }),
   description: z
@@ -37,8 +37,8 @@ export const addProductSchema = z.object({
     .min(1, {
       message: "Please enter product's description",
     })
-    .min(40, {
-      message: "Product's description must have at least 40 characters",
+    .min(10, {
+      message: "Product's description must have at least 10 characters",
     })
     .trim(),
   sizes: z

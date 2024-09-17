@@ -5,13 +5,15 @@ import { InputProps as MuiInputProps } from "@mui/material/Input";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { ReactNode } from "react";
 
+// This is a custom input component.
+
 export default function Input({
   props,
   label,
   disabled,
   mutations,
   inputStyle,
-  size,
+  sizes,
   children,
 }: {
   props: TextFieldElementProps;
@@ -19,11 +21,11 @@ export default function Input({
   disabled?: boolean;
   mutations?: Partial<MuiInputProps>;
   inputStyle?: React.InputHTMLAttributes<HTMLInputElement>;
-  size?: string;
+  sizes?: { width: string; height?: string };
   children?: ReactNode;
 }) {
   return (
-    <Stack width={size}>
+    <Stack width={sizes?.width}>
       <InputLabel htmlFor={label} sx={{ fontWeight: 500 }}>
         {label}{" "}
         {props?.required ? (

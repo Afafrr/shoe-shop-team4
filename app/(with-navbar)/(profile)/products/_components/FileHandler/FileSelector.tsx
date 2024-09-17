@@ -7,6 +7,8 @@ import WarningIcon from "@/components/Form/WarningIcon";
 import { useFormContext } from "react-hook-form";
 import { Dispatch } from "react";
 
+// This component is the UI to manage the file selection. Contains FileExplorer component, which manages the actual file selection.
+
 type FileSelectorProps = {
   handleFileChange: Dispatch<any>;
 };
@@ -15,11 +17,13 @@ export default function FileSelector({ handleFileChange }: FileSelectorProps) {
   const {
     formState: { errors },
   } = useFormContext();
+
   return (
     <Box
       sx={{
         width: "100%",
         aspectRatio: "0.84",
+        position: "relative",
       }}
     >
       <Box
@@ -64,11 +68,13 @@ export default function FileSelector({ handleFileChange }: FileSelectorProps) {
           </FileExplorer>
         </Box>
       </Box>
+
       {errors.image ? (
         <Typography
           color={"red"}
           sx={{
-            mt: "8px",
+            position: "absolute",
+            bottom: "-30px",
             display: "flex",
             alignItems: "center",
             gap: "5px",

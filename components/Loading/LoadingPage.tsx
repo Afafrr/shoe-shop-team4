@@ -1,7 +1,11 @@
 "use client";
 import { Box, CircularProgress, Typography } from "@mui/material";
 
-export default function LoadingPage() {
+type LoadingProps = {
+  height?: string;
+  width?: string;
+};
+export default function LoadingPage({ height, width }: LoadingProps) {
   return (
     <Box
       sx={{
@@ -9,7 +13,8 @@ export default function LoadingPage() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh", // Full viewport height
+        width: width || "100%",
+        height: height || "100vh", // Full viewport height
         backgroundColor: "#f5f5f5", // Light background color
         textAlign: "center",
       }}
