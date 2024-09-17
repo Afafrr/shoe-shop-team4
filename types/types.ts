@@ -30,3 +30,11 @@ export type ContextType = {
   searchParams: { [k: string]: string };
   session: Session | null;
 };
+
+export type FiltersType = {
+  [key: string]: string[] | undefined;
+};
+
+export type SearchParamsType = {
+  [key: string]: string | string[] | undefined;
+};

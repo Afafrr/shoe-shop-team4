@@ -6,9 +6,17 @@ export async function getData<T>(
   token: JWT | null | undefined
 ): Promise<ResData<T>> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${url}`,
+      headers
+    );
 
     if (!res.ok) {
       console.error(res);

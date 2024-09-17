@@ -15,9 +15,9 @@ export default function FiltersBar({ drawerContent }: SideBarProps) {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ width: 260 }}>
+    <Box sx={{ width: 260 }}>
       <Box sx={{ textAlign: "end" }}>
-        <IconButton sx={{ m: 2 }}>
+        <IconButton sx={{ m: 2 }} onClick={handleDrawerToggle}>
           <Close />
         </IconButton>
       </Box>

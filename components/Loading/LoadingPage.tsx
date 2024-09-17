@@ -1,6 +1,10 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 
-export default function LoadingPage() {
+export default function LoadingPage({
+  backgroundColor = "#f5f5f5",
+}: {
+  backgroundColor?: string;
+}) {
   return (
     <Box
       sx={{
@@ -9,7 +13,7 @@ export default function LoadingPage() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh", // Full viewport height
-        backgroundColor: "#f5f5f5", // Light background color
+        backgroundColor,
         textAlign: "center",
       }}
     >

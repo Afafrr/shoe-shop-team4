@@ -1,4 +1,8 @@
-// import { ProductListResponse } from "@/types/Products";
+import { ProductListResponse } from "@/types/Product";
+import { FiltersType } from "@/types/types";
+import qs from "qs";
+import { getData } from "../getData";
+import { JWT } from "next-auth/jwt";
 
 type PopulateField =
   | "images"
@@ -11,22 +15,69 @@ type PopulateField =
 
 export async function getProducts(
   fieldsToPopulate: PopulateField[] = [],
-  token?: string
-) {
+  filters: FiltersType = {},
+  token?: JWT | null | undefined
+): Promise<ProductListResponse> {
   const populateFields = fieldsToPopulate.join(",");
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-  };
+  const query = createFiltersQuery(filters);
 
-  if (token && fieldsToPopulate.includes("userID")) {
-    headers["Authorization"] = `Bearer ${token}`;
+  const responseData = await getData<ProductListResponse>(
+    `products?populate=${populateFields}&${query}`,
+    token
+  );
+  const data = responseData.data;
+
+  if (!data) {
+    throw new Error("Error fetching the products");
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/products?populate=${populateFields}`,
-    { headers }
-  );
-  const data = response.json();
   return data;
+}
+
+function createFiltersQuery(filters: FiltersType) {
+  const dynamicFilters = Object.entries(filters).reduce(
+    (acc, [key, values]) => {
+      switch (key) {
+        case "search":
+          acc["name"] = {
+            $containsi: values,
+          };
+          break;
+        case "sizes":
+          acc[key] = {
+            value: {
+              $containsi: values,
+            },
+          };
+          break;
+        case "price":
+          acc["price"] = {
+            $lt: values,
+          };
+          break;
+        default:
+          if (values && values.length > 0) {
+            acc[key] = {
+              name: {
+                $in: values,
+              },
+            };
+          }
+          break;
+      }
+      return acc;
+    },
+    {} as Record<string, any>
+  );
+  return qs.stringify(
+    {
+      filters: {
+        ...dynamicFilters,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    }
+  );
 }
