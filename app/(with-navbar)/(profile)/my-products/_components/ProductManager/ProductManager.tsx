@@ -8,22 +8,19 @@ import { ProductFormSchema, ActionFunction } from "@/types/Product";
 // This page is a template for a product form. Works for both Add product and Edit product components.
 
 type pageType = {
-  props: {
-    header: string;
-    subheader?: string;
-  };
+  header: string;
+  subheader?: string;
   formActions: {
     schema: z.ZodSchema<FieldValues>;
     submitAction: ActionFunction;
     defaultForm?: ProductFormSchema;
   };
-  productId?: string;
 };
 
 export default function ProductManager({
-  props,
+  header,
+  subheader,
   formActions,
-  productId,
 }: pageType) {
   const { schema, submitAction, defaultForm } = formActions;
 
@@ -32,8 +29,6 @@ export default function ProductManager({
       id="form-page-container"
       disableGutters
       sx={{
-        width: { md: "100%" },
-        margin: { md: "0" },
         maxWidth: "none",
         position: "relative",
         padding: "40px",
@@ -44,23 +39,20 @@ export default function ProductManager({
         spacing={"25px"}
         sx={{ alignItems: { md: "flex-start" } }}
       >
-        <PageTitle props={props} />
+        <PageTitle header={header} subheader={subheader} />
         <ProductFormPage
           schema={schema}
           submitFn={submitAction}
           defaultForm={defaultForm}
-          productId={productId}
-        ></ProductFormPage>
+        />
       </Stack>
     </Container>
   );
 }
 
 //Page title
-type TitleProps = {
-  props: { header: string; subheader?: string };
-};
-function PageTitle({ props }: TitleProps) {
+type TitleProps = { header: string; subheader?: string };
+function PageTitle({ header, subheader }: TitleProps) {
   return (
     <Stack
       spacing={"15px"}
@@ -70,14 +62,10 @@ function PageTitle({ props }: TitleProps) {
       }}
     >
       <Typography fontSize={30} fontWeight={500} lineHeight={"35px"}>
-        {props.header}
+        {header}
       </Typography>
 
-      {props.subheader ? (
-        <Typography fontWeight={300}>{props.subheader}</Typography>
-      ) : (
-        ""
-      )}
+      {subheader && <Typography fontWeight={300}>{subheader}</Typography>}
     </Stack>
   );
 }

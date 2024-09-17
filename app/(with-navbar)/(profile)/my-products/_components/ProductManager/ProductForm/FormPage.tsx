@@ -29,14 +29,12 @@ type FormProps = {
   submitFn: ActionFunction;
   schema: z.ZodSchema<FieldValues>;
   defaultForm?: ProductFormSchema;
-  productId?: string;
 };
 
 export default function ProductFormPage({
   submitFn,
   schema,
   defaultForm,
-  productId,
 }: FormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -76,7 +74,7 @@ export default function ProductFormPage({
 
   const defaultValues = defaultForm || {
     name: "",
-    price: 0,
+    price: undefined,
     color: [],
     gender: "3",
     brand: "9",
@@ -95,9 +93,8 @@ export default function ProductFormPage({
   const mutateFn = async (data: ProductFormSchema) => {
     const formData = toFormData(data);
 
-    let result = productId
-      ? await submitFn(formData, context, productId)
-      : await submitFn(formData, context);
+    let result = await submitFn(formData, context);
+
     if ("error" in result) throw new Error(result.error.message);
     return result;
   };

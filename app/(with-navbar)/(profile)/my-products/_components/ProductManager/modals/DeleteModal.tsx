@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Stack, Divider, Modal } from "@mui/material";
 
-// This is a modal to delete selected file
+// This is a modal to delete selected file.
 
 type DeleteProps = {
   open: boolean;

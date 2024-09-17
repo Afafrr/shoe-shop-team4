@@ -1,9 +1,7 @@
-"use client";
-import { Container, Button } from "@mui/material";
-import { redirect } from "next/navigation";
+import { getMyProducts } from "./action";
+import MyProductsClient from "./_components/MyProductsClient";
 
-export default function PageNone() {
-  redirect("/");
-
-  return <Container sx={{ margin: "0" }}></Container>;
+export default async function Page() {
+  const data = await getMyProducts();
+  return <MyProductsClient data={data} />;
 }

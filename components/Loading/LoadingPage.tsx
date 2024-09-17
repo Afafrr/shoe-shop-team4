@@ -1,4 +1,3 @@
-"use client";
 import { Box, CircularProgress, Typography } from "@mui/material";
 
 type LoadingProps = {

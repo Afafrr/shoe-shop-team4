@@ -497,3 +497,7 @@ export type ActionFunction = {
     id: string
   ): Promise<ProductActionResponse>;
 };
+
+export type EditProduct = ProductFormSchema & {
+  id: string;
+};

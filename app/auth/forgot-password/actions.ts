@@ -1,3 +1,5 @@
+"use server";
+
 import { recoverSchema } from "@/schemas/recoverSchema";
 import { BackResponse, ContextType } from "@/types/types";
 import { ActionResponse } from "@/types/types";

@@ -1,11 +1,16 @@
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
+import { routes } from "@/components/Profile/AsideNavbar";
 
 type ProfileAsideProps = {
   breakpoint?: string;
+  activeBtnPath: routes;
 };
 
-export default function ProfileAside({ breakpoint = "md" }: ProfileAsideProps) {
+export default function ProfileAside({
+  breakpoint = "md",
+  activeBtnPath,
+}: ProfileAsideProps) {
   return (
     <Box
       sx={{
@@ -48,7 +53,7 @@ export default function ProfileAside({ breakpoint = "md" }: ProfileAsideProps) {
       />
       <AsideNavbar
         parentsSX={{ ml: "40px", mt: "30px" }}
-        activeBtnPath="settings"
+        activeBtnPath={activeBtnPath}
       />
     </Box>
   );

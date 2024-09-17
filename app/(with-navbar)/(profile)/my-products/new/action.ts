@@ -4,9 +4,8 @@ import {
   ImageUpload,
   ProductActionResponse,
   ProductResponse,
-  SuccessfulImageUpload,
-  SuccessfulProductAdd,
 } from "@/types/Product";
+import { FormDataToObject } from "../_helpers";
 
 export async function addProductAction(
   formData: FormData,
@@ -21,42 +20,43 @@ export async function addProductAction(
       },
     };
 
+  const jwt = session.user.jwt;
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const headers = {
+    Authorization: `Bearer ${jwt}`,
+  };
+
+  //Required body on backend
   formData.append("path", "");
   formData.append("refId", "");
   formData.append("ref", "");
   formData.append("field", "");
 
-  // Fetch backend signUp endpoint. If form is valid, it returns the created user. If not, it returns an object with an error property.
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/upload`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${session.user.jwt}`,
-    },
-    body: formData,
-  });
-  let result: ImageUpload = await response.json();
-  if ("error" in result) return result;
-  result = result as SuccessfulImageUpload;
-  const idImages = result.map((image) => image.id);
+  // Post request to backend. Upload images before updating the product.
+  try {
+    const uploadResponse = await fetch(`${BASE_URL}/upload`, {
+      method: "POST",
+      headers,
+      body: formData,
+    });
 
-  const productValues: Record<string, any> = {};
-  formData.forEach((value, key) => {
-    try {
-      productValues[key] = JSON.parse(value as string);
-    } catch {
-      productValues[key] = value;
-    }
-  });
+    let result: ImageUpload = await uploadResponse.json();
 
-  const { name, price, color, gender, brand, description } = productValues;
+    if ("error" in result) return result;
 
-  let productResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/products`,
-    {
+    const idImages = result.map((image) => image.id);
+
+    // Format the formData to satisfy product POST request.
+    const productValues: Record<string, any> = FormDataToObject(formData);
+
+    const { name, price, color, gender, brand, description, sizes } =
+      productValues;
+
+    let productResponse = await fetch(`${BASE_URL}/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session.user.jwt}`,
+        ...headers,
       },
       body: JSON.stringify({
         data: {
@@ -67,17 +67,25 @@ export async function addProductAction(
           categories: [5],
           color,
           gender,
-          sizes: [13, 14],
+          sizes,
           price,
           userID: session.user.id,
           teamName: "team-4",
         },
       }),
-    }
-  );
-  let productResult: ProductResponse = await productResponse.json();
+    });
+    let productResult: ProductResponse = await productResponse.json();
 
-  if ("error" in result) return productResult as ErrorResponse;
-  productResult = productResult as SuccessfulProductAdd;
-  return { ...productResult, redirect: "/settings" };
+    if ("error" in productResult) return productResult as ErrorResponse;
+
+    return { ...productResult, redirect: "/settings" };
+  } catch (error) {
+    return {
+      data: {},
+      error: {
+        message:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      },
+    };
+  }
 }

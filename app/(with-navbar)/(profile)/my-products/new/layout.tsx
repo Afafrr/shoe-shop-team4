@@ -1,6 +1,5 @@
-"use client";
 import { ReactNode } from "react";
-import ProfileAside from "./_components/ProfileAside";
+import ProfileAside from "../../_components/ProfileAside";
 import { Container } from "@mui/material";
 
 type LayoutType = {
@@ -10,13 +9,15 @@ type LayoutType = {
 export default function Layout({ children }: LayoutType) {
   return (
     <Container
+      disableGutters
       style={{
         display: "flex",
-        margin: "0 0 50px 0",
+        marginBottom: "50px",
         padding: "0",
         maxWidth: "none",
       }}
     >
+      <ProfileAside activeBtnPath="my-products" breakpoint="lg" />
       {children}
     </Container>
   );

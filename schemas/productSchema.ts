@@ -1,15 +1,12 @@
 import { z } from "zod";
 
-export const addProductSchema = z.object({
+export const productSchema = z.object({
   name: z
     .string()
     .min(1, {
       message: "Please enter product's name",
     })
     .trim(),
-  //   .regex(/^[a-zA-Z\s0-9]+$/, {
-  //     message: "Name can only contain letters and spaces",
-  //   }),
   price: z
     .number()
     .min(1, {

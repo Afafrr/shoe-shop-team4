@@ -54,7 +54,7 @@ export default function ProductForm({ isPending, options }: ProductFormProps) {
             props={{
               name: "price",
               required: true,
-              placeholder: "160",
+              placeholder: "1600",
               type: "number",
               autoComplete: "price",
             }}
@@ -90,7 +90,7 @@ export default function ProductForm({ isPending, options }: ProductFormProps) {
             props={{
               name: "description",
               required: true,
-              placeholder: "Nike",
+              placeholder: "Best snickers in the market!",
               multiline: true,
               autoComplete: "description",
               minRows: isMobile ? 1 : 10,
