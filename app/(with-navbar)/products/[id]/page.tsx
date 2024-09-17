@@ -10,8 +10,8 @@ import ProductDetails, { PopulateField } from "@/utils/api/singleProduct";
 import ProductImageGallery from "@/app/(with-navbar)/products/[id]/_components/gallery/ProductImageGallery";
 import SizeSelector from "@/app/(with-navbar)/products/[id]/_components/buttons/SizeSelector";
 import ActionButtons from "@/app/(with-navbar)/products/[id]/_components/buttons/ActionButtons";
-import ProductDescription from "@/app/(with-navbar)/products/[id]/_components/info/ProductDescription";
-import ProductTitle from "./_components/info/ProductTitle";
+import ProductDescription from "@/app/(with-navbar)/products/[id]/_components/Info/ProductDescription";
+import ProductTitle from "./_components/Info/ProductTitle";
 import ColorSelector from "./_components/buttons/ColorSelector";
 
 
