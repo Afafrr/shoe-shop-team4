@@ -14,7 +14,6 @@ type SizeSelectorProps = {
 
 
 export default function SizeSelector({ sizes, onSelect }: SizeSelectorProps) {
-  //to control the color when selected
   const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
 
   const handleSizeSelect = (sizeId: number) => {

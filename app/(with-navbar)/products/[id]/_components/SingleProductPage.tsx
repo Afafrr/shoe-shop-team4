@@ -2,9 +2,13 @@
 
 import { Box } from "@mui/material";
 import { useState } from "react";
-
 import LoadingPage from "@/components/Loading/LoadingPage";
 import ProductDetails, { PopulateField } from "@/utils/api/singleProduct";
+import {
+  SizesAPIResponse,
+  Color,
+  Size,
+} from "@/types/singleProduct";
 
 import ProductImageGallery from "@/app/(with-navbar)/products/[id]/_components/gallery/ProductImageGallery";
 import SizeSelector from "@/app/(with-navbar)/products/[id]/_components/buttons/SizeSelector";
@@ -13,23 +17,6 @@ import ProductDescription from "@/app/(with-navbar)/products/[id]/_components/In
 import ProductTitle from "./Info/ProductTitle";
 import ColorSelector from "./buttons/ColorSelector";
 
-type Size = {
-  id: number;
-  attributes: {
-    value: number;
-  };
-};
-
-type SizesAPIResponse = {
-  data: Size[];
-};
-
-type Color = {
-  id: number;
-  attributes: {
-    name: string;
-  };
-};
 
 type SingleProductPageProps = {
   productId: string;
@@ -40,7 +27,6 @@ export default function SingleProductPage({
   productId,
   fieldsToPopulate,
 }: SingleProductPageProps) {
-  //const { id } = params;
 
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
@@ -54,8 +40,7 @@ export default function SingleProductPage({
   if (error) return "An error has occurred: " + (error as Error).message;
   if (!data) return null;
 
-  const { name, price, description, images, sizes, gender, color } =
-    data.attributes;
+  const { name, price, description, images, sizes, gender, color } = data.data.attributes;
 
   const mappedSizes =
     (sizes as SizesAPIResponse)?.data?.map((size: Size) => ({
@@ -82,10 +67,9 @@ export default function SingleProductPage({
 
   const handleColorSelect = (selectedColor: Color) => {
     setSelectedColorId(selectedColor.id);
-    console.log("Selected color ID:", selectedColorId);
   };
+
   const handleSizeSelect = (sizeId: number) => {
-    console.log("Selected size ID:", sizeId);
     setSelectedSizeId(sizeId);
   };
 
@@ -114,7 +98,7 @@ export default function SingleProductPage({
       }}
     >
       <Box
-        sx={{ width: { xs: "100%", md: "50%" } }} //, backgroundColor: "#FFCCA9"
+        sx={{ width: { xs: "100%", md: "50%" } }} 
       >
         <ProductImageGallery images={images} />
       </Box>
@@ -128,7 +112,7 @@ export default function SingleProductPage({
           paddingLeft: { xs: "20px", md: "50px", lg: "80px", xl: "100px" },
           paddingRight: { xs: "20px", md: "0" },
           paddingTop: { xs: "30px" },
-        }} //backgroundColor: "#cccccc",
+        }} 
       >
         <ProductTitle name={name} price={price} gender={productGender} />
         <ColorSelector colors={productColors} onSelect={handleColorSelect} />

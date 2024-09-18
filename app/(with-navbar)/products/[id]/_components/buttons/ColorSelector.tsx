@@ -33,7 +33,6 @@ export default function ColorSelector({
       </Typography>
       <Box sx={{ display: "flex", gap: 2 }}>
         {colors.map((color) => {
-          console.log("Rendering color with ID:", color.id); 
           return (
             <Button
               key={color.id}

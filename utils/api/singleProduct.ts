@@ -1,6 +1,5 @@
-"use client";
-
 import { useQuery } from "@tanstack/react-query";
+import { ProductResponse } from "@/types/singleProduct";
 
 export type PopulateField =
   | "images"
@@ -14,7 +13,7 @@ export const fetchProductDetails = async (
   id: string,
   fieldsToPopulate: PopulateField[] = [],
   token?: string
-) => {
+): Promise<ProductResponse> => {
   const populateFields = fieldsToPopulate.join(",");
 
   const headers: HeadersInit = {
@@ -30,16 +29,16 @@ export const fetchProductDetails = async (
     { headers }
   );
   const data = await response.json();
-  return data.data;
+  return data;
 };
 
 export default function ProductDetails(
   id: string,
   fieldsToPopulate: PopulateField[] = [],
-  token?: string
+
 ) {
-  return useQuery({
+  return useQuery<ProductResponse>({
     queryKey: ["productDetails", id, fieldsToPopulate],
-    queryFn: () => fetchProductDetails(id, fieldsToPopulate, token),
+    queryFn: () => fetchProductDetails(id, fieldsToPopulate),
   });
 }
