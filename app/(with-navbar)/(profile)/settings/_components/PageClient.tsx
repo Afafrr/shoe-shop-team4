@@ -4,7 +4,7 @@ import { useState } from "react";
 import ProfileAside from "../../_components/ProfileAside";
 import AvatarBox from "./AvatarBox";
 import MyProfileForm from "./MyProfileForm";
-import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { ResData } from "@/utils/getData";
 import { UserData } from "@/types/types";
 import { inputs } from "../_schema/profileSchema";
 import WarningIcon from "@/components/Form/WarningIcon";

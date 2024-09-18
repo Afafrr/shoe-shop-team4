@@ -1,10 +1,6 @@
 import { z } from "zod";
 
-export const profileValidation: z.ZodSchema<{
-  firstName: string;
-  lastName?: string;
-  phoneNumber?: string;
-}> = z.object({
+export const profileValidation: z.ZodSchema = z.object({
   firstName: z
     .string()
     .min(1, {

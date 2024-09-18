@@ -1,9 +1,9 @@
 import { FormObj } from "./_components/PageClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
-import { getData } from "../../_actions/getData";
+import { getData } from "@/utils/getData";
 import { UserData } from "@/types/types";
-import { postData } from "../../_actions/postData";
+import { postData } from "../../../../utils/postData";
 
 export async function getUserInfo() {
   const session = await getServerSession(authOptions);

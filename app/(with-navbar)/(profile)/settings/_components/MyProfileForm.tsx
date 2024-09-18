@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { UserData } from "@/types/types";
 import WarningIcon from "@/components/Form/WarningIcon";
 import SuccessAlert from "@/components/Alerts/SuccessAlert";
-import { ResData } from "@/app/(with-navbar)/_actions/getData";
+import { ResData } from "@/utils/getData";
 import { updateUserData } from "../actions";
 import { useSession } from "next-auth/react";
 
