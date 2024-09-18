@@ -1,3 +1,5 @@
+"use server";
+
 import { resetSchema } from "@/schemas/resetSchema";
 import { BackResponse, ContextType } from "@/types/types";
 import { ActionResponse } from "@/types/types";
