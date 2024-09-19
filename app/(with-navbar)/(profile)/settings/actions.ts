@@ -5,7 +5,6 @@ import { getData } from "../../../../utils/getData";
 import { UserData } from "@/types/types";
 import { postData } from "../../../../utils/postData";
 import { postImage, deleteImage } from "../../../../utils/imageOperations";
-import { JWT } from "next-auth/jwt";
 
 export async function getUserInfo() {
   const session = await getServerSession(authOptions);
@@ -36,7 +35,7 @@ export async function updateUserData(formData: ReducedData, { data }: any) {
     reducedData["avatar"] = undefined;
   }
   //delete image from DB if image changed or deleted
-  if (formData.deleteImage || formData.avatar) {
+  if (formData.deleteImg || formData.avatar) {
     //getting actual imageId assigned to profile
     const userData = await getData<UserData>(
       "users/me?populate=avatar",
