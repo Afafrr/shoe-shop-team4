@@ -7,10 +7,10 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import NextLink from "next/link";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import { Avatar } from "@mui/material";
+import { Avatar, Link } from "@mui/material";
 
 import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
@@ -32,12 +32,13 @@ export default function NavBar() {
               alignContent: "center",
             }}
           >
-            <Image src="/logo.svg" alt="Logo" width={40} height={30} />
+            <Link href="/products" component={NextLink}>
+              <Image src="/logo.svg" alt="Logo" width={40} height={30} />
+            </Link>
             <Box sx={{ alignContent: "center" }}>
-              <Typography
-                noWrap
-                component="a"
-                href="#products"
+              <Link
+                component={NextLink}
+                href="/products"
                 sx={{
                   ml: 3,
                   display: { xs: "none", md: "flex" },
@@ -46,7 +47,7 @@ export default function NavBar() {
                 }}
               >
                 Products
-              </Typography>
+              </Link>
             </Box>
           </Box>
 
