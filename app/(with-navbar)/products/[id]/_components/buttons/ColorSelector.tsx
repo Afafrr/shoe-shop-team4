@@ -41,14 +41,17 @@ export default function ColorSelector({
                 width: 40,
                 height: 40,
                 backgroundColor: color.attributes.name.toLowerCase(),
-                border: selectedColorId === color.id ? "2px solid black" : "none",
+                border:
+                  selectedColorId === color.id
+                    ? "1px solid black"
+                    : "1px solid #5C5C5C",
                 borderRadius: "10%",
                 "&:hover": {
                   backgroundColor: color.attributes.name.toLowerCase(),
                 },
               }}
             />
-          )
+          );
         })}
       </Box>
     </Box>

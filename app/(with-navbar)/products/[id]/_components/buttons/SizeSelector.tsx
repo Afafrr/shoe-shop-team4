@@ -43,7 +43,7 @@ export default function SizeSelector({ sizes, onSelect }: SizeSelectorProps) {
             sx={{
               borderColor: "#5C5C5C",
               borderRadius: "8px",
-              color: "#5C5C5C",
+              color: selectedSizeId === size.id ? "#C3C3C3" : "#5C5C5C",
               backgroundColor:
                 selectedSizeId === size.id ? "#F0F0F0" : "#FFFFFF",
               textAlign: "center",
