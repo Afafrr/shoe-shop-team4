@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { FieldValues, FormContainer, useForm } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/Input/Input";
-import { FormObj } from "./PageClient";
 import { inputs } from "../_schema/profileSchema";
 import { profileValidation } from "../_schema/profileValidation";
 import { useMutation } from "@tanstack/react-query";
@@ -13,15 +12,15 @@ import SuccessAlert from "@/components/Alerts/SuccessAlert";
 import { ResData } from "@/utils/getData";
 import { updateUserData } from "../actions";
 import { useSession } from "next-auth/react";
-
-export default function MyProfileForm({ formData }: { formData: FormObj }) {
+import { ReducedData } from "./PageClient";
+export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();
   const [show, setShow] = useState(false);
   const session = useSession();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["userData"],
-    mutationFn: async (userData: FormObj) => {
+    mutationFn: async (userData: ReducedData) => {
       setShow(false);
       const res = await updateUserData(
         {
@@ -39,11 +38,7 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
     defaultValues: formData,
     resolver: zodResolver(profileValidation),
   });
-
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = formContext;
+  const { handleSubmit } = formContext;
 
   return (
     <FormContainer
@@ -64,16 +59,17 @@ export default function MyProfileForm({ formData }: { formData: FormObj }) {
       <Button
         variant="contained"
         type="submit"
-        disabled={isSubmitting}
+        disabled={isPending}
         sx={{
           position: "relative",
           width: "152px",
           height: "40px",
           float: "right",
           mt: { xs: "36px", md: "56px" },
+          mb: "30px",
         }}
       >
-        Save changes
+        {isPending ? "Loading..." : " Save changes"}
       </Button>
     </FormContainer>
   );
