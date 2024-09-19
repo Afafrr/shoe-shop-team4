@@ -1,7 +1,14 @@
 import { Avatar, Box, Button } from "@mui/material";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
+import { FormObj } from "./PageClient";
 
-export default function AvatarBox() {
+export default function AvatarBox({
+  formData,
+  setFormData,
+}: {
+  formData: FormObj;
+  setFormData: Dispatch<SetStateAction<FormObj>>;
+}) {
   return (
     <Box sx={{ display: "flex", mt: { xs: "12px", md: "35px" } }}>
       <Avatar

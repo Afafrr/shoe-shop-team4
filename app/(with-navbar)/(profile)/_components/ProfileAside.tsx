@@ -1,7 +1,6 @@
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { routes } from "@/components/Profile/AsideNavbar";
-
 export default function ProfileAside({
   activeBtnPath,
 }: {
@@ -13,7 +12,7 @@ export default function ProfileAside({
         display: { xs: "none", md: "flex" },
         mt: "35px",
         flexDirection: "column",
-        width: "320px",
+        minWidth: "320px",
         height: 1,
       }}
     >

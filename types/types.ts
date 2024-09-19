@@ -38,3 +38,17 @@ export type FiltersType = {
 export type SearchParamsType = {
   [key: string]: string | string[] | undefined;
 };
+
+export type UserData = {
+  id: number;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+};
