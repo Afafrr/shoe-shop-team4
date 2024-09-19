@@ -1,4 +1,3 @@
-"use server";
 import PageClient from "./_components/PageClient";
 import { getUserInfo } from "./actions";
 

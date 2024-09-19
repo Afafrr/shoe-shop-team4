@@ -1,10 +1,10 @@
 import { ReducedData } from "./_components/PageClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/auth";
-import { getData } from "../../../../utils/getData";
+import { getData } from "@/utils/getData";
 import { UserData } from "@/types/types";
-import { postData } from "../../../../utils/postData";
-import { postImage, deleteImage } from "../../../../utils/imageOperations";
+import { postData } from "@/utils/postData";
+import { postImage, deleteImage } from "@/utils/imageOperations";
 
 export async function getUserInfo() {
   const session = await getServerSession(authOptions);
