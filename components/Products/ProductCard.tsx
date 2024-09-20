@@ -71,7 +71,7 @@ function SecondaryText({ children }: { children: ReactNode }) {
   return (
     <Typography
       sx={{
-        fontSize: { xs: "10px", md: "22px" },
+        fontSize: { xs: "9px", md: "18px" },
         fontWeight: 500,
         color: "#5c5c5c",
       }}
