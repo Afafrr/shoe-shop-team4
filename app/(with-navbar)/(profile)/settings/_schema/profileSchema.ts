@@ -8,7 +8,7 @@ type FormInput = {
     type?: string;
     autoComplete?: string;
     InputProps?: {
-      readOnly: boolean;
+      disabled: boolean;
     };
   };
 };
@@ -39,7 +39,7 @@ export const inputs: FormInput[] = [
       placeholder: "Meldrum",
       type: "text",
       InputProps: {
-        readOnly: true,
+        disabled: true,
       },
     },
   },
