@@ -30,3 +30,55 @@ export type ContextType = {
   searchParams: { [k: string]: string };
   session: Session | null;
 };
+export type ImageData = {
+  id: number;
+  name: string;
+  alternativeText: string | null;
+  caption: string | null;
+  width: number;
+  height: number;
+  formats: {
+    thumbnail: {
+      ext: string;
+      url: string;
+      hash: string;
+      mime: string;
+      name: string;
+      path: string | null;
+      size: number;
+      width: number;
+      height: number;
+      provider_metadata: {
+        public_id: string;
+        resource_type: string;
+      };
+    };
+  };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl: string | null;
+  provider: string;
+  provider_metadata: {
+    public_id: string;
+    resource_type: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
+export type UserData = {
+  id: number;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  avatar: ImageData;
+};
