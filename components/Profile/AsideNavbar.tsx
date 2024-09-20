@@ -1,8 +1,7 @@
 "use client";
 
-import { Stack, Typography, Link, SxProps, Box } from "@mui/material";
+import { Stack, Typography, SxProps, Box } from "@mui/material";
 import { useTheme } from "@mui/material";
-import NextLink from "next/link";
 //icons imports
 import { LogoutIcon } from "@/public/svg/LogoutIcon";
 import { SettingsIcon } from "@/public/svg/SettingsIcon";
@@ -48,7 +47,13 @@ export const AsideNavbar = ({
         return label === "Logout" ? (
           <LogoutButton key={label} Icon={Icon} />
         ) : (
-          <AsideLinkButton key={label} Icon={Icon} href={href} color={color} />
+          <AsideLinkButton
+            key={label}
+            Icon={Icon}
+            href={href}
+            color={color}
+            label={label}
+          />
         );
       })}
     </Stack>
@@ -90,9 +95,15 @@ type AsideLinkButtonProps = {
   Icon: IconType;
   href: string;
   color: string;
+  label: string;
 };
 
-const AsideLinkButton = ({ Icon, href, color }: AsideLinkButtonProps) => {
+const AsideLinkButton = ({
+  Icon,
+  href,
+  label,
+  color,
+}: AsideLinkButtonProps) => {
   return (
     <NextMuiLink
       href={href}
@@ -111,7 +122,7 @@ const AsideLinkButton = ({ Icon, href, color }: AsideLinkButtonProps) => {
           color: color,
         }}
       >
-        {href}
+        {label}
       </Typography>
     </NextMuiLink>
   );

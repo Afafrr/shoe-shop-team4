@@ -3,14 +3,14 @@
 import { useState } from "react";
 
 import Image from "next/image";
+import NextLink from "next/link";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import NextLink from "next/link";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import { Avatar, Link } from "@mui/material";
+import { Avatar } from "@mui/material";
 
 import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
@@ -74,15 +74,11 @@ export default function NavBar() {
               <CartIcon count={getCartItemCount()} />
             </IconButton>
             {isLoggedIn && (
-              <Link
-                href="/settings"
-                component={NextLink}
-                sx={{ textDecoration: "none" }}
-              >
+              <NextMuiLink href={"/settings"} sx={{ textDecoration: "none" }}>
                 <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
                   U
                 </Avatar>
-              </Link>
+              </NextMuiLink>
             )}
           </Box>
 
