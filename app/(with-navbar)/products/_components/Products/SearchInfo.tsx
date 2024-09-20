@@ -25,7 +25,7 @@ export default function SearchInfo({
   }
 
   return (
-    <>
+    <Box sx={{ mx: { xs: "20px", md: 0 } }}>
       {hasSearch && (
         <Typography
           color="textSecondary"
@@ -47,6 +47,6 @@ export default function SearchInfo({
         </Box>
         {isDesktop && <FiltersRender />}
       </Stack>
-    </>
+    </Box>
   );
 }

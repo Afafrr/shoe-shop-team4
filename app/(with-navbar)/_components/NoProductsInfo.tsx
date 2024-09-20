@@ -1,10 +1,19 @@
 import { ProductsBagIcon } from "@/public/svg/ProductsBagIcon";
 import { Box, Typography, Button } from "@mui/material";
+
+type NoProductsInfoProps = {
+  onBtnClick: () => void;
+  title?: string;
+  subtitle?: string;
+  btnDescription?: string;
+};
+
 export default function NoProductsInfo({
   onBtnClick,
-}: {
-  onBtnClick: () => void;
-}) {
+  title = "You don't have any products yet",
+  subtitle = "Post can contain video, images and text.",
+  btnDescription = "Add Product",
+}: NoProductsInfoProps) {
   return (
     <Box
       sx={{
@@ -34,7 +43,7 @@ export default function NoProductsInfo({
         fontSize={{ xs: "16px", md: "20px" }}
         fontWeight={500}
       >
-        You don&apos;t have any products yet
+        {title}
       </Typography>
       <Typography
         textAlign="center"
@@ -42,7 +51,7 @@ export default function NoProductsInfo({
         fontSize={{ xs: "16px", md: "20px" }}
         fontWeight={300}
       >
-        Post can contain video, images and text.
+        {subtitle}
       </Typography>
       <Button
         variant="contained"
@@ -54,7 +63,7 @@ export default function NoProductsInfo({
         }}
         onClick={() => onBtnClick()}
       >
-        Add Product
+        {btnDescription}
       </Button>
     </Box>
   );

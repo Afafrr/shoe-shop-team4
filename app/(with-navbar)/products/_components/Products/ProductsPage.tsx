@@ -36,11 +36,10 @@ export default function ProductsPage({
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
       <Box
-        flexGrow={1}
         sx={{
           display: { xs: "none", md: "block" },
           mr: "20px",
-          transition: "width 0.3s ",
+          transition: "width 0.1s ",
         }}
       >
         <Collapse
@@ -51,7 +50,7 @@ export default function ProductsPage({
           <SearchInfoRender />
         </Collapse>
       </Box>
-      <Box sx={{ flexGrow: 4 }}>
+      <Box sx={{ flexGrow: 1 }}>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Typography
             sx={{

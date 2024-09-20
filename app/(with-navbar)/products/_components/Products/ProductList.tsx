@@ -2,13 +2,14 @@ import LoadingPage from "@/components/Loading/LoadingPage";
 import ProductCard from "@/components/Products/ProductCard";
 import { FiltersType } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { extractProductInfo, getProductsForCards } from "../../_lib/utils";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ProductOverlay } from "./ProductOverlay";
 import ProductContainer from "@/components/Products/ProductContainer";
+import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
 
 type ProductListProps = {
   setShoesCount: (num: number) => void;
@@ -21,7 +22,7 @@ export default function ProductList({
 }: ProductListProps) {
   const router = useRouter();
 
-  const { data, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["products", filters],
     queryFn: () => getProductsForCards(filters),
     select: (data) => data.data,
@@ -37,10 +38,12 @@ export default function ProductList({
 
   const productInfo = extractProductInfo(data);
 
+  if (isLoading) return <LoadingPage backgroundColor="white" />;
+
   return (
-    <Suspense fallback={<LoadingPage backgroundColor="#FFFFFF" />}>
-      <Grid container>
-        {productInfo.map((product) => (
+    <Grid container>
+      {productInfo.length > 0 ? (
+        productInfo.map((product) => (
           <ProductContainer key={product.id}>
             <Box
               position="relative"
@@ -62,8 +65,15 @@ export default function ProductList({
               />
             </Box>
           </ProductContainer>
-        ))}
-      </Grid>
-    </Suspense>
+        ))
+      ) : (
+        <NoProductsInfo
+          title="No results were found"
+          subtitle="Try searching with different terms or explore more filter options."
+          btnDescription="Search again"
+          onBtnClick={() => router.push("/products")}
+        />
+      )}
+    </Grid>
   );
 }

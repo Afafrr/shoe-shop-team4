@@ -22,7 +22,7 @@ export default async function Page({
 
   await Promise.all([
     queryClient.prefetchQuery({
-      queryKey: ["products", searchParams],
+      queryKey: ["products", filters],
       queryFn: () => getProductsForCards(filters),
     }),
     queryClient.prefetchQuery({
