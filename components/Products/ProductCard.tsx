@@ -1,12 +1,20 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import React, { ReactNode } from "react";
-
+import noImage from "@public/product/NoProductImage.png";
 type ProductCardProps = {
   imageUrl: string;
   name: string;
-  gender: string;
+  gender?: string;
   price: number;
+  children?: ReactNode;
 };
 
 export default function ProductCard({
@@ -14,22 +22,28 @@ export default function ProductCard({
   name,
   gender,
   price,
+  children,
 }: ProductCardProps) {
   return (
     <Card
       sx={{
-        maxWidth: { xs: "152px", md: "320px" },
+        width: "80%",
+        mx: "auto",
         boxShadow: "none",
       }}
     >
-      <CardMedia sx={{ height: { xs: "180px", md: "380px" } }}>
+      <CardMedia
+        sx={{ height: { xs: "180px", sm: "240px", md: "280px", xl: "300px" } }}
+      >
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <Image
-            src={imageUrl}
+            src={imageUrl || noImage}
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 600px) 50vw, (max-width: 1200px) 33vw, 25vw"
             alt={name}
           />
+          {children}
         </div>
       </CardMedia>
       <CardContent sx={{ p: 0 }}>
@@ -37,7 +51,9 @@ export default function ProductCard({
           <PrimaryText>{name}</PrimaryText>
           <PrimaryText>${price}</PrimaryText>
         </Box>
-        <SecondaryText>{`${gender}'s Shoes`}</SecondaryText>
+        <SecondaryText>
+          {gender ? `${gender}'s Shoes` : "Unisex Shoes"}
+        </SecondaryText>
       </CardContent>
     </Card>
   );
