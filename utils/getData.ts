@@ -13,10 +13,9 @@ export async function getData<T>(
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/${url}`,
-      headers
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`, {
+      headers: headers,
+    });
 
     if (!res.ok) {
       console.error(res);
