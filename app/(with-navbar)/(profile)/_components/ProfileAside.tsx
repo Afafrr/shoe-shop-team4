@@ -1,12 +1,16 @@
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { routes } from "@/components/Profile/AsideNavbar";
-
+import { useUserData } from "@/contexts/UserDataProvider";
+import WarningIcon from "@/components/Form/WarningIcon";
 export default function ProfileAside({
   activeBtnPath,
 }: {
   activeBtnPath: routes;
 }) {
+  const { data, error } = useUserData();
+  const avatar = data?.avatar?.url;
+
   return (
     <Box
       sx={{
@@ -19,14 +23,16 @@ export default function ProfileAside({
     >
       <Box sx={{ display: "flex", ml: "40px" }}>
         <Avatar
-          alt=""
+          alt="User profile image"
+          src={avatar}
           sx={{
             width: "64px",
             height: "64px",
-            padding: "15px",
-            border: "4px solid",
+            border: "1px solid #fff",
           }}
-        />
+        >
+          {error ? <WarningIcon /> : null}
+        </Avatar>
         <Box
           sx={{
             display: "flex",
@@ -37,7 +43,7 @@ export default function ProfileAside({
         >
           <Typography sx={{ fontSize: "12px" }}>Welcome</Typography>
           <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
-            Jane
+            {data?.firstName}
           </Typography>
         </Box>
       </Box>

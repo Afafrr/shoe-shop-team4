@@ -4,5 +4,5 @@ import { getData } from "../../../../utils/getData";
 
 export async function getMyProducts() {
   const session = await getServerSession(authOptions);
-  return getData("users/me?populate=products", session?.user.jwt);
+  return getData("users/me?populate[products][populate]=*", session?.user.jwt);
 }

@@ -1,7 +1,5 @@
 "use client";
-
 import { useState } from "react";
-
 import Image from "next/image";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,15 +9,20 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { Avatar } from "@mui/material";
-
 import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
 import CartIcon from "./CartIcon";
 import { useCart } from "@/contexts/Cart";
+import { useUserData } from "@/contexts/UserDataProvider";
+import { useRouter } from "next/navigation";
+import WarningIcon from "@/components/Form/WarningIcon";
 
 export default function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { getCartItemCount } = useCart();
+  const { data, error } = useUserData();
+  const router = useRouter();
+  const avatar = data?.avatar?.url;
 
   return (
     <AppBar position="static" color="inherit">
@@ -68,8 +71,14 @@ export default function NavBar() {
               <CartIcon count={getCartItemCount()} />
             </IconButton>
             {isLoggedIn && (
-              <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
-                U
+              <Avatar
+                alt="User logged In"
+                src={avatar}
+                onClick={() => router.push("/my-products")}
+                sx={{ width: 24, height: 24 }}
+              >
+                {avatar ? null : data?.firstName.slice(0, 1)}
+                {error ? <WarningIcon /> : null}
               </Avatar>
             )}
           </Box>
