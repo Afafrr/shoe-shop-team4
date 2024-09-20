@@ -8,6 +8,7 @@ import { LogoutIcon } from "@/public/svg/LogoutIcon";
 import { SettingsIcon } from "@/public/svg/SettingsIcon";
 import CartIcon from "@/app/(with-navbar)/_components/CartIcon";
 import { signOut } from "next-auth/react";
+import NextMuiLink from "./NextMuiLink";
 
 export type routes = "my-products" | "settings";
 
@@ -44,57 +45,74 @@ export const AsideNavbar = ({
       {asideButtons.map(({ label, Icon, href }) => {
         const color = href === activeBtnPath ? activeBtnColor : defaultColor;
 
-        if (label === "Logout") {
-          return (
-            <Box
-              key={label}
-              onClick={() => signOut()}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "15px",
-                cursor: "pointer",
-              }}
-            >
-              <Icon color={defaultColor} />
-              <Typography
-                sx={{
-                  fontSize: "16px",
-                  fontWeight: 500,
-                  color: defaultColor,
-                }}
-              >
-                {label}
-              </Typography>
-            </Box>
-          );
-        }
-
-        return (
-          <Link
-            component={NextLink}
-            key={label}
-            href={href}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "15px",
-              textDecoration: "none",
-            }}
-          >
-            <Icon color={color} />
-            <Typography
-              sx={{
-                fontSize: "16px",
-                fontWeight: 500,
-                color: color,
-              }}
-            >
-              {label}
-            </Typography>
-          </Link>
+        return label === "Logout" ? (
+          <LogoutButton key={label} Icon={Icon} />
+        ) : (
+          <AsideLinkButton key={label} Icon={Icon} href={href} color={color} />
         );
       })}
     </Stack>
+  );
+};
+
+type IconType =
+  | (({ count }: { count?: number }) => JSX.Element)
+  | (({ color }: { color?: string }) => JSX.Element);
+
+const LogoutButton = ({ Icon }: { Icon: IconType }) => {
+  const defaultColor = "#000000";
+
+  return (
+    <Box
+      onClick={() => signOut()}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: "15px",
+        cursor: "pointer",
+      }}
+    >
+      <Icon color={defaultColor} />
+      <Typography
+        sx={{
+          fontSize: "16px",
+          fontWeight: 500,
+          color: defaultColor,
+        }}
+      >
+        Logout
+      </Typography>
+    </Box>
+  );
+};
+
+type AsideLinkButtonProps = {
+  Icon: IconType;
+  href: string;
+  color: string;
+};
+
+const AsideLinkButton = ({ Icon, href, color }: AsideLinkButtonProps) => {
+  return (
+    <NextMuiLink
+      href={href}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: "15px",
+        textDecoration: "none",
+      }}
+    >
+      <Icon color={color} />
+      <Typography
+        sx={{
+          fontSize: "16px",
+          fontWeight: 500,
+          color: color,
+        }}
+      >
+        {href}
+      </Typography>
+    </NextMuiLink>
   );
 };

@@ -1,6 +1,7 @@
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { Close, Login } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
+import NextLink from "next/link";
 import {
   Box,
   IconButton,
@@ -71,7 +72,7 @@ function CustomListButtonItem(item: {
 }) {
   return (
     <ListItem key={item.description}>
-      <ListItemButton>
+      <ListItemButton LinkComponent={NextLink} href="/auth/sign-in">
         <ListItemIcon>{item.icon}</ListItemIcon>
         <ListItemText primary={item.description} />
       </ListItemButton>

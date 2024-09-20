@@ -16,6 +16,7 @@ import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
 import CartIcon from "./CartIcon";
 import { useCart } from "@/contexts/Cart";
+import NextMuiLink from "@/components/Profile/NextMuiLink";
 
 export default function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -23,7 +24,7 @@ export default function NavBar() {
 
   return (
     <AppBar position="static" color="inherit">
-      <Container maxWidth="xl" sx={{ my: { md: 1 } }}>
+      <Container maxWidth={false} sx={{ my: { md: 1 } }}>
         <Toolbar disableGutters>
           <Box
             sx={{
@@ -32,12 +33,11 @@ export default function NavBar() {
               alignContent: "center",
             }}
           >
-            <Link href="/products" component={NextLink}>
+            <NextMuiLink href="/products">
               <Image src="/logo.svg" alt="Logo" width={40} height={30} />
-            </Link>
+            </NextMuiLink>
             <Box sx={{ alignContent: "center" }}>
-              <Link
-                component={NextLink}
+              <NextMuiLink
                 href="/products"
                 sx={{
                   ml: 3,
@@ -47,7 +47,7 @@ export default function NavBar() {
                 }}
               >
                 Products
-              </Link>
+              </NextMuiLink>
             </Box>
           </Box>
 
@@ -59,7 +59,12 @@ export default function NavBar() {
             }}
           >
             {!isLoggedIn && (
-              <Button variant="outlined" sx={{ width: 140 }} href="#sign-in">
+              <Button
+                variant="outlined"
+                sx={{ width: 140 }}
+                href="/auth/sign-in"
+                LinkComponent={NextLink}
+              >
                 Sign In
               </Button>
             )}
@@ -69,9 +74,15 @@ export default function NavBar() {
               <CartIcon count={getCartItemCount()} />
             </IconButton>
             {isLoggedIn && (
-              <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
-                U
-              </Avatar>
+              <Link
+                href="/settings"
+                component={NextLink}
+                sx={{ textDecoration: "none" }}
+              >
+                <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
+                  U
+                </Avatar>
+              </Link>
             )}
           </Box>
 
