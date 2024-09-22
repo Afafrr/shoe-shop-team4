@@ -1,6 +1,6 @@
 import { JWT } from "next-auth/jwt";
 import { getData } from "./getData";
-import { Datum6, Options, SizeOptions } from "@/types/Product";
+import { Options, SizeOptions } from "@/types/Product";
 import { ResData } from "./getData";
 
 export async function getOptions(token: JWT) {

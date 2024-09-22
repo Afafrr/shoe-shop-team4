@@ -432,7 +432,20 @@ interface Datum {
   attributes: Attributes;
 }
 
-interface Attributes {}
+interface Attributes {
+  name: string;
+  value: number;
+}
+
+export interface AttributeResponse {
+  data: AttributeListResponseDataItem[];
+  meta: Meta;
+}
+
+export interface AttributeListResponseDataItem {
+  id: number;
+  attributes: Attributes;
+}
 
 export type SuccessfulImageUpload = Omit<
   ImageAttributes,

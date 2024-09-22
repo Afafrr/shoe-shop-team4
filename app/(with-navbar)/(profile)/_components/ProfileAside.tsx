@@ -20,7 +20,7 @@ export default function ProfileAside({
         },
         mt: "35px",
         flexDirection: "column",
-        width: "320px",
+        minWidth: "320px",
         height: 1,
       }}
     >

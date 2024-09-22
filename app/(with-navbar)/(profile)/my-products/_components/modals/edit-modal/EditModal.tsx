@@ -85,3 +85,31 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
     </Modal>
   );
 }
+
+// Example product =>
+//  const product = {
+//   id: "1552",
+//   name: "Jordan Air",
+//   price: 4200,
+//   categories: ["5", "8", "6"],
+//   color: ["8"],
+//   gender: "4",
+//   brand: "13",
+//   description: "Jordan's own personal shoes!",
+//   sizes: [
+//     "13",
+//     "14",
+//     "15",
+//     "16",
+//     "17",
+//     "18",
+//     "19",
+//     "20",
+//     "21",
+//     "22",
+//     "23",
+//     "24",
+//     "25",
+//   ],
+//   images: [file, file1, file2],
+// };

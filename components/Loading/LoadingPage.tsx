@@ -3,8 +3,13 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 type LoadingProps = {
   height?: string;
   width?: string;
+  backgroundColor?: string;
 };
-export default function LoadingPage({ height, width }: LoadingProps) {
+export default function LoadingPage({
+  height,
+  width,
+  backgroundColor = "#f5f5f5",
+}: LoadingProps) {
   return (
     <Box
       sx={{
@@ -13,8 +18,8 @@ export default function LoadingPage({ height, width }: LoadingProps) {
         justifyContent: "center",
         alignItems: "center",
         width: width || "100%",
-        height: height || "100vh", // Full viewport height
-        backgroundColor: "#f5f5f5", // Light background color
+        height: height || "100vh",
+        backgroundColor,
         textAlign: "center",
       }}
     >
@@ -23,8 +28,8 @@ export default function LoadingPage({ height, width }: LoadingProps) {
         size={80}
         thickness={4}
         sx={{
-          color: "#FE645E", // Primary color
-          mb: 3, // Margin bottom
+          color: "#FE645E",
+          mb: 3,
         }}
       />
 

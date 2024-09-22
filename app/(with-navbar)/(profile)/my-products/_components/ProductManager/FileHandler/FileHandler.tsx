@@ -2,7 +2,7 @@
 import { useFormContext } from "react-hook-form";
 import FilePreviewContainer from "./FilePreviewContainer";
 import FileSelector from "./FileSelector";
-import { ReactNode, useEffect, useReducer } from "react";
+import { ReactNode, useReducer } from "react";
 import useIsMobile from "../../useIsMobile";
 import { Box, Stack, Typography } from "@mui/material";
 

@@ -2,7 +2,7 @@
 import { Box, Button, InputLabel, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useFormContext } from "react-hook-form";
 import WarningIcon from "@/components/Form/WarningIcon";
@@ -27,12 +27,6 @@ export default function SizeSelect({ props, options }: SizesProps) {
   const [selectedSizes, setSelectedSizes] = useState<string[]>(
     getValues("sizes")
   );
-
-  useEffect(() => {
-    setValue("sizes", selectedSizes, {
-      shouldValidate: "sizes" in touchedFields ? true : false,
-    });
-  }, [selectedSizes, setValue]);
 
   const handleSizeClick = (size: { value: string; label: string }) => {
     const prevSizes: string[] = getValues("sizes");
