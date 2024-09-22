@@ -1,11 +1,14 @@
+"use client";
 import { Button, Modal, Box } from "@mui/material";
 import { productSchema } from "@/schemas/productSchema";
 import { editProductAction } from "./action";
 import ProductManager from "../../ProductManager/ProductManager";
-import { ActionFunction, EditProduct } from "@/types/Product";
+import { EditProduct } from "@/types/Product";
+import ActionConfirmationModal from "../../ProductManager/modals/ActionConfirmationModal";
 
 import "./modal.css";
 import { ContextType } from "@/types/types";
+import { useEffect, useState } from "react";
 
 // This is a modal that pops when the user clicks on edit product. Uses same template as AddProduct page: 'ProductManager.tsx'
 // This component takes:
@@ -19,8 +22,15 @@ type ModalType = {
 };
 
 export default function EditModal({ open, handleClose, product }: ModalType) {
+  const [confirmModal, setConfirmModal] = useState(false);
   const { id, ...formProduct } = product;
   const defaultValues = formProduct;
+
+  useEffect(() => {
+    if (open) {
+      setConfirmModal(false); // Reset confirmation modal when the main modal is opened
+    }
+  }, [open]);
 
   const title = {
     header: "Edit Product",
@@ -31,13 +41,14 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
     schema: productSchema,
     submitAction: (formData: FormData, context: ContextType) =>
       editProductAction(formData, context, id),
+    successFn: () => handleClose(),
     defaultForm: defaultValues,
   };
 
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={() => setConfirmModal(true)}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
       disableScrollLock
@@ -50,9 +61,17 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
           right: { xs: "120px" },
         }}
       >
+        <ActionConfirmationModal
+          name="Discard"
+          message="Are you sure you want to discard all changes?"
+          open={confirmModal}
+          handleClose={() => setConfirmModal(false)}
+          actionFn={handleClose}
+        />
+
         <Button
           variant="outlined"
-          onClick={handleClose}
+          onClick={() => setConfirmModal(true)}
           className="close-button"
         >
           Close

@@ -13,6 +13,7 @@ type pageType = {
   formActions: {
     schema: z.ZodSchema<FieldValues>;
     submitAction: ActionFunction;
+    successFn?: () => void;
     defaultForm?: ProductFormSchema;
   };
 };
@@ -22,7 +23,7 @@ export default function ProductManager({
   subheader,
   formActions,
 }: pageType) {
-  const { schema, submitAction, defaultForm } = formActions;
+  const { schema, submitAction, defaultForm, successFn } = formActions;
 
   return (
     <Container
@@ -43,6 +44,7 @@ export default function ProductManager({
         <ProductFormPage
           schema={schema}
           submitFn={submitAction}
+          successFn={successFn}
           defaultForm={defaultForm}
         />
       </Stack>

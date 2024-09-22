@@ -26,6 +26,7 @@ const MenuProps = {
 };
 
 type ChipProps = {
+  name: string;
   label: string;
   options?: Option[] | null;
   props: TextFieldElementProps;
@@ -35,30 +36,26 @@ type ChipProps = {
   children?: React.ReactNode;
 };
 
-export default function ChipSelect({ label, options, props }: ChipProps) {
+export default function ChipSelect({ name, label, options, props }: ChipProps) {
   const {
     formState: { errors },
     setValue,
     getValues,
   } = useFormContext();
-  // Initialize colorList. Value of input will be controlled by this list.
+  // Initialize valueList. Value of input will be controlled by this list.
   // Not initialized to empty array because form might be preloaded with default values
-  const [colorList, setColorList] = useState<string[]>(getValues("color"));
+  const [valueList, setValueList] = useState<string[]>(getValues(name));
 
-  // Update formField value every time colorList changes
-  React.useEffect(() => {
-    setValue("color", colorList as string[], {
-      shouldValidate: colorList.length == 0 ? false : true,
-    });
-  }, [colorList, setValue]);
-
-  // function to handle input change. colorList state is updated on every selection.
+  // function to handle input change. valueList state is updated on every selection.
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     const {
       target: { value },
     } = event;
 
-    setColorList([...(value as string[])]);
+    setValueList([...(value as string[])]);
+    setValue(name, [...(value as string[])], {
+      shouldValidate: true,
+    });
   };
 
   return (
@@ -80,8 +77,8 @@ export default function ChipSelect({ label, options, props }: ChipProps) {
         required
         multiple
         displayEmpty
-        label="Colors"
-        value={colorList || []}
+        label={label}
+        value={valueList || []}
         onChange={(event) => {
           handleChange(event);
         }}
@@ -89,7 +86,9 @@ export default function ChipSelect({ label, options, props }: ChipProps) {
         renderValue={(selected) => {
           if (selected.length === 0) {
             return (
-              <Typography color="textSecondary">Select colors...</Typography>
+              <Typography color="textSecondary">
+                {props.placeholder || "select..."}
+              </Typography>
             );
           }
           if (!options) return;
@@ -126,7 +125,7 @@ export default function ChipSelect({ label, options, props }: ChipProps) {
           </MenuItem>
         )}
       </Select>
-      {errors.color ? (
+      {errors[name] ? (
         <Typography
           color={"red"}
           sx={{
@@ -138,7 +137,7 @@ export default function ChipSelect({ label, options, props }: ChipProps) {
             fontWeight: 400,
           }}
         >
-          <WarningIcon /> {errors.color.message as string}
+          <WarningIcon /> {errors[name].message as string}
         </Typography>
       ) : (
         ""

@@ -11,6 +11,7 @@ export async function addProductAction(
   formData: FormData,
   context: ContextType
 ): Promise<ProductActionResponse> {
+  // If no session return
   const { session } = context;
   if (!session || !session.user.jwt)
     return {
@@ -49,8 +50,16 @@ export async function addProductAction(
     // Format the formData to satisfy product POST request.
     const productValues: Record<string, any> = FormDataToObject(formData);
 
-    const { name, price, color, gender, brand, description, sizes } =
-      productValues;
+    const {
+      name,
+      price,
+      categories,
+      color,
+      gender,
+      brand,
+      description,
+      sizes,
+    } = productValues;
 
     let productResponse = await fetch(`${BASE_URL}/products`, {
       method: "POST",
@@ -64,7 +73,7 @@ export async function addProductAction(
           images: idImages,
           description,
           brand,
-          categories: [5],
+          categories,
           color,
           gender,
           sizes,
@@ -78,7 +87,7 @@ export async function addProductAction(
 
     if ("error" in productResult) return productResult as ErrorResponse;
 
-    return { ...productResult, redirect: "/settings" };
+    return { ...productResult, redirect: "/my-products" };
   } catch (error) {
     return {
       data: {},

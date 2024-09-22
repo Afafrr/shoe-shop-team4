@@ -69,7 +69,7 @@ export default function FileSelector({ handleFileChange }: FileSelectorProps) {
         </Box>
       </Box>
 
-      {errors.image ? (
+      {errors.images ? (
         <Typography
           color={"red"}
           sx={{
@@ -82,7 +82,7 @@ export default function FileSelector({ handleFileChange }: FileSelectorProps) {
             fontWeight: 400,
           }}
         >
-          <WarningIcon /> {errors.image.message as string}
+          <WarningIcon /> {errors.images.message as string}
         </Typography>
       ) : (
         ""

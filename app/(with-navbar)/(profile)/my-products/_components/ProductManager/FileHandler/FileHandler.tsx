@@ -17,26 +17,30 @@ type FileHandlerProps = {
 type FileType = { content: File; url: string };
 type StateType = FileType[];
 type StateAction =
-  | { type: "append"; file: FileType }
+  | { type: "append"; files: FileType[] }
   | { type: "remove"; name: string };
 
 export default function FileHandler({ label, required }: FileHandlerProps) {
-  const [imageList, setImageList] = useReducer(reducer, []);
-  const { setError, clearErrors, setValue } = useFormContext();
-  const isMobile = useIsMobile(900);
+  const { setError, clearErrors, setValue, getValues } = useFormContext();
 
-  // Updates form field 'image' every time imageList state changes
-  useEffect(() => {
+  // Retrieve default values from form and format to FileType
+  const initialValue = getValues("images").map((file: File) => ({
+    content: file,
+    url: URL.createObjectURL(file),
+  }));
+  // Stores and tracks all files and their preview urls. Can `append` or `remove` file from it using reducer actions.
+  const [imageList, setImageList] = useReducer(reducer, initialValue);
+
+  const isMobile = useIsMobile();
+
+  // Handles image preview click. In this case, deletes file and preview from selected files.
+  function handleClick(fileName: string) {
+    setImageList({ type: "remove", name: fileName });
     setValue(
-      "image",
-      imageList.map((image) => image.content),
-      { shouldValidate: imageList.length == 0 ? false : true }
+      "images",
+      [...getValues("images").filter((image: File) => image.name !== fileName)],
+      { shouldValidate: true }
     );
-  }, [imageList, setValue]);
-
-  // Handles image preview click
-  function handleClick(name: string) {
-    setImageList({ type: "remove", name: name });
   }
 
   /* Handles file selection.
@@ -47,32 +51,41 @@ export default function FileHandler({ label, required }: FileHandlerProps) {
   async function handleFileChange(
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (!isValidFile(file)) {
-        setError("image", {
-          type: "manual",
-          message: "Invalid file",
-        });
-        let timeoutId = setTimeout(() => {
-          clearErrors("image");
-          clearTimeout(timeoutId);
-        }, 2000);
-        return;
-      }
+    // received files from input.
+    const files = event.target.files;
 
-      let fileUrl;
-      try {
-        fileUrl = await readAsUrl(file);
-      } catch {
-        fileUrl = "No preview";
-      }
-      const new_file = { content: file, url: fileUrl };
-      setImageList({ type: "append", file: new_file });
+    if (files) {
+      //iterate file list.
+      const fileList = Array.from(files);
+
+      // new formatted file list
+      let new_files: FileType[] = [];
+
+      fileList.map((file) => {
+        // Check if it's valid file. If not, set react-hook-form manual error.
+        if (!isValidFile(file)) {
+          setError("images", {
+            type: "manual",
+            message: "Invalid file",
+          });
+          let timeoutId = setTimeout(() => {
+            clearErrors("images");
+            clearTimeout(timeoutId);
+          }, 2000);
+          return;
+        }
+        // create url of image file for preview.
+        let fileUrl = URL.createObjectURL(file);
+
+        new_files.push({ content: file, url: fileUrl });
+      });
+
+      // Update imageList and formField value.
+      setImageList({ type: "append", files: new_files });
       setValue(
-        "image",
-        imageList.map((image) => image.content),
-        { shouldValidate: true }
+        "images",
+        [...getValues("images"), ...new_files.map((file) => file.content)],
+        { shouldDirty: true, shouldValidate: true }
       );
     }
   }
@@ -181,24 +194,6 @@ function SquareGrid({ items }: GridProps) {
   );
 }
 
-// Function to extract url from a file
-function readAsUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const imageUrl = reader.result as string;
-      resolve(imageUrl);
-    };
-
-    reader.onerror = () => {
-      reject(new Error("Failed to read file"));
-    };
-
-    reader.readAsDataURL(file);
-  });
-}
-
 /*
  * State reducer. Two possible actions:
  * "append" => Add file and url to imageList
@@ -207,7 +202,7 @@ function readAsUrl(file: File): Promise<string> {
 function reducer(state: StateType, action: StateAction): StateType {
   switch (action.type) {
     case "append":
-      return [...state, action.file];
+      return [...state, ...action.files];
     case "remove":
       const new_list = state.filter(
         (file) => file.content.name !== action.name

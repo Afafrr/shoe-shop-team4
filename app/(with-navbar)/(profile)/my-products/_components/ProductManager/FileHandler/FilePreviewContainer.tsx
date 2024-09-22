@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import Image from "next/image";
 import "./styles.css";
 import { useState } from "react";
-import DeleteModal from "../modals/DeleteModal";
+import ActionConfirmationModal from "../modals/ActionConfirmationModal";
 
 // Component to store file previews. Takes a Url to show an Image and an onClick handler.
 
@@ -95,11 +95,13 @@ export default function FilePreviewContainer({
           sizes="20px 20px"
         />
       </Box>
-      <DeleteModal
+      <ActionConfirmationModal
+        name="Delete"
+        message="Are you sure you want to delete product image?"
         open={open}
         handleClose={handleClose}
-        deleteFn={handleClick}
-      ></DeleteModal>
+        actionFn={handleClick}
+      ></ActionConfirmationModal>
     </Box>
   );
 }

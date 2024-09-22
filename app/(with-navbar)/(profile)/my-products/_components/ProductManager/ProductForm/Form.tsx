@@ -1,5 +1,5 @@
 "use client";
-import { Button, InputAdornment, MenuItem, Stack } from "@mui/material";
+import { Button, InputAdornment, Stack } from "@mui/material";
 import Input from "../inputs/Input";
 import { Box } from "@mui/material";
 import useIsMobile from "../../useIsMobile";
@@ -7,19 +7,29 @@ import useIsMobile from "../../useIsMobile";
 import ChipSelect from "../inputs/ChipSelect";
 import FileHandler from "../FileHandler/FileHandler";
 import SizeSelect from "../inputs/SizeSelect";
-import { ProductOptions } from "@/types/Product";
 import CustomSelect from "../inputs/CustomSelect";
+import { getOptions } from "@/utils/getOptions";
+import { useQuery } from "@tanstack/react-query";
+import { JWT } from "next-auth/jwt";
+import { useSession } from "next-auth/react";
+import LoadingPage from "@/components/Loading/LoadingPage";
 
 // This component contains the main form inputs for the product form.
 
 type ProductFormProps = {
   isPending: boolean;
-  isLoading: boolean;
-  options: ProductOptions;
 };
 
-export default function ProductForm({ isPending, options }: ProductFormProps) {
+export default function ProductForm({ isPending }: ProductFormProps) {
   const isMobile = useIsMobile();
+  const { data: session } = useSession();
+
+  const { data: options, error: queryError } = useQuery({
+    queryKey: ["options"],
+    queryFn: () => getOptions(session?.user.jwt as JWT),
+  });
+
+  if (!options) return <LoadingPage width="100%" height="800px" />;
 
   return (
     <>
@@ -66,9 +76,24 @@ export default function ProductForm({ isPending, options }: ProductFormProps) {
             }}
           />
           <ChipSelect
+            options={options.categories}
+            name="categories"
+            label="Categories"
+            props={{
+              name: "Category",
+              placeholder: "Select categories...",
+              required: true,
+            }}
+          />
+          <ChipSelect
             options={options.colors}
+            name="color"
             label="Colors"
-            props={{ name: "color", required: true }}
+            props={{
+              name: "color",
+              required: true,
+              placeholder: "Select colors...",
+            }}
           />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <CustomSelect
@@ -108,6 +133,7 @@ export default function ProductForm({ isPending, options }: ProductFormProps) {
       <Button
         type="submit"
         disabled={isPending}
+        variant="contained"
         sx={{
           width: { xs: "200px", lg: "150px" },
           marginTop: { xs: "54.55px", lg: "0" },
@@ -116,8 +142,6 @@ export default function ProductForm({ isPending, options }: ProductFormProps) {
           right: { lg: "40px" },
           py: "25px",
           borderRadius: "5.58px",
-          backgroundColor: "#FE645E",
-          color: "white",
           height: { xs: "60px", lg: "34px" },
           fontWeight: 500,
           textTransform: "none",

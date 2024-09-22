@@ -15,6 +15,14 @@ export const productSchema = z.object({
     .refine((price) => price > 0, {
       message: "Price must be greater than $0",
     }),
+  categories: z
+    .array(z.string())
+    .refine((array) => array.length !== 0, {
+      message: "Please select at least 1 category",
+    })
+    .refine((array) => !array.some((value) => isNaN(Number(value))), {
+      message: "Invalid gender",
+    }),
   color: z
     .array(z.string())
     .refine((array) => array.length !== 0, {
@@ -46,7 +54,7 @@ export const productSchema = z.object({
     .refine((array) => !array.some((value) => isNaN(Number(value))), {
       message: "Invalid size",
     }),
-  image: z
+  images: z
     .array(z.instanceof(File))
     .refine((array) => array.length !== 0, { message: "Please upload image" }),
 });

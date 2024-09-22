@@ -266,15 +266,15 @@ interface Images2 {
   data: Datum6[];
 }
 
-interface Datum6 {
+export interface Datum6 {
   id: number;
   attributes: Attributes8;
 }
 
 interface Attributes8 {
   name: string;
-  alternativeText: string;
-  caption: string;
+  alternativeText: string | null;
+  caption: string | null;
   width: number;
   height: number;
   formats: string;
@@ -283,16 +283,16 @@ interface Attributes8 {
   mime: string;
   size: number;
   url: string;
-  previewUrl: string;
+  previewUrl: string | null;
   provider: string;
   provider_metadata: string;
-  related: Related;
-  folder: Parent;
-  folderPath: string;
+  related?: Related;
+  folder?: Parent;
+  folderPath?: string;
   createdAt: string;
   updatedAt: string;
-  createdBy: Parent;
-  updatedBy: Parent;
+  createdBy?: Parent;
+  updatedBy?: Parent;
 }
 
 interface Folder {
@@ -470,12 +470,13 @@ export type ImageUpload = SuccessfulImageUpload | ErrorResponse;
 export type ProductFormSchema = {
   name: string;
   price: number;
+  categories: string[];
   color: string[];
   gender: string;
   brand: string;
   description: string;
   sizes: string[];
-  image: File[];
+  images: File[];
 };
 
 export type Option = {
@@ -484,6 +485,7 @@ export type Option = {
 };
 export type ProductOptions = {
   colors: Option[] | null;
+  categories: Option[] | null;
   brands: Option[] | null;
   genders: Option[] | null;
   sizes: Option[] | null;
@@ -500,4 +502,44 @@ export type ActionFunction = {
 
 export type EditProduct = ProductFormSchema & {
   id: string;
+};
+
+export type getProducts = {
+  data: BackProduct[];
+};
+
+export type BackProduct = {
+  id: number;
+  attributes: {
+    name: string;
+    description: string;
+    price: number;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    teamName: "team-4";
+    brand: Data5;
+    categories: Data6;
+    gender: Data5;
+    color: Data5;
+    sizes: Data6;
+    images: Images2;
+  };
+};
+
+type Data5 = {
+  data: attributes16;
+};
+type Data6 = {
+  data: attributes16[];
+};
+
+type attributes16 = {
+  id: string;
+  attributes: {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
 };

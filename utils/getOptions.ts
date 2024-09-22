@@ -1,16 +1,18 @@
 import { JWT } from "next-auth/jwt";
 import { getData } from "./getData";
-import { Options, SizeOptions } from "@/types/Product";
+import { Datum6, Options, SizeOptions } from "@/types/Product";
 import { ResData } from "./getData";
 
 export async function getOptions(token: JWT) {
   const colorOptions = getColors(token);
+  const categoryOptions = getCategories(token);
   const brandOptions = getBrands(token);
   const genderOptions = getGenders(token);
   const sizeOptions = getSizes(token);
 
-  const [colors, brands, genders, sizes] = await Promise.all([
+  const [colors, categories, brands, genders, sizes] = await Promise.all([
     colorOptions,
+    categoryOptions,
     brandOptions,
     genderOptions,
     sizeOptions,
@@ -18,13 +20,14 @@ export async function getOptions(token: JWT) {
 
   return {
     colors,
+    categories,
     brands,
     genders,
     sizes,
   };
 }
 
-async function getColors(token: JWT) {
+export async function getColors(token: JWT) {
   let response: ResData<Options> = await getData<Options>("colors", token);
   if (!response.data) return null;
   return response.data.data.map((color) => ({
@@ -33,7 +36,16 @@ async function getColors(token: JWT) {
   }));
 }
 
-async function getBrands(token: JWT) {
+export async function getCategories(token: JWT) {
+  let response: ResData<Options> = await getData<Options>("categories", token);
+  if (!response.data) return null;
+  return response.data.data.map((category) => ({
+    value: category.id.toString(),
+    label: category.attributes.name,
+  }));
+}
+
+export async function getBrands(token: JWT) {
   let response: ResData<Options> = await getData<Options>("brands", token);
   if (!response.data) return null;
   return response.data.data.map((brand) => ({
@@ -42,7 +54,7 @@ async function getBrands(token: JWT) {
   }));
 }
 
-async function getGenders(token: JWT) {
+export async function getGenders(token: JWT) {
   let response: ResData<Options> = await getData<Options>("genders", token);
   if (!response.data) return null;
   return response.data.data.map((gender) => ({
@@ -51,7 +63,7 @@ async function getGenders(token: JWT) {
   }));
 }
 
-async function getSizes(token: JWT) {
+export async function getSizes(token: JWT) {
   let response: ResData<SizeOptions> = await getData<SizeOptions>(
     "sizes",
     token

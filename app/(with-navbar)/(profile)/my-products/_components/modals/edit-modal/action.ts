@@ -4,8 +4,6 @@ import {
   ImageUpload,
   ProductActionResponse,
   ProductResponse,
-  SuccessfulImageUpload,
-  SuccessfulProductAdd,
 } from "@/types/Product";
 import { FormDataToObject } from "../../../_helpers";
 
@@ -53,8 +51,16 @@ export async function editProductAction(
     // Format the formData to satisfy product PUT request.
     const productValues: Record<string, any> = FormDataToObject(formData);
 
-    const { name, price, color, gender, brand, description, sizes } =
-      productValues;
+    const {
+      name,
+      price,
+      categories,
+      color,
+      gender,
+      brand,
+      description,
+      sizes,
+    } = productValues;
 
     // POST request to edit product on backend
     let productResponse = await fetch(
@@ -71,7 +77,7 @@ export async function editProductAction(
             images: idImages,
             description,
             brand,
-            categories: [5],
+            categories,
             color,
             gender,
             sizes,
@@ -86,7 +92,7 @@ export async function editProductAction(
 
     if ("error" in result) return productResult as ErrorResponse;
 
-    return { ...productResult, redirect: "/settings" };
+    return { ...productResult, redirect: "" };
   } catch (error) {
     return {
       data: {},

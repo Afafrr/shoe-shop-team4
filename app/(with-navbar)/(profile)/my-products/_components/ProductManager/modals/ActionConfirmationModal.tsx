@@ -2,16 +2,22 @@ import { Box, Typography, Button, Stack, Divider, Modal } from "@mui/material";
 
 // This is a modal to delete selected file.
 
-type DeleteProps = {
+type ActionConfirmationModalProps = {
+  name?: string;
+  message?: string;
+  description?: string;
   open: boolean;
   handleClose: (event: React.MouseEvent) => void;
-  deleteFn: () => void;
+  actionFn: () => void;
 };
-export default function DeleteModal({
+export default function ActionConfirmationModal({
+  name,
+  message,
+  description,
   open,
   handleClose,
-  deleteFn,
-}: DeleteProps) {
+  actionFn,
+}: ActionConfirmationModalProps) {
   return (
     <Modal
       open={open}
@@ -40,16 +46,15 @@ export default function DeleteModal({
             fontWeight={500}
             lineHeight={"35px"}
           >
-            Are you sure you want to delete product image
+            {message || "Are you sure?"}
           </Typography>
           <Typography
             id="modal-description"
             sx={{ width: "100%" }}
             fontWeight={300}
           >
-            Lorem ipsum dolor sit amet consectetur. Sed imperdiet tempor
-            facilisi massa aliquet sit habitant. Lorem ipsum dolor sit amet
-            consectetur.
+            {description ||
+              "Lorem ipsum dolor sit amet consectetur. Sed imperdiet tempor facilisi massa aliquet sit habitant. Lorem ipsum dolor sit amet consectetur."}
           </Typography>
           <Box mb={"35px"} sx={{ width: "100%" }}>
             <Divider sx={{ color: "#EAECF0" }} />
@@ -84,9 +89,9 @@ export default function DeleteModal({
                 fontWeight: 500,
               }}
               type="submit"
-              onClick={deleteFn}
+              onClick={actionFn}
             >
-              Delete
+              {name || "Accept"}
             </Button>
           </Box>
         </Stack>

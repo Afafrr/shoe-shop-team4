@@ -20,7 +20,7 @@ type SizesProps = {
 export default function SizeSelect({ props, options }: SizesProps) {
   const {
     setValue,
-    formState: { errors },
+    formState: { errors, touchedFields },
     getValues,
   } = useFormContext();
 
@@ -29,20 +29,22 @@ export default function SizeSelect({ props, options }: SizesProps) {
   );
 
   useEffect(() => {
-    if (selectedSizes.length !== 0) {
-      setValue("sizes", selectedSizes, {
-        shouldValidate: selectedSizes.length == 0 ? false : true,
-      });
-    }
+    setValue("sizes", selectedSizes, {
+      shouldValidate: "sizes" in touchedFields ? true : false,
+    });
   }, [selectedSizes, setValue]);
 
   const handleSizeClick = (size: { value: string; label: string }) => {
-    setSelectedSizes((prevSelectedSizes) => {
-      if (prevSelectedSizes.includes(size.value)) {
-        return prevSelectedSizes.filter((s) => s !== size.value);
-      } else {
-        return [...prevSelectedSizes, size.value];
-      }
+    const prevSizes: string[] = getValues("sizes");
+    const new_list = prevSizes.includes(size.value)
+      ? prevSizes.filter((s) => s !== size.value)
+      : [...prevSizes, size.value];
+
+    setSelectedSizes(new_list);
+    setValue("sizes", new_list, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
     });
   };
 
@@ -61,7 +63,7 @@ export default function SizeSelect({ props, options }: SizesProps) {
       <Grid
         container
         spacing={{ xs: 2, md: 2 }}
-        columns={{ xs: 4, md: 7, lg: 4, xl: 5 }}
+        columns={{ xs: 4, sm: 5, md: 7, lg: 4, xl: 5 }}
       >
         {options ? (
           options.map((size, index) => (
