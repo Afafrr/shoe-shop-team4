@@ -30,6 +30,15 @@ export type ContextType = {
   searchParams: { [k: string]: string };
   session: Session | null;
 };
+
+export type FiltersType = {
+  [key: string]: string[] | undefined;
+};
+
+export type SearchParamsType = {
+  [key: string]: string | string[] | undefined;
+};
+
 export type ImageData = {
   id: number;
   name: string;
@@ -68,6 +77,7 @@ export type ImageData = {
   createdAt: string;
   updatedAt: string;
 };
+
 export type UserData = {
   id: number;
   username: string;

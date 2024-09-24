@@ -7,11 +7,15 @@ export async function getData<T>(
   options?: RequestInit
 ): Promise<ResData<T>> {
   try {
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      ...options,
+      headers: headers,
     });
 
     if (!res.ok) {
