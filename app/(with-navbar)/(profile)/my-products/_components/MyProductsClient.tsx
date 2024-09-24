@@ -18,7 +18,7 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
   console.log(data);
 
   const handleAddBtn = () => {
-    router.push("/add-products");
+    router.push("/my-products/new");
   };
 
   return (
