@@ -5,9 +5,10 @@ import { Box, Button, Stack } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { z } from "zod";
-import { CheckBoxInputGroup } from "./CheckBoxInputGroup";
+import CheckBoxInputGroup from "./CheckBoxInputGroup";
 import { getDefaultValues } from "../../_lib/utils";
 import PriceInput from "./PriceInput";
+import { useMemo } from "react";
 
 type FieldValues = z.infer<typeof filtersSchema>;
 
@@ -19,8 +20,13 @@ export default function Filters({ defaultFilters }: FiltersProps) {
   const router = useRouter();
   const currentParams = useSearchParams();
 
+  const defaultValues = useMemo(
+    () => getDefaultValues(defaultFilters),
+    [defaultFilters]
+  );
+
   const formContext = useForm<FieldValues>({
-    defaultValues: getDefaultValues(defaultFilters),
+    defaultValues,
     resolver: zodResolver(filtersSchema),
   });
 
@@ -45,10 +51,11 @@ export default function Filters({ defaultFilters }: FiltersProps) {
 
     const newUrl = "/products?" + newParams.toString();
     router.push(newUrl);
+    formContext.reset(data);
   }
 
   return (
-    <Box sx={{ mt: { xs: "46px", md: "28px" }, width: "100%" }}>
+    <Box sx={{ mt: { xs: "46px", md: "28px" } }}>
       <FormContainer
         formContext={formContext}
         handleSubmit={handleSubmit((data) => onSubmit(data))}
@@ -62,7 +69,8 @@ export default function Filters({ defaultFilters }: FiltersProps) {
           <CheckBoxInputGroup name="sizes" />
           <Button
             type="submit"
-            sx={{ alignSelf: "center", width: "150px", px: 3 }}
+            sx={{ alignSelf: "center", px: 3 }}
+            disabled={!formContext.formState.isDirty}
           >
             Apply Filters
           </Button>

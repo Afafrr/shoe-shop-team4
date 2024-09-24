@@ -2,8 +2,10 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 
 export default function LoadingPage({
   backgroundColor = "#f5f5f5",
+  height = "100vh",
 }: {
   backgroundColor?: string;
+  height?: string;
 }) {
   return (
     <Box
@@ -12,7 +14,7 @@ export default function LoadingPage({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh", // Full viewport height
+        height: height,
         backgroundColor,
         textAlign: "center",
       }}
