@@ -13,7 +13,7 @@ export default function ProfileAside({
         display: { xs: "none", md: "flex" },
         mt: "35px",
         flexDirection: "column",
-        width: "320px",
+        minWidth: "320px",
         height: 1,
       }}
     >

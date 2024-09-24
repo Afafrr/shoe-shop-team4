@@ -1,20 +1,21 @@
 import { JWT } from "next-auth/jwt";
-export type ResData<T> = { data: T | null; error: string };
+type HttpMethods = "PUT" | "POST";
+type PostOptions = {
+  url: string;
+  method: HttpMethods;
+  token: JWT;
+  data: any;
+};
 
-export async function getData<T>(
-  url: string,
-  token: JWT | null | undefined
-): Promise<ResData<T>> {
+export async function postData({ url, method, token, data }: PostOptions) {
   try {
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-    };
-
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${url}`, {
-      headers: headers,
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
     });
 
     if (!res.ok) {
@@ -25,8 +26,7 @@ export async function getData<T>(
       };
     }
 
-    const data = await res.json();
-    return { data: data, error: "" };
+    return { data: await res.json(), error: "" };
   } catch (error) {
     console.error(error);
     return {
