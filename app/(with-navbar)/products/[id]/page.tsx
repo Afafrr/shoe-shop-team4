@@ -3,9 +3,11 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { PopulateField } from "@/utils/api/singleProduct";
-import { fetchProductDetails } from "@/utils/api/singleProduct";
+import { PopulateField, fetchProductDetails } from "@/utils/api/singleProduct";
 import SingleProductPage from "./_components/SingleProductPage";
+import { notFound } from "next/navigation";
+import { ProductResponse } from "@/types/singleProduct";
+
 
 export default async function Page({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
@@ -19,17 +21,32 @@ export default async function Page({ params }: { params: { id: string } }) {
     "color",
   ];
 
-  await queryClient.prefetchQuery({
-    queryKey: ["productDetails", params.id, fieldsToPopulate],
-    queryFn: () => fetchProductDetails(params.id, fieldsToPopulate),
-  });
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: ["productDetails", params.id, fieldsToPopulate],
+      queryFn: () => fetchProductDetails(params.id, fieldsToPopulate),
+    });
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <SingleProductPage
-        productId={params.id}
-        fieldsToPopulate={fieldsToPopulate}
-      />
-    </HydrationBoundary>
-  );
+    const data = queryClient.getQueryData<ProductResponse>([
+      "productDetails",
+      params.id,
+      fieldsToPopulate,
+    ]);
+
+    if (!data || !data.data) {
+      notFound();
+    }
+
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SingleProductPage
+          productId={params.id}
+          fieldsToPopulate={fieldsToPopulate}
+        />
+      </HydrationBoundary>
+    );
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    notFound();
+  }    
 }
