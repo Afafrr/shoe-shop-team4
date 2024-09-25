@@ -1,3 +1,5 @@
+import { ContextType, ErrorResponse } from "./types";
+
 export interface ProductListResponse {
   data: ProductListResponseDataItem[];
   meta: Meta;
@@ -94,7 +96,7 @@ interface ProductsResponse {
   data: ProductData[];
 }
 
-interface ProductData {
+export interface ProductData {
   id: number;
   attributes: ProductAttributes;
 }
@@ -209,6 +211,34 @@ interface Attributes10 {
   updatedBy: Parent;
 }
 
+export type Options = {
+  data: GetOption[];
+};
+
+export type GetOption = {
+  id: number;
+  attributes: Attributes14;
+};
+
+export type SizeOptions = {
+  data: GetSizes[];
+};
+export type GetSizes = {
+  id: number;
+  attributes: Attributes15;
+};
+
+interface Attributes14 {
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+type Attributes15 = Omit<Attributes14, "name"> & {
+  value: string;
+};
+
 interface Color {
   data: Datum7;
 }
@@ -236,15 +266,15 @@ interface Images2 {
   data: Datum6[];
 }
 
-interface Datum6 {
+export interface Datum6 {
   id: number;
   attributes: Attributes8;
 }
 
 interface Attributes8 {
   name: string;
-  alternativeText: string;
-  caption: string;
+  alternativeText: string | null;
+  caption: string | null;
   width: number;
   height: number;
   formats: string;
@@ -253,16 +283,16 @@ interface Attributes8 {
   mime: string;
   size: number;
   url: string;
-  previewUrl: string;
+  previewUrl: string | null;
   provider: string;
   provider_metadata: string;
-  related: Related;
-  folder: Parent;
-  folderPath: string;
+  related?: Related;
+  folder?: Parent;
+  folderPath?: string;
   createdAt: string;
   updatedAt: string;
-  createdBy: Parent;
-  updatedBy: Parent;
+  createdBy?: Parent;
+  updatedBy?: Parent;
 }
 
 interface Folder {
@@ -416,3 +446,113 @@ export interface AttributeListResponseDataItem {
   id: number;
   attributes: Attributes;
 }
+
+export type SuccessfulImageUpload = Omit<
+  ImageAttributes,
+  "related" | "folder" | "folderPath" | "createdBy" | "updatedBy"
+> &
+  {
+    id: number;
+  }[];
+
+export type SuccessfulProductAdd = {
+  data: {
+    id: number;
+    attributes: {
+      name: string;
+      description: string;
+      price: number;
+      createdAt: string;
+      updatedAt: string;
+      publishedAt: string;
+      teamName: string;
+    };
+  };
+  meta: {};
+};
+export type ProductResponse = SuccessfulProductAdd | ErrorResponse;
+
+export type ProductActionSuccess = SuccessfulProductAdd & {
+  redirect: string;
+};
+
+export type ProductActionResponse = ProductActionSuccess | ErrorResponse;
+
+export type ImageUpload = SuccessfulImageUpload | ErrorResponse;
+
+export type ProductFormSchema = {
+  name: string;
+  price: number;
+  categories: string[];
+  color: string[];
+  gender: string;
+  brand: string;
+  description: string;
+  sizes: string[];
+  images: File[];
+};
+
+export type Option = {
+  value: string;
+  label: string;
+};
+export type ProductOptions = {
+  colors: Option[] | null;
+  categories: Option[] | null;
+  brands: Option[] | null;
+  genders: Option[] | null;
+  sizes: Option[] | null;
+};
+
+export type ActionFunction = {
+  (data: FormData, context: ContextType): Promise<ProductActionResponse>;
+  (
+    data: FormData,
+    context: ContextType,
+    id: string
+  ): Promise<ProductActionResponse>;
+};
+
+export type EditProduct = ProductFormSchema & {
+  id: string;
+};
+
+export type getProducts = {
+  data: BackProduct[];
+};
+
+export type BackProduct = {
+  id: number;
+  attributes: {
+    name: string;
+    description: string;
+    price: number;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    teamName: "team-4";
+    brand: Data5;
+    categories: Data6;
+    gender: Data5;
+    color: Data5;
+    sizes: Data6;
+    images: Images2;
+  };
+};
+
+type Data5 = {
+  data: attributes16;
+};
+type Data6 = {
+  data: attributes16[];
+};
+
+type attributes16 = {
+  id: string;
+  attributes: {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+};
