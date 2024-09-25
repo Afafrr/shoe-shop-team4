@@ -1,13 +1,22 @@
 import { PlainAccordion } from "./CheckBoxInputGroup";
-import { AccordionDetails, AccordionSummary, Divider } from "@mui/material";
+import {
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Divider,
+} from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { SliderElement } from "react-hook-form-mui";
+import React from "react";
 
-export default function PriceInput() {
+function PriceInput() {
   return (
-    <>
-      <PlainAccordion sx={{ pl: { xs: "30px", md: "20px" } }}>
-        <AccordionSummary expandIcon={<ExpandMore />} sx={{ padding: 0 }}>
+    <Box sx={{ width: { sm: "100%", md: "175px" } }}>
+      <PlainAccordion sx={{ pl: "30px" }}>
+        <AccordionSummary
+          expandIcon={<ExpandMore />}
+          sx={{ padding: { xs: "5px", md: 0 } }}
+        >
           Max. Price
         </AccordionSummary>
         <AccordionDetails>
@@ -15,6 +24,8 @@ export default function PriceInput() {
         </AccordionDetails>
       </PlainAccordion>
       <Divider />
-    </>
+    </Box>
   );
 }
+
+export default React.memo(PriceInput);

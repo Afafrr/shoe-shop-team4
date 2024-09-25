@@ -61,7 +61,7 @@ export default function FileSelector({ handleFileChange }: FileSelectorProps) {
             layout="intrinsic"
           />
           <Typography width={"65%"} textAlign={"center"}>
-            Drop your image here, or select
+            Click here to select your images
           </Typography>
           <FileExplorer handleFileChange={handleFileChange}>
             click to browse

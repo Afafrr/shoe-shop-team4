@@ -3,19 +3,23 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Divider,
   styled,
 } from "@mui/material";
 import { CheckboxButtonGroup } from "react-hook-form-mui";
 import { useQuery } from "@tanstack/react-query";
 import { capitalizeWord, FieldOption, getFieldOptions } from "../../_lib/utils";
+import React, { useMemo, useState } from "react";
 
 type CheckBoxInputGroupProps = {
   name: FieldOption | "gender" | "brand" | "color";
   open?: boolean;
 };
 
-export function CheckBoxInputGroup({ name }: CheckBoxInputGroupProps) {
+function CheckBoxInputGroup({ name }: CheckBoxInputGroupProps) {
+  const [expanded, setExpanded] = useState(false);
+
   let fieldOption: FieldOption;
   if (name === "gender" || name === "brand" || name === "color") {
     fieldOption = name + "s";
@@ -29,29 +33,39 @@ export function CheckBoxInputGroup({ name }: CheckBoxInputGroupProps) {
     select: (data) => data.data,
   });
 
-  const optionsFetched = data?.map((item) => {
-    if (name === "sizes")
-      return {
-        id: item.attributes.value.toString(),
-        label: item.attributes.value,
-      };
-    return { id: item.attributes.name, label: item.attributes.name };
-  });
+  const optionsFetched = useMemo(() => {
+    return data?.map((item) => {
+      if (name === "sizes")
+        return {
+          id: item.attributes.value.toString(),
+          label: item.attributes.value,
+        };
+      return { id: item.attributes.name, label: item.attributes.name };
+    });
+  }, [data, name]);
 
   return (
-    <>
-      <PlainAccordion sx={{ pl: { xs: "30px", md: "20px" } }}>
-        <AccordionSummary sx={{ padding: 0 }} expandIcon={<ExpandMore />}>
+    <Box sx={{ width: { sm: "100%", md: "175px" } }}>
+      <PlainAccordion sx={{ pl: "30px" }}>
+        <AccordionSummary
+          sx={{ padding: { xs: "5px", md: 0 } }}
+          expandIcon={<ExpandMore />}
+          onClick={() => setExpanded(true)}
+        >
           {capitalizeWord(name)}
         </AccordionSummary>
         <AccordionDetails>
-          <CheckboxButtonGroup name={name} options={optionsFetched || []} />
+          {expanded && (
+            <CheckboxButtonGroup name={name} options={optionsFetched || []} />
+          )}
         </AccordionDetails>
       </PlainAccordion>
       <Divider />
-    </>
+    </Box>
   );
 }
+
+export default React.memo(CheckBoxInputGroup);
 
 export const PlainAccordion = styled(Accordion)({
   boxShadow: "none",

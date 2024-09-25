@@ -8,9 +8,9 @@ export const productSchema = z.object({
     })
     .trim(),
   price: z
-    .number()
+    .number({ message: "Price must be a valid number" })
     .min(1, {
-      message: "Please enter product's price",
+      message: "Price must be higher than 0",
     })
     .refine((price) => price > 0, {
       message: "Price must be greater than $0",

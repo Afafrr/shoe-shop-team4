@@ -48,7 +48,7 @@ export default function ProductCard({
       </CardMedia>
       <CardContent sx={{ p: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <PrimaryText>{name}</PrimaryText>
+          <PrimaryText breakWord>{name}</PrimaryText>
           <PrimaryText>${price}</PrimaryText>
         </Box>
         <SecondaryText>
@@ -59,9 +59,20 @@ export default function ProductCard({
   );
 }
 
-function PrimaryText({ children }: { children: ReactNode }) {
+interface PrimaryTextProps {
+  children: ReactNode;
+  breakWord?: boolean;
+}
+
+function PrimaryText({ children, breakWord = false }: PrimaryTextProps) {
   return (
-    <Typography sx={{ fontSize: { xs: "10px", md: "22px" }, fontWeight: 500 }}>
+    <Typography
+      sx={{
+        fontSize: { xs: "10px", md: "22px" },
+        fontWeight: 500,
+        wordBreak: breakWord ? "break-word" : "normal",
+      }}
+    >
       {children}
     </Typography>
   );
