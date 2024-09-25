@@ -11,8 +11,11 @@ export type FieldOption =
   | "genders"
   | "sizes";
 
-export async function getProductsForCards(filters: FiltersType = {}) {
-  const products = await getProducts(["images", "gender"], filters);
+export async function getProductsForCards(
+  filters: FiltersType = {},
+  pageParam?: number
+) {
+  const products = await getProducts(["images", "gender"], filters, pageParam);
 
   return products;
 }

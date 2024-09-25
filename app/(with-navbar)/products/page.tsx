@@ -21,9 +21,10 @@ export default async function Page({
   const filters = formatParamsToFilters(searchParams);
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ["products", searchParams],
-      queryFn: () => getProductsForCards(filters),
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["products", filters],
+      queryFn: ({ pageParam }) => getProductsForCards(filters, pageParam),
+      initialPageParam: 1,
     }),
     queryClient.prefetchQuery({
       queryKey: ["genders"],

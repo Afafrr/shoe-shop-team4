@@ -1,0 +1,16 @@
+/* styles.css */
+.pointer:hover {
+  cursor: pointer;
+}
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  width: 100%;
+}
+.gridItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 0.84;
+}

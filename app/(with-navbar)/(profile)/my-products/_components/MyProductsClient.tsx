@@ -15,7 +15,7 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
   const [products, setProducts] = useState(data.data?.products);
   const { data: userData, error } = useUserData(); //just to show output for provider
   const handleAddBtn = () => {
-    router.push("/add-products");
+    router.push("/my-products/new");
   };
   const avatar = userData?.avatar?.url;
 

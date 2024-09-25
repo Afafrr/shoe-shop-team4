@@ -20,12 +20,8 @@ export default function SearchInfo({
 
   const searchField = defaultFilters.search && defaultFilters.search[0];
 
-  function FiltersRender() {
-    return <Filters defaultFilters={defaultFilters} />;
-  }
-
   return (
-    <>
+    <Box sx={{ mx: { xs: "20px", md: 0 } }}>
       {hasSearch && (
         <Typography
           color="textSecondary"
@@ -43,10 +39,12 @@ export default function SearchInfo({
           </Typography>
         )}
         <Box sx={{ display: { xs: "block", md: "none" } }}>
-          <FiltersBar drawerContent={<FiltersRender />} />
+          <FiltersBar
+            drawerContent={<Filters defaultFilters={defaultFilters} />}
+          />
         </Box>
-        {isDesktop && <FiltersRender />}
+        {isDesktop && <Filters defaultFilters={defaultFilters} />}
       </Stack>
-    </>
+    </Box>
   );
 }

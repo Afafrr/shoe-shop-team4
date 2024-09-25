@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import NextLink from "next/link";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { Avatar } from "@mui/material";
@@ -13,6 +13,7 @@ import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
 import CartIcon from "./CartIcon";
 import { useCart } from "@/contexts/Cart";
+import NextMuiLink from "@/components/Profile/NextMuiLink";
 import { useUserData } from "@/contexts/UserDataProvider";
 import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
@@ -26,7 +27,7 @@ export default function NavBar() {
 
   return (
     <AppBar position="static" color="inherit">
-      <Container maxWidth="xl" sx={{ my: { md: 1 } }}>
+      <Container maxWidth={false} sx={{ my: { md: 1 } }}>
         <Toolbar disableGutters>
           <Box
             sx={{
@@ -35,12 +36,12 @@ export default function NavBar() {
               alignContent: "center",
             }}
           >
-            <Image src="/logo.svg" alt="Logo" width={40} height={30} />
+            <NextMuiLink href="/products">
+              <Image src="/logo.svg" alt="Logo" width={40} height={30} />
+            </NextMuiLink>
             <Box sx={{ alignContent: "center" }}>
-              <Typography
-                noWrap
-                component="a"
-                href="#products"
+              <NextMuiLink
+                href="/products"
                 sx={{
                   ml: 3,
                   display: { xs: "none", md: "flex" },
@@ -49,7 +50,7 @@ export default function NavBar() {
                 }}
               >
                 Products
-              </Typography>
+              </NextMuiLink>
             </Box>
           </Box>
 
@@ -61,7 +62,12 @@ export default function NavBar() {
             }}
           >
             {!isLoggedIn && (
-              <Button variant="outlined" sx={{ width: 140 }} href="#sign-in">
+              <Button
+                variant="outlined"
+                sx={{ width: 140 }}
+                href="/auth/sign-in"
+                LinkComponent={NextLink}
+              >
                 Sign In
               </Button>
             )}
@@ -71,15 +77,17 @@ export default function NavBar() {
               <CartIcon count={getCartItemCount()} />
             </IconButton>
             {isLoggedIn && (
-              <Avatar
+              <NextMuiLink href={"/settings"} sx={{ textDecoration: "none" }}>
+                <Avatar
                 alt="User logged In"
                 src={avatar}
-                onClick={() => router.push("/my-products")}
+                // onClick={() => router.push("/my-products")}
                 sx={{ width: 24, height: 24 }}
               >
-                {avatar ? null : data?.firstName.slice(0, 1)}
+                  {avatar ? null : data?.firstName.slice(0, 1)}
                 {error ? <WarningIcon /> : null}
-              </Avatar>
+                </Avatar>
+              </NextMuiLink>
             )}
           </Box>
 

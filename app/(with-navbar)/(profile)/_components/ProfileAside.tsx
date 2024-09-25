@@ -3,18 +3,24 @@ import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { routes } from "@/components/Profile/AsideNavbar";
 import { useUserData } from "@/contexts/UserDataProvider";
 import WarningIcon from "@/components/Form/WarningIcon";
-export default function ProfileAside({
-  activeBtnPath,
-}: {
+type ProfileAsideProps = {
+  breakpoint?: string;
   activeBtnPath: routes;
-}) {
+};
+
+export default function ProfileAside({
+  breakpoint = "md",
+  activeBtnPath,
+}: ProfileAsideProps) {
   const { data, error } = useUserData();
   const avatar = data?.avatar?.url;
-
   return (
     <Box
       sx={{
-        display: { xs: "none", md: "flex" },
+        display: {
+          xs: "none",
+          [breakpoint]: "flex",
+        },
         mt: "35px",
         flexDirection: "column",
         minWidth: "320px",
