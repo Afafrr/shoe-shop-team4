@@ -43,7 +43,7 @@ export default function FiltersBar({ drawerContent }: SideBarProps) {
           display: { xs: "block", md: "none" },
         }}
       >
-        {drawer}
+        {filtersBarOpen && drawer}
       </Drawer>
     </>
   );

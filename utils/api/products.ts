@@ -13,17 +13,22 @@ type PopulateField =
   | "sizes"
   | "userID";
 
+const pageSize = 24;
+
 export async function getProducts(
   fieldsToPopulate: PopulateField[] = [],
   filters: FiltersType = {},
+  page: number = 1,
   token?: JWT | null | undefined
 ): Promise<ProductListResponse> {
   const populateFields = fieldsToPopulate.join(",");
 
+  const pagination = `pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
+
   const query = createFiltersQuery(filters);
 
   const responseData = await getData<ProductListResponse>(
-    `products?populate=${populateFields}&${query}`,
+    `products?populate=${populateFields}&${pagination}&${query}`,
     token
   );
   const data = responseData.data;

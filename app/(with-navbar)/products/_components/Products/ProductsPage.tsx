@@ -23,24 +23,13 @@ export default function ProductsPage({
   const [count, setCount] = useState(0);
   const hasSearch = "search" in searchParams;
 
-  function SearchInfoRender() {
-    return (
-      <SearchInfo
-        hasSearch={hasSearch}
-        count={count}
-        defaultFilters={searchParams}
-      />
-    );
-  }
-
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
       <Box
-        flexGrow={1}
         sx={{
           display: { xs: "none", md: "block" },
-          mr: "20px",
-          transition: "width 0.3s ",
+          maxWidth: "175px",
+          width: "auto",
         }}
       >
         <Collapse
@@ -48,10 +37,14 @@ export default function ProductsPage({
           in={filtersVisible}
           sx={{ mt: "35px", height: 1 }}
         >
-          <SearchInfoRender />
+          <SearchInfo
+            hasSearch={hasSearch}
+            count={count}
+            defaultFilters={searchParams}
+          />
         </Collapse>
       </Box>
-      <Box sx={{ flexGrow: 4 }}>
+      <Box sx={{ flexGrow: 1 }}>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Typography
             sx={{
@@ -78,7 +71,11 @@ export default function ProductsPage({
         <Divider sx={{ display: { xs: "block", md: "none" } }} />
         <Stack spacing={1} sx={{ mt: 1 }}>
           <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <SearchInfoRender />
+            <SearchInfo
+              hasSearch={hasSearch}
+              count={count}
+              defaultFilters={searchParams}
+            />
           </Box>
           <ProductList
             setShoesCount={(num: number) => setCount(num)}
