@@ -5,12 +5,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Providers } from "./providers";
-import { authOptions } from "@/utils/auth";
-import { getData, ResData } from "@/utils/getData";
-import { getServerSession } from "next-auth";
-import { UserDataProvider } from "@/contexts/UserDataProvider";
-import { UserData } from "@/types/types";
-
 const workSans = Work_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
@@ -25,31 +19,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  async function getUserInfo() {
-    const session = await getServerSession(authOptions);
-    const revalidateConfig = {
-      next: { revalidate: 3600 },
-    };
-    if (session) {
-      const data: ResData<UserData> = await getData(
-        "users/me?populate=avatar",
-        session?.user.jwt,
-        revalidateConfig
-      );
-      return data;
-    }
-  }
-  const userData = await getUserInfo();
-
   return (
     <html lang="en">
       <body className={workSans.className}>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Providers>
-              <UserDataProvider data={userData}>{children}</UserDataProvider>
-            </Providers>
+            <Providers>{children}</Providers>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

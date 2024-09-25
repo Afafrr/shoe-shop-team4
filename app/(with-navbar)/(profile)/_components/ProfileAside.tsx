@@ -12,7 +12,9 @@ export default function ProfileAside({
   breakpoint = "md",
   activeBtnPath,
 }: ProfileAsideProps) {
-  const { data, error } = useUserData();
+  const userData = useUserData();
+  const data = userData?.data;
+  const error = userData?.error;
   const avatar = data?.avatar?.url;
   return (
     <Box
