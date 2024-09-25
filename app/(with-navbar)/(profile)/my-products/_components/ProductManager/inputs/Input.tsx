@@ -1,4 +1,9 @@
-import { InputLabel, Stack, Typography } from "@mui/material";
+import {
+  InputBaseComponentProps,
+  InputLabel,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { TextFieldElement, TextFieldElementProps } from "react-hook-form-mui";
 import { InputProps as MuiInputProps } from "@mui/material/Input";
 
@@ -12,7 +17,8 @@ export default function Input({
   label,
   disabled,
   mutations,
-  inputStyle,
+  inputProps,
+  componentStyle,
   sizes,
   children,
 }: {
@@ -20,7 +26,8 @@ export default function Input({
   label: string;
   disabled?: boolean;
   mutations?: Partial<MuiInputProps>;
-  inputStyle?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: InputBaseComponentProps | undefined;
+  componentStyle?: React.InputHTMLAttributes<HTMLInputElement>;
   sizes?: { width: string; height?: string };
   children?: ReactNode;
 }) {
@@ -40,6 +47,7 @@ export default function Input({
       <TextFieldElement
         {...props}
         id={label}
+        inputProps={inputProps}
         name={props.name}
         disabled={disabled}
         aria-disabled={disabled}
@@ -69,7 +77,7 @@ export default function Input({
           },
         }}
         sx={{
-          ...inputStyle,
+          ...componentStyle,
           mt: "5px",
           ":placeholder-shown": {
             color: "#5C5C5C",
