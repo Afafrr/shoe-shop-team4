@@ -75,6 +75,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
                 <InputAdornment position="start">$</InputAdornment>
               ),
             }}
+            inputProps={{ min: 1 }}
           />
           <ChipSelect
             options={options.categories}
