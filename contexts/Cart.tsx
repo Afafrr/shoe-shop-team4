@@ -2,9 +2,17 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 
 import { Product } from "@/types/Product";
 
-type CartItem = Product & {
+// type CartItem = Product & {
+//   id: number;
+//   quantity: number;
+// };
+type CartItem = {
   id: number;
   quantity: number;
+  name: string;
+  description: string;
+  image: string;
+  price: number;
 };
 
 type CartContextType = {
@@ -31,7 +39,34 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const savedCart = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return savedCart ? JSON.parse(savedCart) : [];
+    return savedCart
+      ? JSON.parse(savedCart)
+      : [
+          {
+            id: 1,
+            name: "Nike Air Max 270",
+            description: "Women's Shoes",
+            image: "/auth/shoes-log-in.png",
+            price: 160,
+            quantity: 2,
+          },
+          {
+            id: 2,
+            name: "Nike Air Max 90",
+            description: "Men's Shoes",
+            image: "/auth/shoes-password-auth.png",
+            price: 140,
+            quantity: 2,
+          },
+          {
+            id: 3,
+            name: "Nike Air Force 1 '07 SE",
+            description: "Women's Shoes",
+            image: "/auth/shoes-register.png",
+            price: 110,
+            quantity: 2,
+          },
+        ];
   });
 
   useEffect(() => {
