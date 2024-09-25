@@ -50,11 +50,12 @@ export default function NavBar() {
               </NextMuiLink>
             </Box>
           </Box>
-
+          <SearchInput />
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
               alignItems: "center",
+              ml: 2,
               gap: 2,
             }}
           >
@@ -68,8 +69,6 @@ export default function NavBar() {
                 Sign In
               </Button>
             )}
-
-            <SearchInput />
             <IconButton size="large" color="inherit">
               <CartIcon count={getCartItemCount()} />
             </IconButton>
@@ -86,7 +85,6 @@ export default function NavBar() {
             <IconButton size="large" color="inherit">
               <CartIcon count={getCartItemCount()} />
             </IconButton>
-            <SearchInput />
             <SideBar isLoggedIn={isLoggedIn} />
           </Box>
         </Toolbar>
