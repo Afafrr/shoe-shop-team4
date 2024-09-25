@@ -10,7 +10,7 @@ export default function AddProduct() {
   const title = {
     header: "Add a Product",
     subheader:
-      "Lorem ipsum, or ipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:",
+      "Create a new listing by entering key details like product name, price, and brand. Categorize your product by gender, and choose from a variety of colors and sizes. Upload images and write a compelling description to showcase your product. Keep in mind, this is what customers will see when selecting their shoes!",
   };
   const formActions = {
     schema: productSchema,

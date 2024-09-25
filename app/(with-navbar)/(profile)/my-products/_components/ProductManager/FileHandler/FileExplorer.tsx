@@ -22,6 +22,7 @@ const FileExplorer = ({ children, handleFileChange }: FileExplorerProps) => {
     <div>
       <input
         type="file"
+        accept="image/*"
         multiple
         ref={fileInputRef}
         style={{ display: "none" }}
