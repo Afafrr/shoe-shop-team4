@@ -53,7 +53,8 @@ export default function ErrorPage({
   onHome,
 }: ErrorPageProps) {
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", height: "100vh" }}>
+      {/* bg images */}
       <Box
         sx={{
           position: "absolute",
@@ -75,6 +76,7 @@ export default function ErrorPage({
           marginTop: { xs: "15vh", md: "0" },
         }}
       />
+      {/* gradient */}
       <Box
         sx={{
           position: "absolute",
@@ -89,19 +91,19 @@ export default function ErrorPage({
           zIndex: -1,
         }}
       />
+      {/* title mobile and desktop */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: { xs: "flex-start", md: "center" },
           alignItems: { xs: "center", md: "flex-start" },
-          padding: { xs: "60px 0", md: "150px" },
-          height: { xs: "40vh", md: "100vh" },
+          padding: { xs: "50px 0 0 0", md: "150px" },
+          height: { xs: "20vh", md: "100vh" },
         }}
       >
         <TitleComponent title={title} />
-
-        {/* error message desktop */}
+        {/* error message and buttons desktop */}
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
@@ -114,34 +116,19 @@ export default function ErrorPage({
           <ErrorButtons onGoBack={onGoBack} onHome={onHome} />
         </Box>
       </Box>
+
       {/* error message mobile */}
       <Box
         sx={{
-          position: "absolute",
-          bottom: "-350px",
-          left: 0,
-          width: "100%",
-          textAlign: "center",
-          display: { xs: "block", md: "none" },
-          padding: "16px",
+          display: { xs: "flex", md: "none" },
+          flexDirection: "column",
+          justifyContent: { xs: "flex-end" },
+          alignItems: { xs: "center" },
+          height: { xs: "75vh" },
         }}
       >
         <MessageComponent message={message} />
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: {
-            xs: "-470px", 
-            sm: "-510px", 
-          },
-          left: 0,
-          width: "100%",
-          textAlign: "center",
-          display: { xs: "block", md: "none" },
-          padding: "16px",
-        }}
-      >
+        {/* show just one button on mobile version */}
         <Button
           variant="contained"
           color="primary"
@@ -151,6 +138,7 @@ export default function ErrorPage({
             backgroundColor: "primary.main",
             color: "primary.contrastText",
             borderRadius: "10px",
+            marginTop: "60px",
           }}
           onClick={onHome}
         >
