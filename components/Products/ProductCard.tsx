@@ -1,11 +1,19 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import React, { ReactNode } from "react";
+import shoesPlaceholder from "@public/auth/shoes-log-in.png";
 
 type ProductCardProps = {
   imageUrl: string;
   name: string;
-  gender: string;
+  gender?: string;
   price: number;
 };
 
@@ -18,34 +26,51 @@ export default function ProductCard({
   return (
     <Card
       sx={{
-        maxWidth: { xs: "152px", md: "320px" },
+        width: "80%",
+        mx: "auto",
         boxShadow: "none",
       }}
     >
-      <CardMedia sx={{ height: { xs: "180px", md: "380px" } }}>
+      <CardMedia
+        sx={{ height: { xs: "180px", sm: "240px", md: "280px", xl: "300px" } }}
+      >
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <Image
-            src={imageUrl}
+            src={imageUrl || shoesPlaceholder}
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 600px) 50vw, (max-width: 1200px) 33vw, 25vw"
             alt={name}
           />
         </div>
       </CardMedia>
       <CardContent sx={{ p: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <PrimaryText>{name}</PrimaryText>
+          <PrimaryText breakWord>{name}</PrimaryText>
           <PrimaryText>${price}</PrimaryText>
         </Box>
-        <SecondaryText>{`${gender}'s Shoes`}</SecondaryText>
+        <SecondaryText>
+          {gender ? `${gender}'s Shoes` : "Unisex Shoes"}
+        </SecondaryText>
       </CardContent>
     </Card>
   );
 }
 
-function PrimaryText({ children }: { children: ReactNode }) {
+interface PrimaryTextProps {
+  children: ReactNode;
+  breakWord?: boolean;
+}
+
+function PrimaryText({ children, breakWord = false }: PrimaryTextProps) {
   return (
-    <Typography sx={{ fontSize: { xs: "10px", md: "22px" }, fontWeight: 500 }}>
+    <Typography
+      sx={{
+        fontSize: { xs: "10px", md: "22px" },
+        fontWeight: 500,
+        wordBreak: breakWord ? "break-word" : "normal",
+      }}
+    >
       {children}
     </Typography>
   );

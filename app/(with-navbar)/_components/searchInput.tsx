@@ -4,56 +4,47 @@ import {
   Button,
   Drawer,
   IconButton,
-  InputAdornment,
-  TextField,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import SearchForm from "./SearchForm";
+import { useSearchParams } from "next/navigation";
 
 export default function SearchInput() {
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
+  const searchParams = useSearchParams();
   const theme = useTheme();
   const isMobileScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const searchInput = searchParams.get("search");
 
   const handleDrawerToggle = () => {
     setSearchDrawerOpen((prevState) => !prevState);
   };
 
-  const drawerMobile = (
+  const drawer = (
     <Box sx={{ height: 200 }}>
       <Box
         sx={{
           m: 4,
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: { xs: "center", md: "space-between" },
         }}
       >
-        <TextSearch />
-        <IconButton sx={{ ml: 2 }} onClick={handleDrawerToggle}>
-          <Close />
-        </IconButton>
-      </Box>
-    </Box>
-  );
-
-  const drawerFullScreen = (
-    <Box sx={{ height: 200 }}>
-      <Box
-        sx={{
-          m: 4,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Box sx={{ mr: 2 }}>
-          <Image src="/logo.svg" alt="Logo" width={40} height={30} />
-        </Box>
-        <TextSearch />
-        <IconButton sx={{ ml: 2 }} onClick={handleDrawerToggle}>
+        {!isMobileScreen && (
+          <Box sx={{ mr: 2 }}>
+            <Image src="/logo.svg" alt="Logo" width={40} height={30} />
+          </Box>
+        )}
+        <SearchForm
+          isDrawerOpen={searchDrawerOpen}
+          defaultSearch={searchInput}
+        />
+        <IconButton
+          sx={{ ml: 2, alignSelf: "start" }}
+          onClick={handleDrawerToggle}
+        >
           <Close />
         </IconButton>
       </Box>
@@ -68,7 +59,10 @@ export default function SearchInput() {
             <Search />
           </IconButton>
         ) : (
-          <ButtonSearch toggleDrawer={handleDrawerToggle} />
+          <ButtonSearch
+            toggleDrawer={handleDrawerToggle}
+            searchInput={searchInput}
+          />
         )}
       </Box>
 
@@ -81,39 +75,18 @@ export default function SearchInput() {
           keepMounted: true,
         }}
       >
-        {isMobileScreen ? drawerMobile : drawerFullScreen}
+        {drawer}
       </Drawer>
     </>
   );
 }
 
-function TextSearch() {
-  return (
-    <TextField
-      sx={{ flexGrow: 1 }}
-      size="small"
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <Search />
-          </InputAdornment>
-        ),
-        sx: {
-          borderRadius: 28,
-          width: "80%",
-          mx: "auto",
-        },
-      }}
-      placeholder="Search"
-    />
-  );
-}
-
 type ToggleDrawerProps = {
   toggleDrawer: () => void;
+  searchInput: string | null;
 };
 
-function ButtonSearch({ toggleDrawer }: ToggleDrawerProps) {
+function ButtonSearch({ toggleDrawer, searchInput }: ToggleDrawerProps) {
   return (
     <Button
       onClick={toggleDrawer}
@@ -128,7 +101,7 @@ function ButtonSearch({ toggleDrawer }: ToggleDrawerProps) {
       }}
       size="small"
     >
-      Search
+      {searchInput || "Search"}
     </Button>
   );
 }
