@@ -1,9 +1,9 @@
 import { JWT } from "next-auth/jwt";
-type HttpMethods = "PUT" | "POST";
+type HttpMethods = "PUT" | "POST" | "DELETE";
 type PostOptions = {
   url: string;
   method: HttpMethods;
-  token: JWT;
+  token: JWT | null | undefined;
   data: any;
 };
 

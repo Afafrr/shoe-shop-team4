@@ -8,14 +8,48 @@ import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { ResData } from "@/utils/getData";
 import ProductCard from "@/components/Products/ProductCard";
-import { MyProduct } from "@/types/Product";
+import { MyProduct, EditProduct } from "@/types/Product";
 import MenuModal from "./MenuModal";
+import EditModal from "./modals/edit-modal/EditModal";
+import { useEffect, useState } from "react";
+import { reduceData } from "../helper";
+import { UserData } from "@/types/types";
+import { deleteProduct } from "../action";
+import SuccessAlert from "@/components/Alerts/SuccessAlert";
 
-export default function MyProductsClient({ data }: { data: ResData<any> }) {
+type MyProductData = ResData<
+  UserData & {
+    products: MyProduct[];
+  }
+>;
+
+export default function MyProductsClient({ data }: { data: MyProductData }) {
+  const products = data.data?.products;
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalProduct, setEditModalProduct] = useState<EditProduct>();
   const router = useRouter();
-  // const [products, setProducts] = useState<Product[]>(data.data?.products);
-  const products: MyProduct[] = data.data?.products;
-  console.log(data);
+
+  useEffect(() => {
+    if (selectedId && products) {
+      const product = products.find((product) => product.id === selectedId);
+      if (!product) return;
+
+      reduceData(product).then((data) => {
+        setEditModalProduct(data as EditProduct);
+        setEditModalOpen(true);
+      });
+    }
+    return () => {
+      setSelectedId(null);
+    };
+  }, [selectedId]);
+
+  const handleDeleteBtn = async (productId: number | null) => {
+    if (!productId) return;
+    const res = await deleteProduct(productId);
+    console.log(res);
+  };
 
   const handleAddBtn = () => {
     router.push("/my-products/new");
@@ -46,6 +80,11 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
             >
               My Products
             </Typography>
+            <EditModal
+              open={editModalOpen}
+              handleClose={() => setEditModalOpen(false)}
+              product={editModalProduct}
+            />
             {products?.length ? (
               <Button
                 onClick={handleAddBtn}
@@ -95,7 +134,11 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
                       gender={gender?.name || ""}
                       price={price}
                     >
-                      <MenuModal productData={product} />
+                      <MenuModal
+                        productId={product.id}
+                        setSelectedId={setSelectedId}
+                        onDelete={handleDeleteBtn}
+                      />
                     </ProductCard>
                   </Grid>
                 );

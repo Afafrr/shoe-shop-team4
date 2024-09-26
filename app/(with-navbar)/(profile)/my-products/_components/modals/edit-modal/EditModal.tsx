@@ -18,10 +18,11 @@ import { useEffect, useState } from "react";
 type ModalType = {
   open: boolean;
   handleClose: () => void;
-  product: EditProduct;
+  product: EditProduct | undefined;
 };
 
 export default function EditModal({ open, handleClose, product }: ModalType) {
+  if (!product) return;
   const [confirmModal, setConfirmModal] = useState(false);
   const { id, ...formProduct } = product;
   const defaultValues = formProduct;

@@ -3,22 +3,34 @@ import { Box, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ThreeDotsIcon } from "@/public/svg/ThreeDotsIcon";
-import { MyProduct } from "@/types/Product";
-export default function MenuModal({ productData }: { productData: MyProduct }) {
+import { deleteProduct } from "../action";
+
+export default function MenuModal({
+  productId,
+  setSelectedId,
+  onDelete,
+}: {
+  productId: number | null;
+  setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
+  onDelete: (productId: number | null) => void;
+}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
+
   const options = [
     {
       name: "View",
-      action: () => {
-        router.push(`./products/${productData.id}`);
-      },
+      action: () => router.push(`./products/${productId}`),
     },
-    { name: "Edit", action: () => {
-      
-    } },
-    { name: "Delete", action: () => {} },
+    {
+      name: "Edit",
+      action: () => setSelectedId(productId),
+    },
+    {
+      name: "Delete",
+      action: () => onDelete(productId),
+    },
   ];
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,6 +39,7 @@ export default function MenuModal({ productData }: { productData: MyProduct }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
       <Box

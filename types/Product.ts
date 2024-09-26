@@ -58,7 +58,8 @@ export interface MyProduct {
   createdBy: Parent;
   updatedBy: Parent;
 }
-interface MyImage {
+
+export interface MyImage {
   id: number;
   name: string;
   alternativeText: string | null;

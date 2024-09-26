@@ -35,6 +35,8 @@ export async function editProductAction(
   formData.append("field", "");
 
   try {
+    console.log(formData);
+
     // Post request to backend. Upload images before posting the product.
     const uploadResponse = await fetch(`${BASE_URL}/upload`, {
       method: "POST",

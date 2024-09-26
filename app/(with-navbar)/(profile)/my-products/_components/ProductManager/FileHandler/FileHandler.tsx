@@ -22,7 +22,6 @@ type StateAction =
 
 export default function FileHandler({ label, required }: FileHandlerProps) {
   const { setError, clearErrors, setValue, getValues } = useFormContext();
-
   // Retrieve default values from form and format to FileType
   const initialValue = getValues("images").map((file: File) => ({
     content: file,

@@ -28,6 +28,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
     queryKey: ["options"],
     queryFn: () => getOptions(session?.user.jwt as JWT),
   });
+  console.log(options);
 
   if (!options) return <LoadingPage width="100%" height="800px" />;
 
