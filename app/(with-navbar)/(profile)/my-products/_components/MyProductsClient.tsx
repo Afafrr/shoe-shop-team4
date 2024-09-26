@@ -16,6 +16,7 @@ import { reduceData } from "../helper";
 import { UserData } from "@/types/types";
 import { deleteProduct } from "../action";
 import SuccessAlert from "@/components/Alerts/SuccessAlert";
+import { useSession } from "next-auth/react";
 
 type MyProductData = ResData<
   UserData & {
@@ -28,6 +29,9 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalProduct, setEditModalProduct] = useState<EditProduct>();
+  const [showAlert, setShowAlert] = useState("");
+  const [error, setError] = useState("");
+  const session = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -46,9 +50,14 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
   }, [selectedId]);
 
   const handleDeleteBtn = async (productId: number | null) => {
+    setShowAlert("");
     if (!productId) return;
-    const res = await deleteProduct(productId);
-    console.log(res);
+    const res = await deleteProduct(productId, session.data?.user.jwt);
+
+    if (!res.error) {
+      router.refresh();
+      setShowAlert("Product deleted successfully");
+    } else setError(res.error);
   };
 
   const handleAddBtn = () => {
@@ -69,6 +78,8 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
               alignItems: "end",
             }}
           >
+            {showAlert ? <SuccessAlert message={showAlert} /> : null}
+
             <Typography
               variant="h4"
               fontWeight={500}
@@ -85,6 +96,7 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
               handleClose={() => setEditModalOpen(false)}
               product={editModalProduct}
             />
+
             {products?.length ? (
               <Button
                 onClick={handleAddBtn}
@@ -109,10 +121,10 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
               mt: { xs: "20px", md: "36px" },
             }}
           >
-            {data.error ? (
-              <Typography color="red">
+            {data.error || error ? (
+              <Typography color="red" sx={{ pb: 2 }}>
                 <WarningIcon />
-                {data.error}
+                {data.error || error}
               </Typography>
             ) : null}
             {products?.length ? (

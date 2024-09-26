@@ -3,7 +3,6 @@ import { Box, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ThreeDotsIcon } from "@/public/svg/ThreeDotsIcon";
-import { deleteProduct } from "../action";
 
 export default function MenuModal({
   productId,

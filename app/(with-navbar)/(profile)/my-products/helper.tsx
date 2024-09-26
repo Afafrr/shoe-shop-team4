@@ -28,8 +28,7 @@ export async function reduceData(data: MyProduct) {
         });
         return file;
       });
-      console.log(newVal);
-
+      
       newVal = await Promise.all(newVal);
     }
     if (key === "color" && !Array.isArray(value)) newVal = [newVal];

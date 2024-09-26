@@ -5,7 +5,7 @@ import {
   ProductActionResponse,
   ProductResponse,
 } from "@/types/Product";
-import { FormDataToObject } from "../../../_helpers";
+import { FormDataToObject } from "../../../_lib/utils";
 
 export async function editProductAction(
   formData: FormData,
