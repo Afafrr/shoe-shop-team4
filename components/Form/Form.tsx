@@ -120,13 +120,10 @@ export default function Form({
           <Button
             type="submit"
             disabled={isPending}
+            variant="contained"
             sx={{
               py: "25px",
-              borderRadius: "5.58px",
-              backgroundColor: "#FE645E",
-              color: "white",
               height: "34px",
-              fontWeight: 500,
               textTransform: "none",
             }}
             style={{
