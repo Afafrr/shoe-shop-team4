@@ -3,6 +3,7 @@ import { Box, Container, Divider, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 import { Suspense } from "react";
 import LoadingPage from "../Loading/LoadingPage";
+import NextMuiLink from "../Profile/NextMuiLink";
 
 type imageProps = {
   src: string;
@@ -43,18 +44,20 @@ export default function AuthPage({
         }}
       >
         <Box>
-          <Image
-            src="/logo.png"
-            alt="logo"
-            width={35.31}
-            height={26.52}
-            priority
-            style={{
-              marginTop: 18,
-              marginLeft: 20,
-              marginBottom: 14.38,
-            }}
-          />
+          <NextMuiLink href="/products">
+            <Image
+              src="/logo.png"
+              alt="logo"
+              width={35.31}
+              height={26.52}
+              priority
+              style={{
+                marginTop: 18,
+                marginLeft: 20,
+                marginBottom: 14.38,
+              }}
+            />
+          </NextMuiLink>
         </Box>
 
         <Box mb={"35px"} sx={{ display: { xs: "block", md: "none" } }}>

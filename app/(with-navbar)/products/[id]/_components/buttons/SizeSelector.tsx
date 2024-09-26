@@ -12,13 +12,12 @@ type SizeSelectorProps = {
   onSelect: (sizeId: number) => void;
 };
 
-
 export default function SizeSelector({ sizes, onSelect }: SizeSelectorProps) {
   const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
 
-  const handleSizeSelect = (sizeId: number) => {
-    setSelectedSizeId(sizeId);
-    onSelect(sizeId);
+  const handleSizeSelect = (size: SizeAPIResponse) => {
+    setSelectedSizeId(size.id);
+    onSelect(size.attributes.value);
   };
 
   return (
@@ -39,7 +38,7 @@ export default function SizeSelector({ sizes, onSelect }: SizeSelectorProps) {
           <Button
             key={size.id}
             variant="outlined"
-            onClick={() => handleSizeSelect(size.id)}
+            onClick={() => handleSizeSelect(size)}
             sx={{
               borderColor: "#5C5C5C",
               borderRadius: "8px",

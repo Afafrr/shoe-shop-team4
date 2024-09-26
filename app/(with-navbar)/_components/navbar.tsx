@@ -70,9 +70,11 @@ export default function NavBar() {
             )}
 
             <SearchInput />
-            <IconButton size="large" color="inherit">
-              <CartIcon count={getCartItemCount()} />
-            </IconButton>
+            <NextMuiLink href="/chart">
+              <IconButton size="large" color="inherit">
+                <CartIcon count={getCartItemCount()} />
+              </IconButton>
+            </NextMuiLink>
             {isLoggedIn && (
               <NextMuiLink href={"/settings"} sx={{ textDecoration: "none" }}>
                 <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
@@ -83,9 +85,11 @@ export default function NavBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
-            <IconButton size="large" color="inherit">
-              <CartIcon count={getCartItemCount()} />
-            </IconButton>
+            <NextMuiLink href="/chart">
+              <IconButton size="large" color="inherit">
+                <CartIcon count={getCartItemCount()} />
+              </IconButton>
+            </NextMuiLink>
             <SearchInput />
             <SideBar isLoggedIn={isLoggedIn} />
           </Box>

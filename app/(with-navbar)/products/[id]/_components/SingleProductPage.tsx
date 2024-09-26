@@ -1,14 +1,10 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import ProductDetails, { PopulateField } from "@/utils/api/singleProduct";
-import {
-  SizesAPIResponse,
-  Color,
-  Size,
-} from "@/types/singleProduct";
+import { SizesAPIResponse, Color, Size } from "@/types/singleProduct";
 
 import ProductImageGallery from "@/app/(with-navbar)/products/[id]/_components/gallery/ProductImageGallery";
 import SizeSelector from "@/app/(with-navbar)/products/[id]/_components/buttons/SizeSelector";
@@ -16,7 +12,9 @@ import ActionButtons from "@/app/(with-navbar)/products/[id]/_components/buttons
 import ProductDescription from "@/app/(with-navbar)/products/[id]/_components/Info/ProductDescription";
 import ProductTitle from "./Info/ProductTitle";
 import ColorSelector from "./buttons/ColorSelector";
-
+import WarningIcon from "@/components/Form/WarningIcon";
+import { CartItem, useCart } from "@/contexts/Cart";
+import { useRouter } from "next/navigation";
 
 type SingleProductPageProps = {
   productId: string;
@@ -27,9 +25,11 @@ export default function SingleProductPage({
   productId,
   fieldsToPopulate,
 }: SingleProductPageProps) {
-
-  const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
-  const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+  const [fieldsMissing, setFieldsMissing] = useState(false);
+  const { addItem } = useCart();
+  const router = useRouter();
 
   const { data, error, isLoading } = ProductDetails(
     productId,
@@ -37,10 +37,11 @@ export default function SingleProductPage({
   );
 
   if (isLoading) return <LoadingPage />;
-  if (error) return "An error has occurred: " + (error as Error).message;
+  if (error) throw new Error("An error has occurred, please try again");
   if (!data) return null;
 
-  const { name, price, description, images, sizes, gender, color } = data.data.attributes;
+  const { name, price, description, images, sizes, gender, color } =
+    data.data.attributes;
 
   const mappedSizes =
     (sizes as SizesAPIResponse)?.data?.map((size: Size) => ({
@@ -66,23 +67,30 @@ export default function SingleProductPage({
     : [{ id: 1, attributes: { name: "Unspecified" } }];
 
   const handleColorSelect = (selectedColor: Color) => {
-    setSelectedColorId(selectedColor.id);
+    setSelectedColor(selectedColor.attributes.name);
   };
 
-  const handleSizeSelect = (sizeId: number) => {
-    setSelectedSizeId(sizeId);
+  const handleSizeSelect = (size: number) => {
+    setSelectedSize(size);
   };
 
   const handleAddToBag = () => {
-    if (selectedColorId && selectedSizeId) {
-      const productToAdd = {
-        productId: productId,
-        colorId: selectedColorId,
-        sizeId: selectedSizeId,
+    setFieldsMissing(false);
+    if (selectedColor && selectedSize) {
+      const itemToAdd: CartItem = {
+        id: Number(productId),
+        quantity: 1,
+        name: name,
+        gender: productGender,
+        image: images.data[0].attributes.url,
+        price: price,
+        color: selectedColor,
+        size: selectedSize,
       };
-      console.log("Add to Bag:", productToAdd);
+      addItem(itemToAdd);
+      router.push("/chart");
     } else {
-      console.log("Select color and size");
+      setFieldsMissing(true);
     }
   };
 
@@ -97,9 +105,7 @@ export default function SingleProductPage({
         margin: { md: "0 auto" },
       }}
     >
-      <Box
-        sx={{ width: { xs: "100%", md: "50%" } }} 
-      >
+      <Box sx={{ width: { xs: "100%", md: "50%" } }}>
         <ProductImageGallery images={images} />
       </Box>
 
@@ -112,9 +118,14 @@ export default function SingleProductPage({
           paddingLeft: { xs: "20px", md: "50px", lg: "80px", xl: "100px" },
           paddingRight: { xs: "20px", md: "0" },
           paddingTop: { xs: "30px" },
-        }} 
+        }}
       >
         <ProductTitle name={name} price={price} gender={productGender} />
+        {fieldsMissing && (
+          <Typography color="red">
+            <WarningIcon /> Please, select color and size
+          </Typography>
+        )}
         <ColorSelector colors={productColors} onSelect={handleColorSelect} />
         <SizeSelector sizes={mappedSizes} onSelect={handleSizeSelect} />
         <ActionButtons handleAddToBag={handleAddToBag} />
