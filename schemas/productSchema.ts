@@ -46,10 +46,7 @@ export const productSchema = z.object({
     .min(1, {
       message: "Please enter product's description",
     })
-    .min(10, {
-      message: "Product's description must have at least 10 characters",
-    })
-    .max(480, "Name must be 480 characters or less")
+    .max(480, "Description must be 480 characters or less")
     .trim(),
   sizes: z
     .array(z.string())

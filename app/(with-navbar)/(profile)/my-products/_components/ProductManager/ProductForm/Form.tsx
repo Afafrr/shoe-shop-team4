@@ -56,8 +56,8 @@ export default function ProductForm({ isPending }: ProductFormProps) {
               type: "text",
               autoComplete: "name",
             }}
-            inputProps={{ maxLength: 50 }}
             disabled={isPending}
+            isControlled
           />
           <Input
             key="Price"
@@ -122,7 +122,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
               autoComplete: "description",
               minRows: isMobile ? 1 : 10,
             }}
-            inputProps={{ maxLength: 480 }}
+            isControlled
           />
           <SizeSelect
             props={{ name: "Sizes", required: true }}

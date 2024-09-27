@@ -4,11 +4,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { TextFieldElement, TextFieldElementProps } from "react-hook-form-mui";
+import {
+  TextFieldElement,
+  TextFieldElementProps,
+  useFormContext,
+} from "react-hook-form-mui";
 import { InputProps as MuiInputProps } from "@mui/material/Input";
 
 import WarningIcon from "@/components/Form/WarningIcon";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 // This is a custom input component.
 
@@ -20,6 +24,7 @@ export default function Input({
   inputProps,
   componentStyle,
   sizes,
+  isControlled = false,
   children,
 }: {
   props: TextFieldElementProps;
@@ -29,8 +34,19 @@ export default function Input({
   inputProps?: InputBaseComponentProps | undefined;
   componentStyle?: React.InputHTMLAttributes<HTMLInputElement>;
   sizes?: { width: string; height?: string };
+  isControlled?: boolean;
   children?: ReactNode;
 }) {
+  const { getValues, setValue } = useFormContext();
+  const [inputValue, setInputValue] = useState(getValues(props.name));
+
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    let value = event.target.value;
+    setValue(props.name, value, { shouldValidate: true });
+    setInputValue(value);
+  }
   return (
     <Stack width={sizes?.width}>
       <InputLabel htmlFor={label} sx={{ fontWeight: 500 }}>
@@ -51,6 +67,8 @@ export default function Input({
         name={props.name}
         disabled={disabled}
         aria-disabled={disabled}
+        value={isControlled ? inputValue : undefined}
+        onChange={isControlled ? handleChange : undefined}
         InputProps={mutations}
         FormHelperTextProps={{
           component: (item) => {
