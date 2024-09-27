@@ -3,6 +3,7 @@ import { Box, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ThreeDotsIcon } from "@/public/svg/ThreeDotsIcon";
+import ActionConfirmationModal from "./ProductManager/modals/ActionConfirmationModal";
 
 export default function MenuModal({
   productId,
@@ -14,6 +15,7 @@ export default function MenuModal({
   onDelete: (productId: number | null) => void;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const open = Boolean(anchorEl);
   const router = useRouter();
 
@@ -28,7 +30,7 @@ export default function MenuModal({
     },
     {
       name: "Delete",
-      action: () => onDelete(productId),
+      action: () => setDeleteModalOpen(true),
     },
   ];
 
@@ -41,6 +43,14 @@ export default function MenuModal({
 
   return (
     <>
+      <ActionConfirmationModal
+        name="Delete"
+        message="Delete product"
+        description="Do you want to delete this product? The data will be permanently lost."
+        open={deleteModalOpen}
+        handleClose={() => setDeleteModalOpen(false)}
+        actionFn={() => onDelete(productId)}
+      />
       <Box
         sx={{
           display: "flex",

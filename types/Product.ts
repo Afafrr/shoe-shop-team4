@@ -538,7 +538,7 @@ export type ImageUpload = SuccessfulImageUpload | ErrorResponse;
 
 export type ProductFormSchema = {
   name: string;
-  price: number;
+  price: number | undefined;
   categories: string[];
   color: string[];
   gender: string;

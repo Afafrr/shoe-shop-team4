@@ -96,7 +96,6 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
               handleClose={() => setEditModalOpen(false)}
               product={editModalProduct}
             />
-
             {products?.length ? (
               <Button
                 onClick={handleAddBtn}

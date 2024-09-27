@@ -5,10 +5,10 @@ import { editProductAction } from "./action";
 import ProductManager from "../../ProductManager/ProductManager";
 import { EditProduct } from "@/types/Product";
 import ActionConfirmationModal from "../../ProductManager/modals/ActionConfirmationModal";
-
 import "./modal.css";
 import { ContextType } from "@/types/types";
 import { useEffect, useState } from "react";
+import { emptyFormValues } from "../../ProductManager/ProductForm/FormPage";
 
 // This is a modal that pops when the user clicks on edit product. Uses same template as AddProduct page: 'ProductManager.tsx'
 // This component takes:
@@ -22,9 +22,8 @@ type ModalType = {
 };
 
 export default function EditModal({ open, handleClose, product }: ModalType) {
-  if (!product) return;
   const [confirmModal, setConfirmModal] = useState(false);
-  const { id, ...formProduct } = product;
+  const { id, ...formProduct } = product ?? { id: "", ...emptyFormValues };
   const defaultValues = formProduct;
 
   useEffect(() => {
