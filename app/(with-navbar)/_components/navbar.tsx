@@ -1,7 +1,5 @@
 "use client";
-
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import NextLink from "next/link";
 import AppBar from "@mui/material/AppBar";
@@ -11,17 +9,26 @@ import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { Avatar } from "@mui/material";
-
 import SearchInput from "./searchInput";
 import SideBar from "./sidebar";
 import CartIcon from "./CartIcon";
 import { useCart } from "@/contexts/Cart";
 import NextMuiLink from "@/components/Profile/NextMuiLink";
+import { useUserData } from "@/contexts/UserDataProvider";
+import { useRouter } from "next/navigation";
+import WarningIcon from "@/components/Form/WarningIcon";
 
 export default function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { getCartItemCount } = useCart();
-
+  const userData = useUserData();
+  const data = userData?.data;
+  const error = userData?.error;
+  const avatar = data?.avatar?.url;
+  
+  useEffect(() => {
+    setIsLoggedIn(Boolean(data));
+  }, [userData]);
   return (
     <AppBar position="static" color="inherit">
       <Container maxWidth={false} sx={{ my: { md: 1 } }}>
@@ -75,8 +82,13 @@ export default function NavBar() {
             </IconButton>
             {isLoggedIn && (
               <NextMuiLink href={"/settings"} sx={{ textDecoration: "none" }}>
-                <Avatar alt="User logged In" sx={{ width: 24, height: 24 }}>
-                  U
+                <Avatar
+                alt="User logged In"
+                src={avatar}
+                sx={{ width: 24, height: 24 }}
+              >
+                  {avatar ? null : data?.firstName.slice(0, 1)}
+                {error ? <WarningIcon /> : null}
                 </Avatar>
               </NextMuiLink>
             )}

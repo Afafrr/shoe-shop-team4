@@ -8,14 +8,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { ResData } from "@/utils/getData";
+import { useUserData } from "@/contexts/UserDataProvider";
 
 export default function MyProductsClient({ data }: { data: ResData<any> }) {
   const router = useRouter();
   const [products, setProducts] = useState(data.data?.products);
+  const { data: userData, error } = useUserData(); //just to show output for provider
   const handleAddBtn = () => {
     router.push("/my-products/new");
   };
-  console.log(data);
+  const avatar = userData?.avatar?.url;
 
   return (
     <Box sx={{ display: "flex", width: 1, flexShrink: 0 }}>
@@ -23,7 +25,10 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
       <Box sx={{ width: 1, margin: { md: "38px 60px 0px 53px" } }}>
         <BackgroundImage />
         <Box sx={{ mx: { xs: "20px", md: "0px" } }}>
-          <AvatarBox name={"Jane"} points={100} />
+          <AvatarBox
+            name={userData?.firstName + " " + userData?.lastName}
+            src={avatar}
+          />
           <Box
             sx={{
               display: "flex",
