@@ -1,5 +1,5 @@
-import { Button, Typography, Box } from "@mui/material";
-import { useState } from "react";
+import { Button, Typography, Box, Grid } from "@mui/material";
+
 type SizeAPIResponse = {
   id: number;
   attributes: {
@@ -10,13 +10,15 @@ type SizeAPIResponse = {
 type SizeSelectorProps = {
   sizes: SizeAPIResponse[];
   onSelect: (sizeId: number) => void;
+  selectedSize: number | null;
 };
 
-export default function SizeSelector({ sizes, onSelect }: SizeSelectorProps) {
-  const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
-
+export default function SizeSelector({
+  sizes,
+  onSelect,
+  selectedSize,
+}: SizeSelectorProps) {
   const handleSizeSelect = (size: SizeAPIResponse) => {
-    setSelectedSizeId(size.id);
     onSelect(size.attributes.value);
   };
 
@@ -25,42 +27,36 @@ export default function SizeSelector({ sizes, onSelect }: SizeSelectorProps) {
       <Typography variant="h6" gutterBottom>
         Select Size
       </Typography>
-      <Box
-        display="flex"
-        flexDirection="row"
-        flexWrap="wrap"
-        justifyContent="flex-start"
-        sx={{
-          gap: { xs: "15px", md: "15px", lg: "20px", xl: "25px" },
-        }}
+      <Grid
+        container
+        spacing={{ xs: 2, md: 2 }}
+        columns={{ xs: 4, sm: 5, md: 4, lg: 4, xl: 5 }}
       >
         {sizes.map((size) => (
-          <Button
-            key={size.id}
-            variant="outlined"
-            onClick={() => handleSizeSelect(size)}
-            sx={{
-              borderColor: "#5C5C5C",
-              borderRadius: "8px",
-              color: selectedSizeId === size.id ? "#C3C3C3" : "#5C5C5C",
-              backgroundColor:
-                selectedSizeId === size.id ? "#F0F0F0" : "#FFFFFF",
-              textAlign: "center",
-              justifyContent: "center",
-              width: { xs: "70px", md: "60px", lg: "75px", xl: "90px" },
-              height: { xs: "40px", md: "35px", lg: "45px", xl: "55px" },
-              padding: 0,
-              fontSize: { xs: "14px", md: "12px", xl: "15px" },
-              "&:hover": {
-                backgroundColor:
-                  selectedSizeId === size.id ? "#F0F0F0" : "#F9F9F9",
-              },
-            }}
-          >
-            EU - {size.attributes.value}
-          </Button>
+          <Grid item xs={1} md={1} lg={1} xl={1} key={size.id}>
+            <Button
+              color={
+                selectedSize === size.attributes.value ? "primary" : "inherit"
+              }
+              variant={
+                selectedSize === size.attributes.value
+                  ? "contained"
+                  : "outlined"
+              }
+              sx={{
+                fontSize: "0.75rem",
+                width: "70px",
+                height: "45px",
+                borderRadius: "8px",
+                mb: "10px",
+              }}
+              onClick={() => handleSizeSelect(size)}
+            >
+              {`EU-${size.attributes.value}`}
+            </Button>
+          </Grid>
         ))}
-      </Box>
+      </Grid>
     </Box>
   );
 }

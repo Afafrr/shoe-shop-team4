@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-export type CartItem = {
-  id: number;
+export type NewCartItem = {
+  productId: number;
   quantity: number;
   name: string;
   gender: string;
@@ -11,11 +11,15 @@ export type CartItem = {
   size: number;
 };
 
+export type CartItem = NewCartItem & {
+  id: string;
+};
+
 type CartContextType = {
   cartItems: CartItem[];
-  addItem: (item: CartItem) => void;
-  updateItemQuantity: (id: number, quantity: number) => void;
-  removeItem: (id: number) => void;
+  addItem: (item: NewCartItem) => void;
+  updateItemQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string) => void;
   clearCart: () => void;
   getCartItemCount: () => number;
 };
@@ -57,17 +61,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
    * @param {CartItem} item - The item to add to the cart.
    * @return {void}
    */
-  const addItem = (item: CartItem): void => {
+  const addItem = (item: NewCartItem): void => {
+    const newItemId = `${item.productId}-${item.size}`;
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+      const existingItem = prevItems.find((i) => i.id === newItemId);
 
       if (existingItem) {
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
+          i.id === newItemId
+            ? { ...i, quantity: i.quantity + item.quantity }
+            : i
         );
       }
 
-      return [...prevItems, item];
+      return [...prevItems, { id: newItemId, ...item }];
     });
   };
 
@@ -78,7 +85,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
    * @param {number} quantity - The new quantity of the item.
    * @return {void}
    */
-  const updateItemQuantity = (id: number, quantity: number): void => {
+  const updateItemQuantity = (id: string, quantity: number): void => {
     setCartItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
@@ -90,7 +97,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
    * @param {number} id - The ID of the item to be removed.
    * @return {void}
    */
-  const removeItem = (id: number): void => {
+  const removeItem = (id: string): void => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 

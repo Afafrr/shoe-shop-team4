@@ -6,31 +6,55 @@ import { CartItem, useCart } from "@/contexts/Cart";
 import QuantitySelect from "./QuantitySelect";
 import { Delete } from "@/public/svg/Delete";
 import useIsMobile from "../../(profile)/my-products/_components/useIsMobile";
+import NextMuiLink from "@/components/Profile/NextMuiLink";
 
-export default function ProductInfo({ item }: { item: CartItem }) {
+type ProductInfoProps = {
+  item: CartItem;
+  showMessage: () => void;
+  setEliminatedItem: (item: CartItem) => void;
+};
+
+export default function ProductInfo({
+  item,
+  showMessage,
+  setEliminatedItem,
+}: ProductInfoProps) {
   const { removeItem } = useCart();
   const isMobile = useIsMobile();
+  const isSmallScreen = useIsMobile("sm");
+
+  function handleDelete(item: CartItem) {
+    showMessage();
+    setEliminatedItem(item);
+    removeItem(item.id);
+  }
 
   return (
     <Box
-      key={item.id}
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        my: "30px",
-        mx: "20px",
+        my: { xs: "15px", sm: "30px" },
+        mx: { xs: "5px", sm: "20px" },
         gap: "15px",
       }}
     >
-      <Box sx={{ width: "150px", height: "120px" }}>
-        <Image
-          src={item.image}
-          alt={item.name}
-          width={223}
-          height={110}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      </Box>
+      {!isSmallScreen && (
+        <Box
+          sx={{
+            width: { xs: "150px", md: "225px" },
+            height: { xs: "120px", md: "180px" },
+          }}
+        >
+          <Image
+            src={item.image}
+            alt={item.name}
+            width={223}
+            height={110}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </Box>
+      )}
 
       <Box
         sx={{
@@ -45,27 +69,66 @@ export default function ProductInfo({ item }: { item: CartItem }) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            mb: "6px",
             width: {
               md: "100%",
             },
           }}
         >
           <Box>
-            <Typography fontWeight={500} noWrap sx={{ maxWidth: "150px" }}>
-              {item.name}
+            <NextMuiLink
+              href={`/products/${item.productId}`}
+              sx={{ textDecoration: "none" }}
+            >
+              <Typography
+                fontWeight={500}
+                sx={{ wordBreak: "break-word" }}
+                color={"textPrimary"}
+              >
+                {item.name}
+              </Typography>
+              <Typography
+                fontWeight={500}
+                fontSize={"12px"}
+                color={"textSecondary"}
+              >
+                {item.gender}
+              </Typography>
+            </NextMuiLink>
+          </Box>
+          <Box display="flex" alignItems="center" gap={2}>
+            <Typography fontWeight={500} fontSize={"12px"}>
+              Color:
             </Typography>
+            <Box
+              sx={{
+                height: 20,
+                width: 40,
+                backgroundColor: item.color.toLowerCase(),
+                borderRadius: "10%",
+              }}
+            />
+          </Box>
+
+          <Box display="flex" alignItems="center" gap={2}>
             <Typography
               fontWeight={500}
               fontSize={"12px"}
-              color={"#5c5c5c"}
               noWrap
               sx={{ maxWidth: "150px" }}
             >
-              {item.gender}
+              Size:
             </Typography>
-          </Box>
 
-          <QuantitySelect item={item} />
+            <Box>
+              <Typography
+                fontWeight={500}
+                fontSize={"12px"}
+                color={"textSecondary"}
+                noWrap
+              >{`EU-${item.size}`}</Typography>
+            </Box>
+          </Box>
         </Box>
 
         <Box
@@ -79,15 +142,17 @@ export default function ProductInfo({ item }: { item: CartItem }) {
             fontWeight={500}
             sx={{ alignSelf: "flex-end" }}
           >{`$${item.price}`}</Typography>
-
-          <Button
-            onClick={() => removeItem(item.id)}
-            aria-label="delete"
-            sx={{ color: "#8B8E93", gap: "4px", p: 0, mb: "10px" }}
-          >
-            <Delete />
-            {!isMobile && <Typography>Delete</Typography>}
-          </Button>
+          <Box display="flex" alignItems="center">
+            <QuantitySelect item={item} />
+            <Button
+              onClick={() => handleDelete(item)}
+              aria-label="delete"
+              sx={{ color: "#5C5C5C", gap: "4px", p: 0 }}
+            >
+              <Delete />
+              {!isMobile && <Typography>Delete</Typography>}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

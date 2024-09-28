@@ -1,20 +1,29 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  IconButton,
+  Snackbar,
+  SnackbarCloseReason,
+  SnackbarContent,
+  Typography,
+} from "@mui/material";
+import { Fragment, useState } from "react";
 import LoadingPage from "@/components/Loading/LoadingPage";
-import ProductDetails, { PopulateField } from "@/utils/api/singleProduct";
+import productDetails, { PopulateField } from "@/utils/api/singleProduct";
 import { SizesAPIResponse, Color, Size } from "@/types/singleProduct";
 
 import ProductImageGallery from "@/app/(with-navbar)/products/[id]/_components/gallery/ProductImageGallery";
 import SizeSelector from "@/app/(with-navbar)/products/[id]/_components/buttons/SizeSelector";
-import ActionButtons from "@/app/(with-navbar)/products/[id]/_components/buttons/ActionButtons";
+import ActionButton from "@/app/(with-navbar)/products/[id]/_components/buttons/ActionButtons";
 import ProductDescription from "@/app/(with-navbar)/products/[id]/_components/Info/ProductDescription";
 import ProductTitle from "./Info/ProductTitle";
 import ColorSelector from "./buttons/ColorSelector";
 import WarningIcon from "@/components/Form/WarningIcon";
-import { CartItem, useCart } from "@/contexts/Cart";
+import { NewCartItem, useCart } from "@/contexts/Cart";
 import { useRouter } from "next/navigation";
+import { Close } from "@mui/icons-material";
 
 type SingleProductPageProps = {
   productId: string;
@@ -28,10 +37,11 @@ export default function SingleProductPage({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [fieldsMissing, setFieldsMissing] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
   const { addItem } = useCart();
   const router = useRouter();
 
-  const { data, error, isLoading } = ProductDetails(
+  const { data, error, isLoading } = productDetails(
     productId,
     fieldsToPopulate
   );
@@ -74,11 +84,22 @@ export default function SingleProductPage({
     setSelectedSize(size);
   };
 
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setShowMessage(false);
+  };
+
   const handleAddToBag = () => {
     setFieldsMissing(false);
     if (selectedColor && selectedSize) {
-      const itemToAdd: CartItem = {
-        id: Number(productId),
+      const itemToAdd: NewCartItem = {
+        productId: Number(productId),
         quantity: 1,
         name: name,
         gender: productGender,
@@ -88,11 +109,22 @@ export default function SingleProductPage({
         size: selectedSize,
       };
       addItem(itemToAdd);
-      router.push("/chart");
+      setShowMessage(true);
+      setSelectedColor(null);
+      setSelectedSize(null);
     } else {
       setFieldsMissing(true);
     }
   };
+
+  const action = (
+    <Fragment>
+      <Button onClick={() => router.push("/chart")}>Go to cart</Button>
+      <IconButton aria-label="close" onClick={handleClose}>
+        <Close fontSize="small" />
+      </IconButton>
+    </Fragment>
+  );
 
   return (
     <Box
@@ -123,13 +155,35 @@ export default function SingleProductPage({
         <ProductTitle name={name} price={price} gender={productGender} />
         {fieldsMissing && (
           <Typography color="red">
-            <WarningIcon /> Please, select color and size
+            <WarningIcon /> Please select color and size.
           </Typography>
         )}
-        <ColorSelector colors={productColors} onSelect={handleColorSelect} />
-        <SizeSelector sizes={mappedSizes} onSelect={handleSizeSelect} />
-        <ActionButtons handleAddToBag={handleAddToBag} />
+        <ColorSelector
+          selectedColor={selectedColor}
+          colors={productColors}
+          onSelect={handleColorSelect}
+        />
+        <SizeSelector
+          selectedSize={selectedSize}
+          sizes={mappedSizes}
+          onSelect={handleSizeSelect}
+        />
+        <ActionButton handleAddToBag={handleAddToBag} />
         <ProductDescription description={description} />
+        <Snackbar
+          open={showMessage}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          autoHideDuration={4000}
+          onClose={handleClose}
+        >
+          <SnackbarContent
+            style={{
+              backgroundColor: "white",
+            }}
+            message={<Typography color="textPrimary">Product added</Typography>}
+            action={action}
+          />
+        </Snackbar>
       </Box>
     </Box>
   );

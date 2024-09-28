@@ -1,11 +1,19 @@
 import { ExpandMore } from "@mui/icons-material";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import useIsMobile from "../../(profile)/my-products/_components/useIsMobile";
+import { useCart } from "@/contexts/Cart";
 
-export default function SummaryInfo({ subtotal }: { subtotal: number }) {
+export default function SummaryInfo() {
+  const { cartItems, getCartItemCount } = useCart();
   const isMobile = useIsMobile();
 
+  const subtotal = cartItems.reduce((acc, item) => {
+    return (acc += item.price * item.quantity);
+  }, 0);
+
   const { shipping, tax, total } = calculateTotal(subtotal);
+
+  if (getCartItemCount() === 0) return;
 
   return (
     <Box
@@ -13,7 +21,7 @@ export default function SummaryInfo({ subtotal }: { subtotal: number }) {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        height: "100vh",
+        minHeight: "100vh",
         [theme.breakpoints.up("md")]: {
           mr: "50px",
           height: "100%",
@@ -38,7 +46,7 @@ export default function SummaryInfo({ subtotal }: { subtotal: number }) {
       <Stack
         flexGrow={1}
         sx={{
-          m: "13.73px 16.22px 12px 20px",
+          m: "13.73px 15px 12px 15px",
         }}
         gap={3}
       >
@@ -62,7 +70,7 @@ export default function SummaryInfo({ subtotal }: { subtotal: number }) {
           mb: "20px",
           mx: "auto",
           borderRadius: "8px",
-          minWidth: { xs: "240px", sm: "320px" },
+          minWidth: { xs: "240px", lg: "320px" },
         }}
       >
         {isMobile ? "Go to checkout" : "Checkout"}
