@@ -1,6 +1,6 @@
 import { Box, Avatar, Typography } from "@mui/material";
 
-export default function AvatarBox({ name = "", points = 0 }) {
+export default function AvatarBox({ name = "", points = 0, src = "" }) {
   return (
     <Box
       sx={{
@@ -12,6 +12,7 @@ export default function AvatarBox({ name = "", points = 0 }) {
       }}
     >
       <Avatar
+        src={src}
         sx={{
           width: { xs: "60px", md: "120px" },
           height: { xs: "60px", md: "120px" },

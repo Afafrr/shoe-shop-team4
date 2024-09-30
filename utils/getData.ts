@@ -3,7 +3,8 @@ export type ResData<T> = { data: T | null; error: string };
 
 export async function getData<T>(
   url: string,
-  token: JWT | null | undefined
+  token: JWT | null | undefined,
+  options?: RequestInit
 ): Promise<ResData<T>> {
   try {
     const headers: HeadersInit = {
