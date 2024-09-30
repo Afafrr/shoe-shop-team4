@@ -14,7 +14,10 @@ export async function getMyProducts(): Promise<
   >
 > {
   const session = await getServerSession(authOptions);
-  return getData("users/me?populate[products][populate]=*", session?.user.jwt);
+  return getData(
+    "users/me?populate[products][populate]=*&populate=avatar",
+    session?.user.jwt
+  );
 }
 
 export async function deleteProduct(

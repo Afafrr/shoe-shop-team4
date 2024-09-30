@@ -44,6 +44,7 @@ export default function MyProductsClient() {
       ),
   });
   const products = data?.data?.products;
+  const userData = data?.data;
   if (error) setErrorMsg(error.message);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function MyProductsClient() {
   const handleAddBtn = () => {
     router.push("/my-products/new");
   };
+  const avatar = userData?.avatar?.url;
 
   return (
     <Box sx={{ display: "flex", width: 1, mb: 7 }}>
@@ -82,7 +84,10 @@ export default function MyProductsClient() {
       <Box sx={{ width: 1, margin: { md: "38px 60px 0px 53px" } }}>
         <BackgroundImage />
         <Box sx={{ mx: { xs: "20px", md: "0px" } }}>
-          <AvatarBox name={"Jane"} points={100} />
+          <AvatarBox
+            name={userData?.firstName + " " + userData?.lastName}
+            src={avatar}
+          />
           <Box
             sx={{
               display: "flex",
