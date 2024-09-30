@@ -6,7 +6,7 @@ import AvatarBox from "./AvatarBox";
 import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
 import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
-import { ResData } from "@/utils/getData";
+import { getData, ResData } from "@/utils/getData";
 import ProductCard from "@/components/Products/ProductCard";
 import { MyProduct, EditProduct } from "@/types/Product";
 import MenuModal from "./MenuModal";
@@ -17,6 +17,8 @@ import { UserData } from "@/types/types";
 import { deleteProduct } from "../action";
 import SuccessAlert from "@/components/Alerts/SuccessAlert";
 import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import LoadingPage from "@/components/Loading/LoadingPage";
 
 type MyProductData = ResData<
   UserData & {
@@ -24,15 +26,25 @@ type MyProductData = ResData<
   }
 >;
 
-export default function MyProductsClient({ data }: { data: MyProductData }) {
-  const products = data.data?.products;
+export default function MyProductsClient() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalProduct, setEditModalProduct] = useState<EditProduct>();
   const [showAlert, setShowAlert] = useState("");
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const session = useSession();
   const router = useRouter();
+
+  const { data, error, isLoading } = useQuery<MyProductData>({
+    queryKey: ["my-products"],
+    queryFn: () =>
+      getData(
+        "users/me?populate[products][populate]=*",
+        session?.data?.user.jwt
+      ),
+  });
+  const products = data?.data?.products;
+  if (error) setErrorMsg(error.message);
 
   useEffect(() => {
     if (selectedId && products) {
@@ -57,7 +69,7 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
     if (!res.error) {
       router.refresh();
       setShowAlert("Product deleted successfully");
-    } else setError(res.error);
+    } else setErrorMsg(res.error);
   };
 
   const handleAddBtn = () => {
@@ -120,42 +132,46 @@ export default function MyProductsClient({ data }: { data: MyProductData }) {
               mt: { xs: "20px", md: "36px" },
             }}
           >
-            {data.error || error ? (
+            {error || errorMsg ? (
               <Typography color="red" sx={{ pb: 2 }}>
                 <WarningIcon />
-                {data.error || error}
+                {errorMsg}
               </Typography>
             ) : null}
-            {products?.length ? (
-              products.map((product) => {
-                const { images, name, gender, price } = product;
-                return (
-                  <Grid
-                    key={product.id}
-                    item
-                    xs={6}
-                    sm={4}
-                    md={4}
-                    lg={3}
-                    sx={{ position: "relative" }}
-                  >
-                    <ProductCard
-                      imageUrl={images ? images[0].url : ""}
-                      name={name || ""}
-                      gender={gender?.name || ""}
-                      price={price}
+            {!isLoading ? (
+              products?.length ? (
+                products?.map((product) => {
+                  const { images, name, gender, price } = product;
+                  return (
+                    <Grid
+                      key={product.id}
+                      item
+                      xs={6}
+                      sm={4}
+                      md={4}
+                      lg={3}
+                      sx={{ position: "relative" }}
                     >
-                      <MenuModal
-                        productId={product.id}
-                        setSelectedId={setSelectedId}
-                        onDelete={handleDeleteBtn}
-                      />
-                    </ProductCard>
-                  </Grid>
-                );
-              })
+                      <ProductCard
+                        imageUrl={images ? images[0].url : ""}
+                        name={name || ""}
+                        gender={gender?.name || ""}
+                        price={price}
+                      >
+                        <MenuModal
+                          productId={product.id}
+                          setSelectedId={setSelectedId}
+                          onDelete={handleDeleteBtn}
+                        />
+                      </ProductCard>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <NoProductsInfo onBtnClick={handleAddBtn} />
+              )
             ) : (
-              <NoProductsInfo onBtnClick={handleAddBtn} />
+              <LoadingPage />
             )}
           </Grid>
         </Box>

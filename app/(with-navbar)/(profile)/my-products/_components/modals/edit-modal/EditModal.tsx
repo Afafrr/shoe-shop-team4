@@ -9,6 +9,7 @@ import "./modal.css";
 import { ContextType } from "@/types/types";
 import { useEffect, useState } from "react";
 import { emptyFormValues } from "../../ProductManager/ProductForm/FormPage";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
 // This is a modal that pops when the user clicks on edit product. Uses same template as AddProduct page: 'ProductManager.tsx'
 // This component takes:
@@ -25,7 +26,7 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
   const [confirmModal, setConfirmModal] = useState(false);
   const { id, ...formProduct } = product ?? { id: "", ...emptyFormValues };
   const defaultValues = formProduct;
-
+  const queryClient = useQueryClient();
   useEffect(() => {
     if (open) {
       setConfirmModal(false); // Reset confirmation modal when the main modal is opened
@@ -37,11 +38,16 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
     subheader:
       "Update product names, adjust pricing, and assign the correct brand and categories. Easily manage product details like colors, sizes, and gender to ensure accurate listings. Upload images and fine-tune descriptions to present your products in the best light.",
   };
+
   const formActions = {
     schema: productSchema,
-    submitAction: (formData: FormData, context: ContextType) =>
-      editProductAction(formData, context, id),
-    successFn: () => handleClose(),
+    submitAction: (formData: FormData, context: ContextType) => {
+      return editProductAction(formData, context, id);
+    },
+    successFn: async () => {
+      queryClient.invalidateQueries({ queryKey: ["my-products"] });
+      return handleClose();
+    },
     defaultForm: defaultValues,
   };
 
