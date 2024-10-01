@@ -100,8 +100,8 @@ export default function ChipSelect({ name, label, options, props }: ChipProps) {
                 );
                 return (
                   <Chip
-                    key={selectedOption!.value}
-                    label={selectedOption!.label}
+                    key={selectedOption?.value}
+                    label={selectedOption?.label}
                   />
                 );
               })}

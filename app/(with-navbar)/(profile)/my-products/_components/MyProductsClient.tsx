@@ -1,26 +1,85 @@
 "use client";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Grid } from "@mui/material";
 import BackgroundImage from "./BackgroundImage";
 import ProfileAside from "../../_components/ProfileAside";
 import AvatarBox from "./AvatarBox";
 import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
-import { ResData } from "@/utils/getData";
-import { useUserData } from "@/contexts/UserDataProvider";
+import { getData, ResData } from "@/utils/getData";
+import ProductCard from "@/components/Products/ProductCard";
+import { MyProduct, EditProduct } from "@/types/Product";
+import MenuModal from "./MenuModal";
+import EditModal from "./modals/edit-modal/EditModal";
+import { useEffect, useState } from "react";
+import { reduceData } from "../helper";
+import { UserData } from "@/types/types";
+import { deleteProduct } from "../action";
+import SuccessAlert from "@/components/Alerts/SuccessAlert";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
+import LoadingPage from "@/components/Loading/LoadingPage";
 
-export default function MyProductsClient({ data }: { data: ResData<any> }) {
+type MyProductData = ResData<
+  UserData & {
+    products: MyProduct[];
+  }
+>;
+
+export default function MyProductsClient() {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalProduct, setEditModalProduct] = useState<EditProduct>();
+  const [showAlert, setShowAlert] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const session = useSession();
   const router = useRouter();
-  const [products, setProducts] = useState(data.data?.products);
-  const { data: userData, error } = useUserData(); //just to show output for provider
+
+  const { data, error, isLoading } = useQuery<MyProductData>({
+    queryKey: ["my-products"],
+    queryFn: () =>
+      getData(
+        "users/me?populate[products][populate]=*&populate=avatar",
+        session?.data?.user.jwt
+      ),
+  });
+  const products = data?.data?.products;
+  const userData = data?.data;
+  if (error) setErrorMsg(error.message);
+
+  useEffect(() => {
+    if (selectedId && products) {
+      const product = products.find((product) => product.id === selectedId);
+      if (!product) return;
+
+      reduceData(product).then((data) => {
+        setEditModalProduct(data as EditProduct);
+        setEditModalOpen(true);
+      });
+    }
+    return () => {
+      setSelectedId(null);
+    };
+  }, [selectedId]);
+
+  const handleDeleteBtn = async (productId: number | null) => {
+    setShowAlert("");
+    if (!productId) return;
+    const res = await deleteProduct(productId, session.data?.user.jwt);
+
+    if (!res.error) {
+      router.refresh();
+      setShowAlert("Product deleted successfully");
+    } else setErrorMsg(res.error);
+  };
+
   const handleAddBtn = () => {
     router.push("/my-products/new");
   };
   const avatar = userData?.avatar?.url;
 
   return (
-    <Box sx={{ display: "flex", width: 1, flexShrink: 0 }}>
+    <Box sx={{ display: "flex", width: 1, mb: 7 }}>
       <ProfileAside activeBtnPath="my-products" />
       <Box sx={{ width: 1, margin: { md: "38px 60px 0px 53px" } }}>
         <BackgroundImage />
@@ -36,6 +95,8 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
               alignItems: "end",
             }}
           >
+            {showAlert ? <SuccessAlert message={showAlert} /> : null}
+
             <Typography
               variant="h4"
               fontWeight={500}
@@ -47,41 +108,77 @@ export default function MyProductsClient({ data }: { data: ResData<any> }) {
             >
               My Products
             </Typography>
+            <EditModal
+              open={editModalOpen}
+              handleClose={() => setEditModalOpen(false)}
+              product={editModalProduct}
+            />
             {products?.length ? (
               <Button
                 onClick={handleAddBtn}
                 variant="contained"
                 sx={{
-                  position: { xs: "absolute", md: "relative" },
-                  width: "152px",
-                  height: "40px",
+                  position: { xs: "fixed", md: "relative" },
                   bottom: { xs: "15px", md: "0px" },
                   left: { xs: "50%", md: "auto" },
+                  width: "152px",
+                  height: "40px",
                   transform: { xs: "translateX(-50%)", md: "none" },
+                  zIndex: 1000,
                 }}
               >
                 Add Product
               </Button>
             ) : null}
           </Box>
-          <Box
+          <Grid
+            container
             sx={{
-              display: "flex",
-              flexWrap: "wrap",
               mt: { xs: "20px", md: "36px" },
             }}
           >
-            {data.error ? (
-              <Typography color="red">
+            {error || errorMsg ? (
+              <Typography color="red" sx={{ pb: 2 }}>
                 <WarningIcon />
-                {data.error}
+                {errorMsg}
               </Typography>
             ) : null}
-            {/* PRODUCTS */}
-            {products?.length ? null : (
-              <NoProductsInfo onBtnClick={handleAddBtn} />
+            {!isLoading ? (
+              products?.length ? (
+                products?.map((product) => {
+                  const { images, name, gender, price } = product;
+                  return (
+                    <Grid
+                      key={product.id}
+                      item
+                      xs={6}
+                      sm={4}
+                      md={4}
+                      lg={3}
+                      sx={{ position: "relative" }}
+                    >
+                      <ProductCard
+                        imageUrl={images ? images[0].url : ""}
+                        name={name || ""}
+                        gender={gender?.name || ""}
+                        price={price}
+                      >
+                        <MenuModal
+                          productId={product.id}
+                          setSelectedId={setSelectedId}
+                          onDelete={handleDeleteBtn}
+                        />
+                      </ProductCard>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <NoProductsInfo onBtnClick={handleAddBtn} />
+              )
+            ) : (
+              <LoadingPage />
             )}
-          </Box>
+          </Grid>
         </Box>
       </Box>
     </Box>
