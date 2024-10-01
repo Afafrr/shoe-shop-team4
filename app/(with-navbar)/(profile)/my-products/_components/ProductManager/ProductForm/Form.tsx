@@ -57,6 +57,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
               autoComplete: "name",
             }}
             disabled={isPending}
+            isControlled
           />
           <Input
             key="Price"
@@ -74,6 +75,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
                 <InputAdornment position="start">$</InputAdornment>
               ),
             }}
+            inputProps={{ min: 1 }}
           />
           <ChipSelect
             options={options.categories}
@@ -120,6 +122,7 @@ export default function ProductForm({ isPending }: ProductFormProps) {
               autoComplete: "description",
               minRows: isMobile ? 1 : 10,
             }}
+            isControlled
           />
           <SizeSelect
             props={{ name: "Sizes", required: true }}
