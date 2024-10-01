@@ -30,6 +30,7 @@ type FormProps = {
   submitFn: (data: FormData, context: ContextType) => Promise<ActionResponse>;
   schema: z.ZodSchema<FieldValues>;
   buttonText: string;
+  defaultForm?: { [key: string]: any };
   children?: ReactNode;
 };
 
@@ -38,6 +39,7 @@ export default function Form({
   submitFn,
   schema,
   buttonText,
+  defaultForm,
   children,
 }: FormProps) {
   const searchParams = useSearchParams();
@@ -48,13 +50,12 @@ export default function Form({
   };
   const router = useRouter();
 
-  const defaultValues = inputs.reduce(
-    (acc: { [key: string]: string }, input) => {
+  const defaultValues =
+    defaultForm ||
+    inputs.reduce((acc: { [key: string]: string }, input) => {
       acc[input.props.name] = "";
       return acc;
-    },
-    {}
-  );
+    }, {});
 
   const formContext = useForm<FieldValues>({
     defaultValues,

@@ -8,6 +8,7 @@ declare module "next-auth" {
   interface User extends NextAuthUser {
     id: number;
     jwt: JWT | undefined;
+    rememberMe: boolean;
   }
 }
 
@@ -18,6 +19,7 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      rememberMe?: boolean;
       jwt: JWT | null;
     };
   }
