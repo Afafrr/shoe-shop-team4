@@ -39,7 +39,7 @@ export default function MyProductsClient() {
     queryKey: ["my-products"],
     queryFn: () =>
       getData(
-        "users/me?populate[products][populate]=*",
+        "users/me?populate[products][populate]=*&populate=avatar",
         session?.data?.user.jwt
       ),
   });

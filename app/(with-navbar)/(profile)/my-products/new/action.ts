@@ -6,6 +6,7 @@ import {
   ProductResponse,
 } from "@/types/Product";
 import { FormDataToObject } from "../_lib/utils";
+import { revalidatePath } from "next/cache";
 
 export async function addProductAction(
   formData: FormData,
@@ -86,6 +87,7 @@ export async function addProductAction(
     let productResult: ProductResponse = await productResponse.json();
 
     if ("error" in productResult) return productResult as ErrorResponse;
+    revalidatePath(`/my-products`);
 
     return { ...productResult, redirect: "/my-products" };
   } catch (error) {

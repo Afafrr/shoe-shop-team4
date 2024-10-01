@@ -9,7 +9,7 @@ import "./modal.css";
 import { ContextType } from "@/types/types";
 import { useEffect, useState } from "react";
 import { emptyFormValues } from "../../ProductManager/ProductForm/FormPage";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 // This is a modal that pops when the user clicks on edit product. Uses same template as AddProduct page: 'ProductManager.tsx'
 // This component takes:
