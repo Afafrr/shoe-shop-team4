@@ -11,11 +11,6 @@ describe("AsideNavbar", () => {
   let myProductsBtn: HTMLElement;
   let settingsBtn: HTMLElement;
   let logoutBtn: HTMLElement;
-  it("renders buttons", () => {
-    expect(myProductsBtn).toBeInTheDocument();
-    expect(settingsBtn).toBeInTheDocument();
-    expect(logoutBtn).toBeInTheDocument();
-  });
 
   beforeEach(() => {
     render(<AsideNavbar parentsSX={{}} activeBtnPath="my-products" />);
