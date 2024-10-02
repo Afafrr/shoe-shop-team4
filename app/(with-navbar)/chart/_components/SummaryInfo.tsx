@@ -21,7 +21,6 @@ export default function SummaryInfo() {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        minHeight: "100vh",
         [theme.breakpoints.up("md")]: {
           mr: "50px",
           height: "100%",
@@ -34,7 +33,7 @@ export default function SummaryInfo() {
         sx={{
           m: {
             xs: "13.73px 16.22px 12px 20px",
-            md: "80px auto 50px 50px",
+            md: "80px auto 50px 20px",
           },
         }}
       >

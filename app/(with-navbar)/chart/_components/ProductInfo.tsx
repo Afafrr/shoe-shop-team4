@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 
 import { CartItem, useCart } from "@/contexts/Cart";
 import QuantitySelect from "./QuantitySelect";
@@ -21,7 +21,6 @@ export default function ProductInfo({
 }: ProductInfoProps) {
   const { removeItem } = useCart();
   const isMobile = useIsMobile();
-  const isSmallScreen = useIsMobile("sm");
 
   function handleDelete(item: CartItem) {
     showMessage();
@@ -39,22 +38,20 @@ export default function ProductInfo({
         gap: "15px",
       }}
     >
-      {!isSmallScreen && (
-        <Box
-          sx={{
-            width: { xs: "150px", md: "225px" },
-            height: { xs: "120px", md: "180px" },
-          }}
-        >
-          <Image
-            src={item.image}
-            alt={item.name}
-            width={223}
-            height={110}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </Box>
-      )}
+      <Box
+        sx={{
+          width: { xs: "150px", md: "225px" },
+          height: { xs: "120px", md: "180px" },
+        }}
+      >
+        <Image
+          src={item.image}
+          alt={item.name}
+          width={223}
+          height={110}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      </Box>
 
       <Box
         sx={{
@@ -140,18 +137,35 @@ export default function ProductInfo({
         >
           <Typography
             fontWeight={500}
-            sx={{ alignSelf: "flex-end" }}
+            sx={{
+              alignSelf: { xs: "center", sm: "flex-end" },
+              pr: { sm: "8px" },
+            }}
           >{`$${item.price}`}</Typography>
-          <Box display="flex" alignItems="center">
+          <Box
+            display="flex"
+            sx={{ flexDirection: { xs: "column", sm: "row" } }}
+            alignItems="center"
+          >
             <QuantitySelect item={item} />
-            <Button
-              onClick={() => handleDelete(item)}
-              aria-label="delete"
-              sx={{ color: "#5C5C5C", gap: "4px", p: 0 }}
-            >
-              <Delete />
-              {!isMobile && <Typography>Delete</Typography>}
-            </Button>
+            {isMobile ? (
+              <IconButton
+                onClick={() => handleDelete(item)}
+                aria-label="delete"
+                sx={{ color: "#5C5C5C" }}
+              >
+                <Delete />
+              </IconButton>
+            ) : (
+              <Button
+                onClick={() => handleDelete(item)}
+                aria-label="delete"
+                sx={{ color: "#5C5C5C" }}
+              >
+                <Delete />
+                <Typography>Delete</Typography>
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

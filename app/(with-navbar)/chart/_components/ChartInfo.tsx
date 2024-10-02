@@ -71,7 +71,7 @@ export default function ChartInfo() {
             sx={(theme) => ({
               display: "flex",
               flexDirection: "column",
-              minHeight: "100vh",
+              minHeight: "60vh",
               mx: "12px",
               [theme.breakpoints.up("md")]: {
                 height: "100%",
