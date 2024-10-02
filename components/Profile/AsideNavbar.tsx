@@ -68,7 +68,7 @@ const LogoutButton = ({ Icon }: { Icon: IconType }) => {
 
   return (
     <Box
-      onClick={() => signOut()}
+      onClick={() => signOut({ callbackUrl: "" })}
       sx={{
         display: "flex",
         alignItems: "center",
