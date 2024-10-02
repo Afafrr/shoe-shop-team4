@@ -87,7 +87,6 @@ export async function addProductAction(
     let productResult: ProductResponse = await productResponse.json();
 
     if ("error" in productResult) return productResult as ErrorResponse;
-    revalidatePath(`/my-products`);
 
     return { ...productResult, redirect: "/my-products" };
   } catch (error) {

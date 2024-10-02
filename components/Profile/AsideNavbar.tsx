@@ -24,12 +24,12 @@ export const AsideNavbar = ({
     {
       label: "My Products",
       Icon: CartIcon,
-      href: "my-products",
+      href: "/my-products",
     },
     {
       label: "Settings",
       Icon: SettingsIcon,
-      href: "settings",
+      href: "/settings",
     },
     {
       label: "Logout",

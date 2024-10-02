@@ -51,7 +51,6 @@ export async function editProductAction(
 
     // Format the formData to satisfy product PUT request.
     const productValues: Record<string, any> = FormDataToObject(formData);
-    revalidatePath(`/products/${id}`);
 
     const {
       name,
