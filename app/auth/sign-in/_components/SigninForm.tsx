@@ -30,9 +30,15 @@ export default function SigninForm() {
       },
     },
   ];
+  const defaultForm = {
+    email: "",
+    password: "",
+    rememberMe: false,
+  };
 
   return (
     <Form
+      defaultForm={defaultForm}
       inputs={inputs}
       submitFn={signIn}
       schema={signInSchema}
