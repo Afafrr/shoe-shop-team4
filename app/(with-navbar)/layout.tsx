@@ -10,7 +10,7 @@ export default function Layout({ children }: LayoutType) {
   return (
     <>
       <NavBar />
-      <Suspense fallback={<Loading />}>{children}</Suspense>;
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </>
   );
 }
