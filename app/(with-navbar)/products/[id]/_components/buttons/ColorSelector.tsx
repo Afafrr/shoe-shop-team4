@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
 
 type ColorAttributes = {
   name: string;
@@ -13,16 +12,15 @@ type Color = {
 type ColorSelectorProps = {
   colors: Color[];
   onSelect: (color: Color) => void;
+  selectedColor: string | null;
 };
 
 export default function ColorSelector({
   colors,
   onSelect,
+  selectedColor,
 }: ColorSelectorProps) {
-  const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
-
   const handleColorClick = (color: Color) => {
-    setSelectedColorId(color.id);
     onSelect(color);
   };
 
@@ -42,9 +40,9 @@ export default function ColorSelector({
                 height: 40,
                 backgroundColor: color.attributes.name.toLowerCase(),
                 border:
-                  selectedColorId === color.id
-                    ? "1px solid black"
-                    : "1px solid #5C5C5C",
+                  selectedColor === color.attributes.name
+                    ? "1px solid #5C5C5C"
+                    : "none",
                 borderRadius: "10%",
                 "&:hover": {
                   backgroundColor: color.attributes.name.toLowerCase(),
