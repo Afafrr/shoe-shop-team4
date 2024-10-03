@@ -1,3 +1,5 @@
+import { ReducedData } from "@/app/(with-navbar)/(profile)/settings/_components/PageClient";
+import { inputs } from "@/app/(with-navbar)/(profile)/settings/_schema/profileSchema";
 import { UserData } from "@/types/types";
 import { ResData } from "@/utils/getData";
 export const mockUserData: ResData<UserData> = {
@@ -54,3 +56,16 @@ export const mockUserData: ResData<UserData> = {
   },
   error: "",
 };
+
+export function mockInitialData() {
+  const { data } = mockUserData;
+  const reducedData: ReducedData = {};
+  const inputsName = inputs.map((input) => input.props.name);
+  if (data) {
+    for (const key of inputsName) {
+      const value = data[key as keyof typeof data];
+      reducedData[key] = value;
+    }
+  }
+  return reducedData;
+}
