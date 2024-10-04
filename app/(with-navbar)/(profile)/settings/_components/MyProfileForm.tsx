@@ -1,6 +1,6 @@
 import { Stack, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FieldValues, FormContainer, useForm } from "react-hook-form-mui";
+import { FormContainer, useForm } from "react-hook-form-mui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/Input/Input";
 import { inputs } from "../_schema/profileSchema";
@@ -13,6 +13,9 @@ import { updateUserData } from "../actions";
 import { useSession } from "next-auth/react";
 import { ReducedData } from "./PageClient";
 import successToast from "@/components/Alerts/successToast";
+import { z } from "zod";
+
+type FieldValues = z.infer<typeof profileValidation>;
 
 export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();

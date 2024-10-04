@@ -25,9 +25,10 @@ export default function PageClient({
   if (data) {
     for (const key of inputsName) {
       const value = data[key as keyof typeof data];
-      reducedData[key] = value;
+      reducedData[key] = value || "";
     }
   }
+  console.log(reducedData);
   const [formData, setFormData] = useState<ReducedData>(reducedData);
   const [image, setImage] = useState<string | undefined>(
     initialData.data?.avatar?.url
