@@ -1,5 +1,5 @@
 import LoadingPage from "@/components/Loading/LoadingPage";
 
 export default function Loading() {
-  return <LoadingPage />;
+  return <LoadingPage backgroundColor="white" />;
 }

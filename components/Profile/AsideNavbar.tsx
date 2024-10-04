@@ -24,12 +24,12 @@ export const AsideNavbar = ({
     {
       label: "My Products",
       Icon: CartIcon,
-      href: "my-products",
+      href: "/my-products",
     },
     {
       label: "Settings",
       Icon: SettingsIcon,
-      href: "settings",
+      href: "/settings",
     },
     {
       label: "Logout",
@@ -41,7 +41,8 @@ export const AsideNavbar = ({
   return (
     <Stack spacing={"36px"} sx={{ ...parentsSX }}>
       {asideButtons.map(({ label, Icon, href }) => {
-        const color = href === activeBtnPath ? activeBtnColor : defaultColor;
+        const color =
+          href === `/${activeBtnPath}` ? activeBtnColor : defaultColor;
 
         return label === "Logout" ? (
           <LogoutButton key={label} Icon={Icon} />
