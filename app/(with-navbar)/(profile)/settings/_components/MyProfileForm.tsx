@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/Input/Input";
 import { inputs } from "../_schema/profileSchema";
 import { profileValidation } from "../_schema/profileValidation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserData } from "@/types/types";
 import WarningIcon from "@/components/Form/WarningIcon";
 import SuccessAlert from "@/components/Alerts/SuccessAlert";
@@ -13,10 +13,12 @@ import { ResData } from "@/utils/getData";
 import { updateUserData } from "../actions";
 import { useSession } from "next-auth/react";
 import { ReducedData } from "./PageClient";
+
 export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();
   const [show, setShow] = useState(false);
   const session = useSession();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["userData"],
@@ -31,6 +33,7 @@ export default function MyProfileForm({ formData }: { formData: ReducedData }) {
       );
       setResponse(res);
       if (!res.error) setShow(true);
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
     },
   });
 
