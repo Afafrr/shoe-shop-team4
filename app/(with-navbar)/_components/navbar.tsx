@@ -88,7 +88,7 @@ export default function NavBar() {
                   src={avatar}
                   sx={{ width: 24, height: 24 }}
                 >
-                  {avatar ? null : data?.firstName?.slice(0, 1)}
+                  {avatar ? null : data?.firstName.slice(0, 1)}
                   {error ? <WarningIcon /> : null}
                 </Avatar>
               </NextMuiLink>

@@ -28,7 +28,7 @@ export default function PageClient({
       reducedData[key] = value || "";
     }
   }
-  console.log(reducedData);
+
   const [formData, setFormData] = useState<ReducedData>(reducedData);
   const [image, setImage] = useState<string | undefined>(
     initialData.data?.avatar?.url
