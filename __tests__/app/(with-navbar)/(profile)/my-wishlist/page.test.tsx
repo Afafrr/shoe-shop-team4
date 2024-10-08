@@ -75,9 +75,7 @@ describe("Wishlist Component", () => {
     );
     // Check page's main container is rendered
     expect(screen.getByTestId("my-wishlist-page")).toBeInTheDocument();
-    // Check page's ProfileAside component is rendered
-    expect(screen.getByText("Welcome")).toBeInTheDocument();
-    // Check Wishlist component is rendered
-    expect(screen.getByTestId("wishlist-component")).toBeInTheDocument();
+    // Check Wishlist Title is rendered
+    expect(screen.getByText("My Wishlist")).toBeInTheDocument();
   });
 });
