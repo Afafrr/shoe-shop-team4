@@ -10,16 +10,13 @@ import NextMuiLink from "./NextMuiLink";
 import FavoriteIcon from "@/public/svg/FavoriteIcon";
 import OrderHistoryIcon from "@/public/svg/OrderHistoryIcon";
 import RecentIcon from "@/public/svg/RecentIcon";
+import { usePathname } from "next/navigation";
 
 export type routes = "my-products" | "settings" | "my-wishlist";
 
-export const AsideNavbar = ({
-  parentsSX,
-  activeBtnPath,
-}: {
-  parentsSX: SxProps;
-  activeBtnPath?: routes;
-}) => {
+export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
+  const pathname = usePathname();
+
   const { palette } = useTheme();
   const activeBtnColor = palette.primary.main;
   const defaultColor = "#000000";
@@ -59,8 +56,7 @@ export const AsideNavbar = ({
   return (
     <Stack spacing={"36px"} sx={{ ...parentsSX }}>
       {asideButtons.map(({ label, Icon, href }) => {
-        const color =
-          href === `/${activeBtnPath}` ? activeBtnColor : defaultColor;
+        const color = href === `${pathname}` ? activeBtnColor : defaultColor;
 
         return label === "Logout" ? (
           <LogoutButton key={label} Icon={Icon} />
