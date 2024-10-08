@@ -15,10 +15,10 @@ import { useEffect, useState } from "react";
 import { reduceData } from "../helper";
 import { UserData } from "@/types/types";
 import { deleteProduct } from "../action";
-import SuccessAlert from "@/components/Alerts/SuccessAlert";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingPage from "@/components/Loading/LoadingPage";
+import successToast from "@/components/Alerts/successToast";
 
 type MyProductData = ResData<
   UserData & {
@@ -30,10 +30,10 @@ export default function MyProductsClient() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalProduct, setEditModalProduct] = useState<EditProduct>();
-  const [showAlert, setShowAlert] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const session = useSession();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data, error, isLoading } = useQuery<MyProductData>({
     queryKey: ["my-products"],
@@ -63,13 +63,12 @@ export default function MyProductsClient() {
   }, [selectedId]);
 
   const handleDeleteBtn = async (productId: number | null) => {
-    setShowAlert("");
     if (!productId) return;
     const res = await deleteProduct(productId, session.data?.user.jwt);
 
     if (!res.error) {
-      router.refresh();
-      setShowAlert("Product deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["my-products"] });
+      successToast("Product deleted Successfully");
     } else setErrorMsg(res.error);
   };
 
@@ -95,8 +94,6 @@ export default function MyProductsClient() {
               alignItems: "end",
             }}
           >
-            {showAlert ? <SuccessAlert message={showAlert} /> : null}
-
             <Typography
               variant="h4"
               fontWeight={500}

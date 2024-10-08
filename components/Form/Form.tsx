@@ -19,6 +19,7 @@ import WarningIcon from "./WarningIcon";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import successToast from "../Alerts/successToast";
 
 export interface FormInput {
   label: string;
@@ -80,6 +81,7 @@ export default function Form({
       return result;
     },
     onSuccess: (response: ActionResponse) => {
+      successToast("Success!");
       if ("redirect" in response) router.push(response.redirect);
     },
     onError: (error) => {
