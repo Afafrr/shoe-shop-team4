@@ -121,9 +121,3 @@ export default function NavBar() {
     </AppBar>
   );
 }
-function ResData<T>(arg0: {
-  queryKey: string[];
-  queryFn: () => Promise<import("@/utils/getData").ResData<unknown>>;
-}) {
-  throw new Error("Function not implemented.");
-}
