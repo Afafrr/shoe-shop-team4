@@ -7,8 +7,11 @@ import { SettingsIcon } from "@/public/svg/SettingsIcon";
 import CartIcon from "@/app/(with-navbar)/_components/CartIcon";
 import { signOut } from "next-auth/react";
 import NextMuiLink from "./NextMuiLink";
+import FavoriteIcon from "@/public/svg/FavoriteIcon";
+import OrderHistoryIcon from "@/public/svg/OrderHistoryIcon";
+import RecentIcon from "@/public/svg/RecentIcon";
 
-export type routes = "my-products" | "settings";
+export type routes = "my-products" | "settings" | "my-wishlist";
 
 export const AsideNavbar = ({
   parentsSX,
@@ -25,6 +28,21 @@ export const AsideNavbar = ({
       label: "My Products",
       Icon: CartIcon,
       href: "/my-products",
+    },
+    {
+      label: "Order history",
+      Icon: OrderHistoryIcon,
+      href: "#",
+    },
+    {
+      label: "My Wishlist",
+      Icon: FavoriteIcon,
+      href: "/my-wishlist",
+    },
+    {
+      label: "Recently viewed",
+      Icon: RecentIcon,
+      href: "#",
     },
     {
       label: "Settings",

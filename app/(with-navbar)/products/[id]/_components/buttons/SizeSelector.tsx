@@ -30,7 +30,7 @@ export default function SizeSelector({
       <Grid
         container
         spacing={{ xs: 2, md: 2 }}
-        columns={{ xs: 4, sm: 5, md: 4, lg: 4, xl: 5 }}
+        columns={{ xs: 5, sm: 7, md: 4, lg: 5, xl: 6 }}
       >
         {sizes.map((size) => (
           <Grid item xs={1} md={1} lg={1} xl={1} key={size.id}>

@@ -11,6 +11,12 @@ const DynamicCartProvider = dynamic(
     ssr: false,
   }
 );
+export const DynamicWishlistProvider = dynamic(
+  () => import("@/contexts/Wishlist").then((module) => module.WishlistProvider),
+  {
+    ssr: false,
+  }
+);
 
 export default function ContextWrapper({
   children,
@@ -42,7 +48,9 @@ export default function ContextWrapper({
 
   return (
     <UserDataProvider data={userData}>
-      <DynamicCartProvider>{children}</DynamicCartProvider>
+      <DynamicWishlistProvider>
+        <DynamicCartProvider>{children}</DynamicCartProvider>
+      </DynamicWishlistProvider>
     </UserDataProvider>
   );
 }

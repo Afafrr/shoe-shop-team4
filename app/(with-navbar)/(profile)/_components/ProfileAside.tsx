@@ -1,3 +1,4 @@
+"use client";
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { routes } from "@/components/Profile/AsideNavbar";

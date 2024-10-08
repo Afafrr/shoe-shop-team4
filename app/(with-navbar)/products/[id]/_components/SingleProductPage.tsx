@@ -7,9 +7,10 @@ import {
   Snackbar,
   SnackbarCloseReason,
   SnackbarContent,
+  Stack,
   Typography,
 } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, ReactNode, useState } from "react";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import productDetails, { PopulateField } from "@/utils/api/singleProduct";
 import { SizesAPIResponse, Color, Size } from "@/types/singleProduct";
@@ -23,11 +24,19 @@ import ColorSelector from "./buttons/ColorSelector";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { NewCartItem, useCart } from "@/contexts/Cart";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { Close } from "@mui/icons-material";
+import { getFieldOptions } from "../../_lib/utils";
+import { NewWishlistItem, useWishlist } from "@/contexts/Wishlist";
 
 type SingleProductPageProps = {
   productId: string;
   fieldsToPopulate: PopulateField[];
+};
+type MessageManager = {
+  state: boolean;
+  message: string;
+  action: ReactNode | null;
 };
 
 export default function SingleProductPage({
@@ -37,14 +46,33 @@ export default function SingleProductPage({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [fieldsMissing, setFieldsMissing] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
+  const [showMessage, setShowMessage] = useState<MessageManager>({
+    state: false,
+    message: "",
+    action: null,
+  });
   const { addItem } = useCart();
+  const Wishlist = useWishlist();
   const router = useRouter();
 
   const { data, error, isLoading } = productDetails(
     productId,
     fieldsToPopulate
   );
+
+  const { data: colors, error: queryError } = useQuery({
+    queryKey: ["colors"],
+    queryFn: () => getFieldOptions("colors"),
+  });
+
+  // The color API is broken and returns only one color, leading to a bad UI.
+  // The following simulates product colors by generating the Product's Available Colors based on the productID.
+  const productColorsIds = productId.split("");
+  const productColors = colors
+    ? colors.data.filter((_, index) =>
+        productColorsIds.includes(index.toString())
+      )
+    : [];
 
   if (isLoading) return <LoadingPage />;
   if (error) throw new Error("An error has occurred, please try again");
@@ -65,17 +93,6 @@ export default function SingleProductPage({
     ? `${gender.data.attributes.name}'s Shoes`
     : "Unisex";
 
-  const productColors = color?.data
-    ? [
-        {
-          id: color.data.id,
-          attributes: {
-            name: color.data.attributes.name,
-          },
-        },
-      ]
-    : [{ id: 1, attributes: { name: "Unspecified" } }];
-
   const handleColorSelect = (selectedColor: Color) => {
     setSelectedColor(selectedColor.attributes.name);
   };
@@ -92,7 +109,7 @@ export default function SingleProductPage({
       return;
     }
 
-    setShowMessage(false);
+    setShowMessage({ ...showMessage, state: false });
   };
 
   const handleAddToBag = () => {
@@ -109,7 +126,11 @@ export default function SingleProductPage({
         size: selectedSize,
       };
       addItem(itemToAdd);
-      setShowMessage(true);
+      setShowMessage({
+        state: true,
+        message: "Product added to cart",
+        action: cartAction,
+      });
       setSelectedColor(null);
       setSelectedSize(null);
     } else {
@@ -117,9 +138,48 @@ export default function SingleProductPage({
     }
   };
 
-  const action = (
+  const handleAddToWishlist = () => {
+    const itemToAdd: NewWishlistItem = {
+      productId: Number(productId),
+      name: name,
+      gender: productGender,
+      imageUrl: images.data[0].attributes.url,
+      price: price,
+    };
+    const existingItem = Wishlist.wishlistItems.find(
+      (item) => item.productId === itemToAdd.productId
+    );
+    if (existingItem) {
+      setShowMessage({
+        state: true,
+        message: "Product already in wishlist",
+        action: wishlistAction,
+      });
+    } else {
+      Wishlist.addItem(itemToAdd);
+      setShowMessage({
+        state: true,
+        message: "Product added to wishlist",
+        action: wishlistAction,
+      });
+    }
+    setSelectedColor(null);
+    setSelectedSize(null);
+  };
+
+  const cartAction = (
     <Fragment>
       <Button onClick={() => router.push("/chart")}>Go to cart</Button>
+      <IconButton aria-label="close" onClick={handleClose}>
+        <Close fontSize="small" />
+      </IconButton>
+    </Fragment>
+  );
+  const wishlistAction = (
+    <Fragment>
+      <Button onClick={() => router.push("/my-wishlist")}>
+        Go to wishlist
+      </Button>
       <IconButton aria-label="close" onClick={handleClose}>
         <Close fontSize="small" />
       </IconButton>
@@ -168,10 +228,17 @@ export default function SingleProductPage({
           sizes={mappedSizes}
           onSelect={handleSizeSelect}
         />
-        <ActionButton handleAddToBag={handleAddToBag} />
+        <Stack direction={"row"} spacing={4}>
+          <ActionButton
+            buttonAction={handleAddToWishlist}
+            variant="outlined"
+            buttonText="Add to Wishlist"
+          />
+          <ActionButton buttonAction={handleAddToBag} buttonText="Add to Bag" />
+        </Stack>
         <ProductDescription description={description} />
         <Snackbar
-          open={showMessage}
+          open={showMessage.state}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           autoHideDuration={4000}
           onClose={handleClose}
@@ -180,11 +247,20 @@ export default function SingleProductPage({
             style={{
               backgroundColor: "white",
             }}
-            message={<Typography color="textPrimary">Product added</Typography>}
-            action={action}
+            message={
+              <Typography color="textPrimary">{showMessage.message}</Typography>
+            }
+            action={showMessage.action}
           />
         </Snackbar>
       </Box>
     </Box>
   );
 }
+type Colors = {
+  id: number;
+  attributes: {
+    name: string;
+    [key: string]: any | undefined;
+  };
+};

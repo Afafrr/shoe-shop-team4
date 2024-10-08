@@ -9,8 +9,8 @@ import {
 import Image from "next/image";
 import React, { ReactNode } from "react";
 import noImage from "@public/product/NoProductImage.png";
-type ProductCardProps = {
-  imageUrl: string;
+export type ProductCardProps = {
+  imageUrl: string | null;
   name: string;
   gender?: string;
   price: number;
