@@ -7,12 +7,12 @@ import { SettingsIcon } from "@/public/svg/SettingsIcon";
 import CartIcon from "@/app/(with-navbar)/_components/CartIcon";
 import { signOut } from "next-auth/react";
 import NextMuiLink from "./NextMuiLink";
-import { useActivePath } from "@/contexts/ActivePathProvider";
+import { usePathname } from "next/navigation";
 
 export type routes = "my-products" | "settings";
 
 export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
-  const { activePath } = useActivePath();
+  const pathname = usePathname();
 
   const { palette } = useTheme();
   const activeBtnColor = palette.primary.main;
@@ -38,7 +38,7 @@ export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
   return (
     <Stack spacing={"36px"} sx={{ ...parentsSX }}>
       {asideButtons.map(({ label, Icon, href }) => {
-        const color = href === `/${activePath}` ? activeBtnColor : defaultColor;
+        const color = href === `${pathname}` ? activeBtnColor : defaultColor;
 
         return label === "Logout" ? (
           <LogoutButton key={label} Icon={Icon} />

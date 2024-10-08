@@ -1,4 +1,3 @@
-import { ActivePathProvider } from "@/contexts/ActivePathProvider";
 import { ReactNode } from "react";
 import ProfileAside from "./_components/ProfileAside";
 import { Container } from "@mui/material";

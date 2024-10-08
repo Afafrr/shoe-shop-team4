@@ -1,14 +1,12 @@
 "use client";
 import { Typography, Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import ProfileAside from "../../_components/ProfileAside";
+import { useState } from "react";
 import AvatarBox from "./AvatarBox";
 import MyProfileForm from "./MyProfileForm";
 import { ResData } from "@/utils/getData";
 import { UserData } from "@/types/types";
 import { inputs } from "../_schema/profileSchema";
 import WarningIcon from "@/components/Form/WarningIcon";
-import { useActivePath } from "@/contexts/ActivePathProvider";
 
 export type ReducedData = Partial<
   Record<string, UserData[keyof UserData] | File>
@@ -33,13 +31,6 @@ export default function PageClient({
   const [image, setImage] = useState<string | undefined>(
     initialData.data?.avatar?.url
   );
-  const { setActivePath } = useActivePath();
-
-  useEffect(() => {
-    setActivePath("settings");
-
-    return () => setActivePath("");
-  }, [setActivePath]);
 
   return (
     <Box

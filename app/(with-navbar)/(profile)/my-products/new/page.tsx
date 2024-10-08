@@ -26,21 +26,10 @@ export default function AddProduct() {
   };
 
   return (
-    <Container
-      disableGutters
-      style={{
-        display: "flex",
-        marginBottom: "50px",
-        padding: "0",
-        maxWidth: "none",
-        margin: "0",
-      }}
-    >
-      <ProductManager
-        header={title.header}
-        subheader={title.subheader}
-        formActions={formActions}
-      />
-    </Container>
+    <ProductManager
+      header={title.header}
+      subheader={title.subheader}
+      formActions={formActions}
+    />
   );
 }

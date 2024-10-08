@@ -1,7 +1,6 @@
 "use client";
 import { Box, Typography, Button, Grid } from "@mui/material";
 import BackgroundImage from "./BackgroundImage";
-import ProfileAside from "../../_components/ProfileAside";
 import AvatarBox from "./AvatarBox";
 import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,6 @@ import { useSession } from "next-auth/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import successToast from "@/components/Alerts/successToast";
-import { useActivePath } from "@/contexts/ActivePathProvider";
 
 type MyProductData = ResData<
   UserData & {
@@ -35,13 +33,6 @@ export default function MyProductsClient() {
   const session = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { setActivePath } = useActivePath();
-
-  useEffect(() => {
-    setActivePath("my-products");
-
-    return () => setActivePath("");
-  }, [setActivePath]);
 
   const { data, error, isLoading } = useQuery<MyProductData>({
     queryKey: ["my-products"],
