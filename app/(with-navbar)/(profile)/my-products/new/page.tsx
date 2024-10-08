@@ -4,7 +4,6 @@ import { productSchema } from "@/schemas/productSchema";
 import { addProductAction } from "./action";
 import ProductManager from "../_components/ProductManager/ProductManager";
 import { ContextType } from "@/types/types";
-import ProfileAside from "../../_components/ProfileAside";
 import successToast from "@/components/Alerts/successToast";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -37,7 +36,6 @@ export default function AddProduct() {
         margin: "0",
       }}
     >
-      <ProfileAside activeBtnPath="my-products" breakpoint="lg" />
       <ProductManager
         header={title.header}
         subheader={title.subheader}
