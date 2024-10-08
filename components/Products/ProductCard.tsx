@@ -8,13 +8,13 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import React, { ReactNode } from "react";
-import shoesPlaceholder from "@public/auth/shoes-log-in.png";
-
+import noImage from "@public/product/NoProductImage.png";
 type ProductCardProps = {
   imageUrl: string;
   name: string;
   gender?: string;
   price: number;
+  children?: ReactNode;
 };
 
 export default function ProductCard({
@@ -22,6 +22,7 @@ export default function ProductCard({
   name,
   gender,
   price,
+  children,
 }: ProductCardProps) {
   return (
     <Card
@@ -36,12 +37,13 @@ export default function ProductCard({
       >
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <Image
-            src={imageUrl || shoesPlaceholder}
+            src={imageUrl || noImage}
             fill
             style={{ objectFit: "cover" }}
             sizes="(max-width: 600px) 50vw, (max-width: 1200px) 33vw, 25vw"
             alt={name}
           />
+          {children}
         </div>
       </CardMedia>
       <CardContent sx={{ p: 0 }}>
@@ -80,7 +82,7 @@ function SecondaryText({ children }: { children: ReactNode }) {
   return (
     <Typography
       sx={{
-        fontSize: { xs: "10px", md: "22px" },
+        fontSize: { xs: "9px", md: "18px" },
         fontWeight: 500,
         color: "#5c5c5c",
       }}

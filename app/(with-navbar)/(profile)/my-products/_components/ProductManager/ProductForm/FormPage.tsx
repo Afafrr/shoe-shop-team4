@@ -30,6 +30,18 @@ type FormProps = {
   defaultForm?: ProductFormSchema;
 };
 
+export const emptyFormValues = {
+  name: "",
+  price: undefined,
+  categories: [],
+  color: [],
+  gender: "3",
+  brand: "9",
+  description: "",
+  sizes: [],
+  images: [],
+};
+
 export default function ProductFormPage({
   submitFn,
   successFn,
@@ -46,17 +58,7 @@ export default function ProductFormPage({
     session,
   };
 
-  const defaultValues = defaultForm || {
-    name: "",
-    price: undefined,
-    categories: [],
-    color: [],
-    gender: "3",
-    brand: "9",
-    description: "",
-    sizes: [],
-    images: [],
-  };
+  const defaultValues = defaultForm || emptyFormValues;
 
   // React-hook-form
   const formContext = useForm<ProductFormSchema>({

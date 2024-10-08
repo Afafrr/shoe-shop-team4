@@ -40,6 +40,7 @@ export default function SearchInput() {
         <SearchForm
           isDrawerOpen={searchDrawerOpen}
           defaultSearch={searchInput}
+          handleDrawerToggle={handleDrawerToggle}
         />
         <IconButton
           sx={{ ml: 2, alignSelf: "start" }}
@@ -71,9 +72,6 @@ export default function SearchInput() {
         variant="temporary"
         open={searchDrawerOpen}
         onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true,
-        }}
       >
         {drawer}
       </Drawer>

@@ -8,7 +8,11 @@ interface ProductTitleProps {
   gender: string;
 }
 
-export default function ProductTitle({ name, price, gender }: ProductTitleProps) {
+export default function ProductTitle({
+  name,
+  price,
+  gender,
+}: ProductTitleProps) {
   return (
     <Box sx={{ width: "100%", padding: "0" }}>
       <Box
@@ -24,6 +28,8 @@ export default function ProductTitle({ name, price, gender }: ProductTitleProps)
             fontSize: { xs: "35px", md: "35px", lg: "46px" },
 
             fontWeight: "500",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
           }}
         >
           {name}

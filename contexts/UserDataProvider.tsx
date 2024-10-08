@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import { UserData } from "@/types/types";
 import { ResData } from "@/utils/getData";
 const UserDataContext = createContext<ResData<UserData> | undefined>(undefined);

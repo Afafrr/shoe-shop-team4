@@ -17,11 +17,13 @@ type FieldValues = z.infer<typeof searchSchema>;
 type SearchFormProps = {
   isDrawerOpen: Boolean;
   defaultSearch: string | null;
+  handleDrawerToggle: () => void;
 };
 
 export default function SearchForm({
   isDrawerOpen,
   defaultSearch,
+  handleDrawerToggle,
 }: SearchFormProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -42,6 +44,7 @@ export default function SearchForm({
   function onSubmit(data: FieldValues) {
     const newUrl = `/products?search=${data.search}`;
     router.push(newUrl);
+    handleDrawerToggle();
   }
 
   return (
@@ -54,7 +57,6 @@ export default function SearchForm({
           name="search"
           inputRef={inputRef}
           size="small"
-          autoFocus
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -64,10 +66,10 @@ export default function SearchForm({
             sx: {
               borderRadius: 28,
               mx: "auto",
-              width: "80%",
+              width: "100%",
             },
           }}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", px: "10%" }}
           placeholder="Search, hit Enter"
         />
       </FormContainer>

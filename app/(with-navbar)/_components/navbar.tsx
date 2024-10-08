@@ -25,7 +25,7 @@ export default function NavBar() {
   const data = userData?.data;
   const error = userData?.error;
   const avatar = data?.avatar?.url;
-  
+
   useEffect(() => {
     setIsLoggedIn(Boolean(data));
   }, [userData]);
@@ -57,11 +57,12 @@ export default function NavBar() {
               </NextMuiLink>
             </Box>
           </Box>
-
+          <SearchInput />
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
               alignItems: "center",
+              ml: 2,
               gap: 2,
             }}
           >
@@ -75,30 +76,31 @@ export default function NavBar() {
                 Sign In
               </Button>
             )}
-
-            <SearchInput />
-            <IconButton size="large" color="inherit">
-              <CartIcon count={getCartItemCount()} />
-            </IconButton>
+            <NextMuiLink href="/chart">
+              <IconButton size="large" color="inherit">
+                <CartIcon count={getCartItemCount()} />
+              </IconButton>
+            </NextMuiLink>
             {isLoggedIn && (
               <NextMuiLink href={"/settings"} sx={{ textDecoration: "none" }}>
                 <Avatar
-                alt="User logged In"
-                src={avatar}
-                sx={{ width: 24, height: 24 }}
-              >
+                  alt="User logged In"
+                  src={avatar}
+                  sx={{ width: 24, height: 24 }}
+                >
                   {avatar ? null : data?.firstName.slice(0, 1)}
-                {error ? <WarningIcon /> : null}
+                  {error ? <WarningIcon /> : null}
                 </Avatar>
               </NextMuiLink>
             )}
           </Box>
 
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
-            <IconButton size="large" color="inherit">
-              <CartIcon count={getCartItemCount()} />
-            </IconButton>
-            <SearchInput />
+            <NextMuiLink href="/chart">
+              <IconButton size="large" color="inherit">
+                <CartIcon count={getCartItemCount()} />
+              </IconButton>
+            </NextMuiLink>
             <SideBar isLoggedIn={isLoggedIn} />
           </Box>
         </Toolbar>

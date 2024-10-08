@@ -39,7 +39,63 @@ export interface Product {
   createdBy: Parent;
   updatedBy: Parent;
 }
+export interface MyProduct {
+  id: number;
+  name: string;
+  images: MyImage[];
+  description: string;
+  brand: BrandResponse;
+  categories: Related;
+  color: Color;
+  gender: Gender;
+  sizes: Related;
+  price: number;
+  userID: Parent;
+  teamName: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  createdBy: Parent;
+  updatedBy: Parent;
+}
 
+export interface MyImage {
+  id: number;
+  name: string;
+  alternativeText: string | null;
+  caption: string | null;
+  width: number | null;
+  height: number | null;
+  formats: any | null;
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl: string | null;
+  provider: string;
+  provider_metadata: {
+    public_id: string;
+    resource_type: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Gender {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+interface Color {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
 interface ImageResponse {
   data: ImageData[];
 }
@@ -482,7 +538,7 @@ export type ImageUpload = SuccessfulImageUpload | ErrorResponse;
 
 export type ProductFormSchema = {
   name: string;
-  price: number;
+  price: number | undefined;
   categories: string[];
   color: string[];
   gender: string;

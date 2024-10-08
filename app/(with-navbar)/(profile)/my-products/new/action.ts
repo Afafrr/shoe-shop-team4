@@ -5,7 +5,8 @@ import {
   ProductActionResponse,
   ProductResponse,
 } from "@/types/Product";
-import { FormDataToObject } from "../_helpers";
+import { FormDataToObject } from "../_lib/utils";
+import { revalidatePath } from "next/cache";
 
 export async function addProductAction(
   formData: FormData,

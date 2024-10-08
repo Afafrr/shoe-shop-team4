@@ -11,6 +11,7 @@ export const authOptions: AuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        rememberMe: { label: "Remember Me", type: "checkbox" },
       },
       async authorize(credentials, req) {
         const response = await fetch(
@@ -33,6 +34,7 @@ export const authOptions: AuthOptions = {
           id: data.user.id,
           name: data.user.username,
           email: data.user.email,
+          rememberMe: credentials?.rememberMe == "true" ? true : false,
           jwt: data.jwt,
         };
       },
@@ -40,12 +42,14 @@ export const authOptions: AuthOptions = {
   ],
   pages: {
     signIn: "/auth/sign-in",
+    signOut: "/products",
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.jwt = user.jwt;
+        token.rememberMe = user.rememberMe;
       }
       return token;
     },
@@ -53,6 +57,16 @@ export const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.jwt = token.jwt as JWT;
+        session.user.rememberMe = token.rememberMe as boolean;
+      }
+      if (token.rememberMe) {
+        session.expires = new Date(
+          Date.now() + 30 * 24 * 60 * 60 * 1000
+        ).toISOString(); // 30 days
+      } else {
+        session.expires = new Date(
+          Date.now() + 24 * 60 * 60 * 1000
+        ).toISOString(); // 1 day
       }
       return session;
     },

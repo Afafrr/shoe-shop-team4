@@ -6,11 +6,15 @@ export const productSchema = z.object({
     .min(1, {
       message: "Please enter product's name",
     })
+    .max(50, "Name must be 50 characters or less")
     .trim(),
   price: z
     .number({ message: "Price must be a valid number" })
     .min(1, {
       message: "Price must be higher than 0",
+    })
+    .max(1000000, {
+      message: "Price must be lower than $1,000,000",
     })
     .refine((price) => price > 0, {
       message: "Price must be greater than $0",
@@ -42,9 +46,7 @@ export const productSchema = z.object({
     .min(1, {
       message: "Please enter product's description",
     })
-    .min(10, {
-      message: "Product's description must have at least 10 characters",
-    })
+    .max(480, "Description must be 480 characters or less")
     .trim(),
   sizes: z
     .array(z.string())
