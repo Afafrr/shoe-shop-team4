@@ -18,6 +18,16 @@ export const DynamicWishlistProvider = dynamic(
   }
 );
 
+export const DynamicRecentlyProvider = dynamic(
+  () =>
+    import("@/contexts/RecentlyViewed").then(
+      (module) => module.RecentlyProvider
+    ),
+  {
+    ssr: false,
+  }
+);
+
 export default function ContextWrapper({
   children,
 }: {
@@ -49,7 +59,9 @@ export default function ContextWrapper({
   return (
     <UserDataProvider data={userData}>
       <DynamicWishlistProvider>
-        <DynamicCartProvider>{children}</DynamicCartProvider>
+        <DynamicRecentlyProvider>
+          <DynamicCartProvider>{children}</DynamicCartProvider>
+        </DynamicRecentlyProvider>
       </DynamicWishlistProvider>
     </UserDataProvider>
   );

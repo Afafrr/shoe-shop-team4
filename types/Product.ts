@@ -612,3 +612,15 @@ type attributes16 = {
     publishedAt: string;
   };
 };
+
+export type ProductCard = {
+  productId: number;
+  name: string;
+  gender: string;
+  imageUrl: string;
+  price: number;
+};
+
+export type ProductContextItem = ProductCard & {
+  id: string;
+};

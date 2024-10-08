@@ -1,33 +1,40 @@
 "use client";
 import { Grid } from "@mui/material";
 import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
-import { useWishlist } from "@/contexts/Wishlist";
+import { useRecently } from "@/contexts/RecentlyViewed";
 import { useRouter } from "next/navigation";
-import WishlistItemCard from "./WishlistItemCard";
 import ProductCollection from "../../_components/ProductCollection";
+import ProductPreview from "@/components/Products/ProductPreview";
 
-export default function Wishlist() {
+export default function RecentlyViewed() {
   const router = useRouter();
-  const { wishlistItems } = useWishlist();
+  const { getRecentItems } = useRecently();
+  const recentItems = getRecentItems();
 
   const handleBrowseBtn = () => {
     router.push("/");
   };
 
   return (
-    <ProductCollection title="My Wishlist">
-      {wishlistItems.length ? (
-        wishlistItems.map((product) => {
+    <ProductCollection title="Recently Viewed">
+      {recentItems.length ? (
+        recentItems.map((product) => {
+          // format RecentlyViewedCard type object into ProductPreview type.
+          const { id, viewedAt, productId, ...filteredProd } = product;
+          const formattedProd = {
+            ...filteredProd,
+            id: productId,
+          };
           return (
             <Grid key={product.id} item xs={1} sx={{ position: "relative" }}>
-              <WishlistItemCard product={product} />
+              <ProductPreview product={formattedProd} />
             </Grid>
           );
         })
       ) : (
         <NoProductsInfo
           onBtnClick={handleBrowseBtn}
-          title="You don't have any products in your wishlist yet"
+          title="You have not viewed any products recently"
           subtitle="Browse the homepage and find products of your preference"
           btnDescription="Browse products"
         />

@@ -68,7 +68,7 @@ function PrimaryText({ children, breakWord = false }: PrimaryTextProps) {
   return (
     <Typography
       sx={{
-        fontSize: { xs: "10px", md: "22px" },
+        fontSize: { xs: "20px", sm: "22px", md: "22px" },
         fontWeight: 500,
         wordBreak: breakWord ? "break-word" : "normal",
       }}

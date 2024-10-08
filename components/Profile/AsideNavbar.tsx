@@ -12,8 +12,6 @@ import OrderHistoryIcon from "@/public/svg/OrderHistoryIcon";
 import RecentIcon from "@/public/svg/RecentIcon";
 import { usePathname } from "next/navigation";
 
-export type routes = "my-products" | "settings" | "my-wishlist";
-
 export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
   const pathname = usePathname();
 
@@ -39,7 +37,7 @@ export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
     {
       label: "Recently viewed",
       Icon: RecentIcon,
-      href: "#",
+      href: "/recently-viewed",
     },
     {
       label: "Settings",

@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import productDetails, { PopulateField } from "@/utils/api/singleProduct";
 import { SizesAPIResponse, Color, Size } from "@/types/singleProduct";
@@ -28,6 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Close } from "@mui/icons-material";
 import { getFieldOptions } from "../../_lib/utils";
 import { NewWishlistItem, useWishlist } from "@/contexts/Wishlist";
+import { useRecently } from "@/contexts/RecentlyViewed";
 
 type SingleProductPageProps = {
   productId: string;
@@ -53,6 +54,7 @@ export default function SingleProductPage({
   });
   const { addItem } = useCart();
   const Wishlist = useWishlist();
+  const Recent = useRecently();
   const router = useRouter();
 
   const { data, error, isLoading } = productDetails(
@@ -63,6 +65,21 @@ export default function SingleProductPage({
   const { data: colors, error: queryError } = useQuery({
     queryKey: ["colors"],
     queryFn: () => getFieldOptions("colors"),
+  });
+
+  useEffect(() => {
+    if (productData && productGender) {
+      const { id } = productData;
+      const { name, images, price } = productData.attributes;
+      const imageUrl = images.data[0].attributes.url;
+      Recent.addItem({
+        productId: id,
+        name,
+        price,
+        gender: productGender,
+        imageUrl,
+      });
+    }
   });
 
   // The color API is broken and returns only one color, leading to a bad UI.
@@ -78,8 +95,9 @@ export default function SingleProductPage({
   if (error) throw new Error("An error has occurred, please try again");
   if (!data) return null;
 
-  const { name, price, description, images, sizes, gender, color } =
-    data.data.attributes;
+  const productData = data.data;
+  const { name, price, description, images, sizes, gender } =
+    productData.attributes;
 
   const mappedSizes =
     (sizes as SizesAPIResponse)?.data?.map((size: Size) => ({

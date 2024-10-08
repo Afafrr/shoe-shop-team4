@@ -17,11 +17,14 @@ export default function ProductCollection({
       spacing={5}
       data-testid={`${title.replace(/\s+/g, "-").toLowerCase()}-page`}
     >
-      <Box paddingLeft={"20px"}>
+      <Box
+        paddingLeft={"20px"}
+        sx={{ display: { xs: "flex", sm: "block" }, justifyContent: "center" }}
+      >
         <Typography
           variant="h4"
           fontWeight={500}
-          fontSize={{ xs: "30px", md: "45px" }}
+          fontSize={{ xs: "30px", md: "35px" }}
           sx={{
             mt: { xs: "8px", md: "15px" },
             position: "relative",
@@ -30,7 +33,7 @@ export default function ProductCollection({
           {title}
         </Typography>
       </Box>
-      <Grid container columns={{ xs: 4, sm: 4, md: 4, lg: 4, xl: 4 }}>
+      <Grid container columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}>
         {children}
       </Grid>
     </Stack>
