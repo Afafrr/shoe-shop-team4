@@ -1,4 +1,5 @@
 "use client";
+import { useUserData } from "@/contexts/UserDataProvider";
 import {
   Box,
   Grid,
@@ -15,37 +16,33 @@ import { personalInfo, shippingInfo } from "./_schema/checkoutSchema";
 import { checkoutValidation } from "./_schema/checkoutValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutStripeForm, {
-  confirmPaymentForm,
-} from "./_components/CheckoutStripeForm";
+import { Elements, PaymentElement } from "@stripe/react-stripe-js";
+import { useEffect, useState } from "react";
+import CheckoutStripeForm from "./_components/CheckoutStripeForm";
 import { calculateOrderAmount } from "./_lib/calculateOrderAmount";
-import { useState } from "react";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
   throw new Error("PUBLIC KEY not defined");
 }
+
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
 
 export default function Page() {
-  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
   const lastElShippingInfo = shippingInfo[shippingInfo.length - 1];
   const totalPrice = 10; //USD
-  const products = [123, 243]; //only product ids
-  const productsString = JSON.stringify(products);
-
   const formContext = useForm<FieldValues>({
     resolver: zodResolver(checkoutValidation),
   });
   const { handleSubmit } = formContext;
 
-  async function onSubmit(data: any) {
-    console.log({ ...data, products: productsString });
-    await confirmPaymentForm({ ...data, products: productsString });
+  function onSubmit(data: any) {
+    console.log("Submitted", data);
+    
   }
+
   return (
     <FormContainer
       formContext={formContext}
@@ -58,8 +55,7 @@ export default function Page() {
           flexDirection: { xs: "column", md: "row" },
           width: "100%",
           maxWidth: { xs: "388px", sm: "500px", md: "1400px" },
-          px: { xs: "15px ", md: "20px" },
-          paddingLeft: { xs: "auto", md: "60px" },
+          px: { xs: "15px", md: "40px" },
         }}
       >
         <Box
@@ -94,7 +90,7 @@ export default function Page() {
           </Typography>
           {/* Personal Info */}
           <SectionTitle title="Personal Info" />
-          <Grid
+          {/* <Grid
             container
             rowSpacing={{ xs: 3, md: 4 }}
             columnSpacing={{ xs: 2, md: 3 }}
@@ -109,11 +105,11 @@ export default function Page() {
                 />
               </Grid>
             ))}
-          </Grid>
+          </Grid> */}
           <Divider sx={{ my: { sm: "40px", xs: "50px", md: "74px" } }} />
           {/* Shipping info */}
           <SectionTitle title="Shipping info" />
-          <Grid
+          {/* <Grid
             container
             rowSpacing={{ xs: 3, md: 4 }}
             columnSpacing={{ xs: 2, md: 3 }}
@@ -135,35 +131,46 @@ export default function Page() {
                 props={lastElShippingInfo.props}
               />
             </Grid>
-          </Grid>
+          </Grid> */}
           <Divider sx={{ my: { sm: "40px", xs: "50px", md: "74px" } }} />
           {/* Payment info */}
           <SectionTitle title="Payment info" />
-          <Box
-            sx={{
-              minHeight: { xs: "350px", md: "210px" },
-              mb: "100px",
-              position: "relative",
-            }}
-          >
+          <Box sx={{ mb: "100px" }}>
             <Elements
               stripe={stripePromise}
               options={{
                 mode: "payment",
                 amount: calculateOrderAmount(totalPrice),
                 currency: "usd",
-                loader: "always",
               }}
             >
-              <CheckoutStripeForm
-                amount={calculateOrderAmount(totalPrice)}
-                setIsLoading={setIsLoading}
-              />
+              <CheckoutStripeForm amount={calculateOrderAmount(totalPrice)} />
             </Elements>
           </Box>
         </Box>
-        {/* Checkout Summary */}
-        <CheckoutSummary price={totalPrice} isLoading={isLoading} />
+        <Box
+          sx={{
+            alignSelf: "flex-start",
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            position: { xs: "relative", md: "sticky" },
+            top: { xs: "auto", md: "40px" },
+            mt: "20px",
+            minWidth: "300px",
+            maxWidth: "400px",
+          }}
+        >
+          <p>Checkout</p>
+          <p>Checkout</p>
+          <p>Checkout</p>
+          <p>Checkout</p>
+          <p>Checkout</p>
+          <Button variant="contained" type="submit">
+            Pay {totalPrice}$
+          </Button>
+        </Box>
       </Container>
     </FormContainer>
   );
@@ -180,38 +187,5 @@ function SectionTitle({ title }: { title: string }) {
     >
       {title}
     </Typography>
-  );
-}
-function CheckoutSummary({
-  price,
-  isLoading,
-}: {
-  price: number;
-  isLoading: boolean;
-}) {
-  return (
-    <Box
-      sx={{
-        alignSelf: "flex-start",
-        flexGrow: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        position: { xs: "relative", md: "sticky" },
-        top: { xs: "auto", md: "40px" },
-        mt: "20px",
-        minWidth: "300px",
-        maxWidth: "400px",
-      }}
-    >
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <Button variant="contained" type="submit" disabled={isLoading}>
-        {isLoading ? "Loading ..." : `Pay ${price}$`}
-      </Button>
-    </Box>
   );
 }

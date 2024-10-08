@@ -92,3 +92,16 @@ export type UserData = {
   lastName: string;
   avatar: ImageData;
 };
+
+export type CheckoutForm = {
+  country: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  address: string;
+  firstName: string;
+  phoneNumber: string;
+  surname: string;
+  email: string;
+  products: string[];
+};
