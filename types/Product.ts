@@ -613,7 +613,7 @@ type attributes16 = {
   };
 };
 
-export type ProductCard = {
+export type ProductCardType = {
   productId: number;
   name: string;
   gender: string;
@@ -621,6 +621,6 @@ export type ProductCard = {
   price: number;
 };
 
-export type ProductContextItem = ProductCard & {
+export type ProductContextItem = ProductCardType & {
   id: string;
 };

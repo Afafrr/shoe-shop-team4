@@ -5,6 +5,7 @@ import MyWishlist from "@/app/(with-navbar)/(profile)/my-wishlist/page";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => "/my-products"),
 }));
 
 const mockImage = {
@@ -46,7 +47,7 @@ const mockImage = {
   updatedAt: "",
 };
 
-const mockUserData = {
+export const mockUserData = {
   data: {
     id: 123,
     username: "team-4",

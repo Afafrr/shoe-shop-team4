@@ -9,6 +9,7 @@ import { useState } from "react";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => "/my-products"),
 }));
 
 const products: NewWishlistItem[] = [

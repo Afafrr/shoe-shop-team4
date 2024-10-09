@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { ProductCard, ProductContextItem } from "@/types/Product";
+import { ProductCardType, ProductContextItem } from "@/types/Product";
 
 type RecentlyViewedCard = ProductContextItem & {
   viewedAt: number;
@@ -8,7 +8,7 @@ type RecentlyViewedCard = ProductContextItem & {
 
 type RecentlyViewedContextType = {
   getRecentItems: () => RecentlyViewedCard[];
-  addItem: (item: ProductCard) => void;
+  addItem: (item: ProductCardType) => void;
   removeItem: (id: string) => void;
 };
 
@@ -44,10 +44,10 @@ export const RecentlyProvider: React.FC<{ children: React.ReactNode }> = ({
   /**
    * Adds an item to the recentlyViewedItems, updating the quantity if the item already exists.
    *
-   * @param {ProductCard} item - The item to add to the recentlyViewedItems.
+   * @param {ProductCardType} item - The item to add to the recentlyViewedItems.
    * @return {void}
    */
-  const addItem = (item: ProductCard): void => {
+  const addItem = (item: ProductCardType): void => {
     // Create Id for context list.
     const newItemId = `${item.productId}`;
     // Create timestamp.

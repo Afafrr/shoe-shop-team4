@@ -1,10 +1,11 @@
 import { useWishlist, WishlistProvider } from "@/contexts/Wishlist";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import WishlistItemCard from "@/app/(with-navbar)/(profile)/my-wishlist/_components/WishlistItemCard";
 import { WishlistItem } from "@/contexts/Wishlist";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => "/my-products"),
 }));
 
 const product: WishlistItem = {
