@@ -5,23 +5,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/Input/Input";
 import { inputs } from "../_schema/profileSchema";
 import { profileValidation } from "../_schema/profileValidation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserData } from "@/types/types";
 import WarningIcon from "@/components/Form/WarningIcon";
-import SuccessAlert from "@/components/Alerts/SuccessAlert";
 import { ResData } from "@/utils/getData";
 import { updateUserData } from "../actions";
 import { useSession } from "next-auth/react";
 import { ReducedData } from "./PageClient";
+import successToast from "@/components/Alerts/successToast";
+
+
 export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();
-  const [show, setShow] = useState(false);
   const session = useSession();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["userData"],
     mutationFn: async (userData: ReducedData) => {
-      setShow(false);
       const res = await updateUserData(
         {
           ...formData,
@@ -30,7 +31,10 @@ export default function MyProfileForm({ formData }: { formData: ReducedData }) {
         session
       );
       setResponse(res);
-      if (!res.error) setShow(true);
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
+    },
+    onSuccess: () => {
+      successToast("Info updated successfully");
     },
   });
 
@@ -45,7 +49,6 @@ export default function MyProfileForm({ formData }: { formData: ReducedData }) {
       formContext={formContext}
       handleSubmit={handleSubmit((data) => mutate(data))}
     >
-      {show ? <SuccessAlert message="Changes saved!" /> : null}
       {response?.error ? (
         <Typography color="red">
           <WarningIcon /> {response?.error}

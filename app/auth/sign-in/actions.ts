@@ -19,7 +19,7 @@ export async function signIn(
   // Backend form structure validation. Check if received form data follows signIn schema
   // Booleans have been converted to strings by this point. So it's necessary to change the original Login schema
   const extendedSignInSchema = signInSchema.extend({
-    rememberMe: z.enum(["true", "undefined"]),
+    rememberMe: z.enum(["true", "false"]),
   });
   const parsed = extendedSignInSchema.safeParse(formData);
   if (!parsed.success) {
@@ -35,12 +35,13 @@ export async function signIn(
   // NOTE: This behavior is independent on what we do here, it is handled by next-auth in the function itself. For example,
   //    If the function was successful but we would throw an error in this file after the function call, it will still create a session.
   //    Same for the opposite case.
-  const { email, password } = parsed.data;
+  const { email, password, rememberMe } = parsed.data;
   const response: AuthorizeResponse | undefined = await Authorize(
     "credentials",
     {
       email,
       password,
+      rememberMe,
       redirect: false,
     }
   );

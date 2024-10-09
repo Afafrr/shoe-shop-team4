@@ -8,7 +8,6 @@ import SingleProductPage from "./_components/SingleProductPage";
 import { notFound } from "next/navigation";
 import { ProductResponse } from "@/types/singleProduct";
 
-
 export default async function Page({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
 
@@ -46,7 +45,6 @@ export default async function Page({ params }: { params: { id: string } }) {
       </HydrationBoundary>
     );
   } catch (error) {
-    console.error("Error fetching product:", error);
     notFound();
-  }    
+  }
 }

@@ -32,10 +32,9 @@ export const fetchProductDetails = async (
   return data;
 };
 
-export default function ProductDetails(
+export default function productDetails(
   id: string,
-  fieldsToPopulate: PopulateField[] = [],
-
+  fieldsToPopulate: PopulateField[] = []
 ) {
   return useQuery<ProductResponse>({
     queryKey: ["productDetails", id, fieldsToPopulate],
