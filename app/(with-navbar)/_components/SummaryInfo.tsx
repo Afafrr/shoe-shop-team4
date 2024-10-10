@@ -3,11 +3,13 @@ import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import { useCart } from "@/contexts/Cart";
 
 export default function SummaryInfo({
-  btnAction,
   btnText,
+  btnAction,
+  btnDisabled,
 }: {
-  btnAction: () => void;
   btnText: string;
+  btnAction: () => void;
+  btnDisabled?: boolean;
 }) {
   const { getCartItemCount, totalPrice } = useCart();
   const { subtotal, shipping, tax, total } = totalPrice();
@@ -64,6 +66,7 @@ export default function SummaryInfo({
         type="submit"
         variant="contained"
         size="large"
+        disabled={btnDisabled}
         sx={{
           mb: "20px",
           mx: "auto",

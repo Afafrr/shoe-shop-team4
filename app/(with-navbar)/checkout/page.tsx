@@ -204,8 +204,9 @@ function CheckoutSummary({ isLoading }: { isLoading: boolean }) {
       }}
     >
       <SummaryInfo
-        btnText={isLoading ? "Loading ..." : `Confirm & Pay`}
+        btnText={isLoading ? "Loading..." : `Confirm & Pay`}
         btnAction={() => {}}
+        btnDisabled={isLoading}
       />
     </Box>
   );
