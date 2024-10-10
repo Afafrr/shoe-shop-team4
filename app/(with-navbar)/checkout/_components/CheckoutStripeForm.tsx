@@ -45,6 +45,7 @@ export default function CheckoutStripeForm({
       return;
     }
     async function createPaymentIntent() {
+      setMessage("");
       const res = await postData<createPI>("/api/payment-intent", {
         userId: userId,
         amount: amount,
