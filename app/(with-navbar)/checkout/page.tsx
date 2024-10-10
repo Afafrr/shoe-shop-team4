@@ -21,6 +21,8 @@ import CheckoutStripeForm, {
 } from "./_components/CheckoutStripeForm";
 import { calculateOrderAmount } from "./_lib/calculateOrderAmount";
 import { useState } from "react";
+import SummaryInfo from "../_components/SummaryInfo";
+import { useCart } from "@/contexts/Cart";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
   throw new Error("PUBLIC KEY not defined");
@@ -33,9 +35,9 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
   const lastElShippingInfo = shippingInfo[shippingInfo.length - 1];
-  const totalPrice = 10; //USD
-  const products = [123, 243]; //only product ids
-  const productsString = JSON.stringify(products);
+  const { totalPrice, cartItems } = useCart();
+  const { total } = totalPrice();
+  const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
 
   const formContext = useForm<FieldValues>({
     resolver: zodResolver(checkoutValidation),
@@ -43,8 +45,7 @@ export default function Page() {
   const { handleSubmit } = formContext;
 
   async function onSubmit(data: any) {
-    console.log({ ...data, products: productsString });
-    await confirmPaymentForm({ ...data, products: productsString });
+    await confirmPaymentForm({ ...data, products: products });
   }
   return (
     <FormContainer
@@ -56,8 +57,10 @@ export default function Page() {
           position: "relative",
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
           width: "100%",
           maxWidth: { xs: "388px", sm: "500px", md: "1400px" },
+          mb: { xs: "50px", md: "100px" },
           px: { xs: "15px ", md: "20px" },
           paddingLeft: { xs: "auto", md: "60px" },
         }}
@@ -141,8 +144,8 @@ export default function Page() {
           <SectionTitle title="Payment info" />
           <Box
             sx={{
-              minHeight: { xs: "350px", md: "210px" },
-              mb: "100px",
+              minHeight: { xs: "235px", md: "155px" },
+              mb: { xs: "0px", md: "100px" },
               position: "relative",
             }}
           >
@@ -150,20 +153,20 @@ export default function Page() {
               stripe={stripePromise}
               options={{
                 mode: "payment",
-                amount: calculateOrderAmount(totalPrice),
+                amount: calculateOrderAmount(Number(total)),
                 currency: "usd",
                 loader: "always",
               }}
             >
               <CheckoutStripeForm
-                amount={calculateOrderAmount(totalPrice)}
+                amount={calculateOrderAmount(Number(total))}
                 setIsLoading={setIsLoading}
               />
             </Elements>
           </Box>
         </Box>
         {/* Checkout Summary */}
-        <CheckoutSummary price={totalPrice} isLoading={isLoading} />
+        <CheckoutSummary isLoading={isLoading} />
       </Container>
     </FormContainer>
   );
@@ -182,13 +185,7 @@ function SectionTitle({ title }: { title: string }) {
     </Typography>
   );
 }
-function CheckoutSummary({
-  price,
-  isLoading,
-}: {
-  price: number;
-  isLoading: boolean;
-}) {
+function CheckoutSummary({ isLoading }: { isLoading: boolean }) {
   return (
     <Box
       sx={{
@@ -199,19 +196,17 @@ function CheckoutSummary({
         alignItems: "center",
         position: { xs: "relative", md: "sticky" },
         top: { xs: "auto", md: "40px" },
-        mt: "20px",
+        maxWidth: { xs: "auto", md: "400px" },
+        width: { xs: "100%", md: "auto" },
         minWidth: "300px",
-        maxWidth: "400px",
+        ml: { xs: "auto", md: "20px" },
+        mt: { xs: "50px", md: "0px" },
       }}
     >
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <p>Checkout</p>
-      <Button variant="contained" type="submit" disabled={isLoading}>
-        {isLoading ? "Loading ..." : `Pay ${price}$`}
-      </Button>
+      <SummaryInfo
+        btnText={isLoading ? "Loading ..." : `Confirm & Pay`}
+        btnAction={() => {}}
+      />
     </Box>
   );
 }

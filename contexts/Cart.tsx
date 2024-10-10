@@ -22,6 +22,14 @@ type CartContextType = {
   removeItem: (id: string) => void;
   clearCart: () => void;
   getCartItemCount: () => number;
+  totalPrice: () => CartTotals;
+};
+
+type CartTotals = {
+  subtotal: string;
+  shipping: string;
+  tax: string;
+  total: string;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -110,6 +118,30 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     setCartItems([]);
   };
 
+  /**
+   * Calculates price value of cart.
+   * @returns {CartTotals}
+   */
+  const totalPrice = (): CartTotals => {
+    const subtotal = cartItems.reduce((acc, item) => {
+      return (acc += item.price * item.quantity);
+    }, 0);
+    const freeShippingAmount = 200;
+    const shippingCost = 20;
+    const taxRate = 0.08;
+
+    const shipping = subtotal > freeShippingAmount ? 0 : shippingCost;
+    const tax = (subtotal + shipping) * taxRate;
+    const total = subtotal + shipping + tax;
+
+    return {
+      subtotal: subtotal.toFixed(2),
+      shipping: shipping.toFixed(2),
+      tax: tax.toFixed(2),
+      total: total.toFixed(2),
+    };
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -119,6 +151,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         updateItemQuantity,
         removeItem,
         clearCart,
+        totalPrice,
       }}
     >
       {children}

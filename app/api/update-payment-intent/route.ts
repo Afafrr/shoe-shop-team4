@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
       paymentId: string;
     } = await req.json();
     //update paymentIntent with latest data
-    console.log(metadata);
 
     const paymentIntent = await stripe.paymentIntents.update(paymentId, {
       metadata: { ...metadata },

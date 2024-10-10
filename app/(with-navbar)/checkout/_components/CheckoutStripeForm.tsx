@@ -19,6 +19,7 @@ type dataPI = {
   clientSecret: string;
   paymentId: string;
 };
+
 export default function CheckoutStripeForm({
   amount,
   setIsLoading,
@@ -37,7 +38,6 @@ export default function CheckoutStripeForm({
 
   useEffect(() => {
     getUserTransactions();
-    console.log({ userId });
 
     if (!userId) {
       setMessage("User not found");
@@ -58,7 +58,7 @@ export default function CheckoutStripeForm({
       setIsLoading(false);
     }
     createPaymentIntent();
-  }, [amount]);
+  }, [amount, userId]);
 
   confirmPaymentForm = async (metadata: any) => {
     setIsLoading(true);

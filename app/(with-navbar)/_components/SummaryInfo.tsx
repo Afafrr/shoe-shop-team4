@@ -1,17 +1,16 @@
 import { ExpandMore } from "@mui/icons-material";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
-import useIsMobile from "../../(profile)/my-products/_components/useIsMobile";
 import { useCart } from "@/contexts/Cart";
 
-export default function SummaryInfo() {
-  const { cartItems, getCartItemCount } = useCart();
-  const isMobile = useIsMobile();
-
-  const subtotal = cartItems.reduce((acc, item) => {
-    return (acc += item.price * item.quantity);
-  }, 0);
-
-  const { shipping, tax, total } = calculateTotal(subtotal);
+export default function SummaryInfo({
+  btnAction,
+  btnText,
+}: {
+  btnAction: () => void;
+  btnText: string;
+}) {
+  const { getCartItemCount, totalPrice } = useCart();
+  const { subtotal, shipping, tax, total } = totalPrice();
 
   if (getCartItemCount() === 0) return;
 
@@ -22,7 +21,6 @@ export default function SummaryInfo() {
         flexDirection: "column",
         width: "100%",
         [theme.breakpoints.up("md")]: {
-          mr: "50px",
           height: "100%",
           flex: 1,
           flexGrow: 1,
@@ -55,7 +53,7 @@ export default function SummaryInfo() {
           </Typography>
           <ExpandMore />
         </Stack>
-        <SummaryLine concept="Subtotal" amount={subtotal.toFixed(2)} />
+        <SummaryLine concept="Subtotal" amount={subtotal} />
         <SummaryLine concept="Shipping" amount={shipping} />
         <SummaryLine concept="Tax" amount={tax} />
         <Divider />
@@ -63,6 +61,7 @@ export default function SummaryInfo() {
         <Divider />
       </Stack>
       <Button
+        type="submit"
         variant="contained"
         size="large"
         sx={{
@@ -71,8 +70,9 @@ export default function SummaryInfo() {
           borderRadius: "8px",
           minWidth: { xs: "240px", lg: "320px" },
         }}
+        onClick={btnAction}
       >
-        {isMobile ? "Go to checkout" : "Checkout"}
+        {btnText}
       </Button>
     </Box>
   );
@@ -95,20 +95,4 @@ function SummaryLine({ concept, amount, total }: SummaryLineProps) {
       </Typography>
     </Stack>
   );
-}
-
-function calculateTotal(subtotal: number) {
-  const freeShippingAmount = 200;
-  const shippingCost = 20;
-  const taxRate = 0.08;
-
-  const shipping = subtotal > freeShippingAmount ? 0 : shippingCost;
-  const tax = (subtotal + shipping) * taxRate;
-  const total = subtotal + shipping + tax;
-
-  return {
-    shipping: shipping.toFixed(2),
-    tax: tax.toFixed(2),
-    total: total.toFixed(2),
-  };
 }
