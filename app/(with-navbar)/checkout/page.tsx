@@ -38,7 +38,7 @@ export default function Page() {
   const { totalPrice, cartItems } = useCart();
   const { total } = totalPrice();
   const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
-
+  //TODO: add disalbed
   const formContext = useForm<FieldValues>({
     resolver: zodResolver(checkoutValidation),
   });
@@ -204,8 +204,9 @@ function CheckoutSummary({ isLoading }: { isLoading: boolean }) {
       }}
     >
       <SummaryInfo
-        btnText={isLoading ? "Loading ..." : `Confirm & Pay`}
+        btnText={isLoading ? "Loading..." : `Confirm & Pay`}
         btnAction={() => {}}
+        btnDisabled={isLoading}
       />
     </Box>
   );
