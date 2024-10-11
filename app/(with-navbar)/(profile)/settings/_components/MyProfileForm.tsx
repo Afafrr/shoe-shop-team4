@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/Input/Input";
 import { inputs } from "../_schema/profileSchema";
 import { profileValidation } from "../_schema/profileValidation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserData } from "@/types/types";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { ResData } from "@/utils/getData";
@@ -17,9 +17,11 @@ import { z } from "zod";
 
 type FieldValues = z.infer<typeof profileValidation>;
 
+
 export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();
   const session = useSession();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["userData"],
@@ -32,6 +34,7 @@ export default function MyProfileForm({ formData }: { formData: ReducedData }) {
         session
       );
       setResponse(res);
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
     },
     onSuccess: () => {
       successToast("Info updated successfully");
