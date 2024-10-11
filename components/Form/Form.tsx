@@ -16,7 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import Input from "@components/Input/Input";
 import { ActionResponse, ContextType } from "@/types/types";
 import WarningIcon from "./WarningIcon";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import successToast from "../Alerts/successToast";
@@ -50,6 +50,7 @@ export default function Form({
     session,
   };
   const router = useRouter();
+  const pathname = usePathname();
 
   const defaultValues =
     defaultForm ||
@@ -82,7 +83,13 @@ export default function Form({
     },
     onSuccess: (response: ActionResponse) => {
       successToast("Success!");
-      if ("redirect" in response) router.push(response.redirect);
+      if ("redirect" in response) {
+        if (pathname === "/auth/sign-in") {
+          window.location.href = response.redirect;
+        } else {
+          router.push(response.redirect);
+        }
+      }
     },
     onError: (error) => {
       console.log("Error in mutation: ", error);

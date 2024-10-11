@@ -7,11 +7,11 @@ import { signUp } from "../actions";
 export default function SignupForm() {
   const inputs: FormInput[] = [
     {
-      label: "Name",
+      label: "First Name",
       props: {
         name: "name",
         required: true,
-        placeholder: "Hayman Andrews",
+        placeholder: "Hayman",
         type: "text",
         autoComplete: "name",
       },

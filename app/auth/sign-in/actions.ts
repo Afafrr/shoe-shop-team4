@@ -30,12 +30,6 @@ export async function signIn(
       },
     };
   }
-  // Check if user was redirected to Login page from other page.
-  // If so, redirect to the latter. If not, redirect to home
-  const callBack =
-    "callbackUrl" in context.searchParams
-      ? (context.searchParams.callbackUrl as string)
-      : "/";
 
   // Call the signIn function. If successful, it creates a user session. If not, it returns an object with an error property.
   // NOTE: This behavior is independent on what we do here, it is handled by next-auth in the function itself. For example,
@@ -48,7 +42,7 @@ export async function signIn(
       email,
       password,
       rememberMe,
-      callbackUrl: callBack,
+      redirect: false,
     }
   );
   if (response?.error) throw new Error(response.error);
@@ -69,6 +63,13 @@ export async function signIn(
     username: "",
     email: "",
   };
+
+  // Check if user was redirected to Login page from other page.
+  // If so, redirect to the latter. If not, redirect to home
+  const callBack =
+    "callbackUrl" in context.searchParams
+      ? (context.searchParams.callbackUrl as string)
+      : "/";
 
   return { user: emptyUser, redirect: callBack };
 }

@@ -32,6 +32,7 @@ export async function signUp(
       },
       body: JSON.stringify({
         username,
+        firstName: username,
         email,
         password,
       }),
