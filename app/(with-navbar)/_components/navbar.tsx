@@ -14,7 +14,6 @@ import SideBar from "./sidebar";
 import CartIcon from "./CartIcon";
 import { useCart } from "@/contexts/Cart";
 import NextMuiLink from "@/components/Profile/NextMuiLink";
-import { useUserData } from "@/contexts/UserDataProvider";
 import WarningIcon from "@/components/Form/WarningIcon";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
