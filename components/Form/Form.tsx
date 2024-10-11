@@ -20,6 +20,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import successToast from "../Alerts/successToast";
+import errorToast from "../Alerts/errorToast";
 
 export interface FormInput {
   label: string;
@@ -82,7 +83,7 @@ export default function Form({
       return result;
     },
     onSuccess: (response: ActionResponse) => {
-      successToast("Success!");
+      if ("message" in response) successToast(response.message);
       if ("redirect" in response) {
         if (pathname === "/auth/sign-in") {
           window.location.href = response.redirect;
