@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { mockInitialData } from "@/__mocks__/mocks";
 import AvatarBox from "@/app/(with-navbar)/(profile)/settings/_components/AvatarBox";
 
@@ -41,7 +41,6 @@ describe("ProfileAside", () => {
   it("checks delete button", async () => {
     fireEvent.click(deleteBtn);
     expect(setImageMock).toHaveBeenCalledWith("");
-    screen.debug();
   });
 
   it("checks change button", () => {

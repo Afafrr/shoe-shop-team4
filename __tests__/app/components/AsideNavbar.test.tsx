@@ -13,7 +13,7 @@ describe("AsideNavbar", () => {
   let logoutBtn: HTMLElement;
 
   beforeEach(() => {
-    render(<AsideNavbar parentsSX={{}} activeBtnPath="my-products" />);
+    render(<AsideNavbar parentsSX={{}} />);
     myProductsBtn = screen.getByText("My Products");
     settingsBtn = screen.getByText("Settings");
     logoutBtn = screen.getByText("Logout");
@@ -26,8 +26,8 @@ describe("AsideNavbar", () => {
   });
 
   it("checks buttons actions", () => {
-    expect(myProductsBtn.closest("a")).toHaveAttribute("href", "my-products");
-    expect(settingsBtn.closest("a")).toHaveAttribute("href", "settings");
+    expect(myProductsBtn.closest("a")).toHaveAttribute("href", "/my-products");
+    expect(settingsBtn.closest("a")).toHaveAttribute("href", "/settings");
   });
 
   it("checks logout button call", () => {

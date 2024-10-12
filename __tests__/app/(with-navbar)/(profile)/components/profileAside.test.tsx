@@ -1,16 +1,32 @@
 import { render, screen } from "@testing-library/react";
 import ProfileAside from "@/app/(with-navbar)/(profile)/_components/ProfileAside";
-import { UserDataProvider } from "@/contexts/UserDataProvider";
-import { mockUserData } from "@/__mocks__/mocks";
+import * as ReactQuery from "@tanstack/react-query";
+
+jest.mock("@tanstack/react-query");
+const useQuery = jest.spyOn(ReactQuery, "useQuery");
 
 describe("ProfileAside", () => {
-  it("renders user data", () => {
-    render(
-      <UserDataProvider data={mockUserData}>
-        <ProfileAside activeBtnPath="settings" />
-      </UserDataProvider>
-    );
+  afterEach(() => {
+    useQuery.mockRestore();
+  });
 
+  it("renders user data", () => {
+    useQuery.mockImplementation(
+      jest.fn().mockReturnValue({
+        data: {
+          error: "",
+          data: {
+            firstName: "TestName",
+            avatar: {
+              url: "testUrl",
+            },
+          },
+        },
+        isLoading: false,
+        isSuccess: true,
+      })
+    );
+    render(<ProfileAside />);
     expect(screen.getByText("Welcome")).toBeInTheDocument();
     expect(screen.getByText("TestName")).toBeInTheDocument();
     expect(screen.getByAltText("User profile image")).toHaveAttribute(
@@ -20,13 +36,17 @@ describe("ProfileAside", () => {
   });
 
   it("show error icon", () => {
-    mockUserData.error = "Error";
-    mockUserData.data = null;
-    render(
-      <UserDataProvider data={mockUserData}>
-        <ProfileAside activeBtnPath="settings" />
-      </UserDataProvider>
+    useQuery.mockImplementation(
+      jest.fn().mockReturnValue({
+        data: {
+          error: "Error",
+          data: undefined,
+        },
+        isLoading: false,
+        isSuccess: true,
+      })
     );
+    render(<ProfileAside />);
     expect(screen.getByTestId("WarningIcon")).toBeInTheDocument();
   });
 });
