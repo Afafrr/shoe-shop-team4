@@ -2,7 +2,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { ProductCardType, ProductContextItem } from "@/types/Product";
 
-type RecentlyViewedCard = ProductContextItem & {
+export type RecentlyViewedCard = ProductContextItem & {
   viewedAt: number;
 };
 
@@ -47,6 +47,7 @@ export const RecentlyProvider: React.FC<{ children: React.ReactNode }> = ({
    * @param {ProductCardType} item - The item to add to the recentlyViewedItems.
    * @return {void}
    */
+  const LENGTH_LIMIT = 15;
   const addItem = (item: ProductCardType): void => {
     // Create Id for context list.
     const newItemId = `${item.productId}`;
@@ -54,14 +55,13 @@ export const RecentlyProvider: React.FC<{ children: React.ReactNode }> = ({
     const viewed = new Date().getTime();
     // Update state list.
     setRecentlyViewedItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === newItemId);
-
-      // Reject repeated items
-      if (existingItem) {
-        return prevItems;
-      }
-
-      return [...prevItems, { id: newItemId, viewedAt: viewed, ...item }];
+      const isFull = (list: RecentlyViewedCard[]) =>
+        list.length === LENGTH_LIMIT;
+      // If product is already in list, it should be deleted before adding it at the beginning
+      const new_list = prevItems.filter((item) => item.id !== newItemId);
+      // If list limit is reached, delete the oldest item.
+      if (isFull(new_list)) new_list.pop();
+      return [{ id: newItemId, viewedAt: viewed, ...item }, ...new_list];
     });
   };
 
