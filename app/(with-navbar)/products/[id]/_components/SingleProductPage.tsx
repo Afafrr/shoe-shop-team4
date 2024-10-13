@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useCallback, useEffect, useState } from "react";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import productDetails, { PopulateField } from "@/utils/api/singleProduct";
 import { SizesAPIResponse, Color, Size, Gender } from "@/types/singleProduct";
@@ -67,11 +67,11 @@ export default function SingleProductPage({
     queryFn: () => getFieldOptions("colors"),
   });
 
-  const getGenderName = (genderObject: Gender) => {
+  const getGenderName = useCallback((genderObject: Gender) => {
     return genderObject?.data?.attributes?.name
-      ? `${gender.data.attributes.name}'s Shoes`
+      ? `${genderObject.data.attributes.name}'s Shoes`
       : "Unisex";
-  };
+  }, []);
 
   useEffect(() => {
     if (data) {
