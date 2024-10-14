@@ -1,28 +1,13 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import MyProfileForm from "@/app/(with-navbar)/(profile)/settings/_components/MyProfileForm";
-import { useSession } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { inputs } from "@/app/(with-navbar)/(profile)/settings/_schema/profileSchema";
 import { act } from "@testing-library/react";
 import { updateUserData } from "@/app/(with-navbar)/(profile)/settings/actions";
 
 jest.mock("../../../../../../app/(with-navbar)/(profile)/settings/actions");
-jest.mock("next-auth/react", () => ({
-  ...jest.requireActual("next-auth/react"),
-  useSession: jest.fn(),
-}));
-
-(useSession as jest.Mock).mockReturnValue({
-  data: {
-    user: {
-      name: "Test User",
-      email: "testuser@example.com",
-    },
-  },
-  status: "authenticated",
-});
 
 describe("MyProfileForm", () => {
   const formDataMock = {
