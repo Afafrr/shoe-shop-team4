@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import { ReducedData } from "./PageClient";
 import successToast from "@/components/Alerts/successToast";
 
-
 export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();
   const session = useSession();
