@@ -2,6 +2,7 @@ import { ReducedData } from "@/app/(with-navbar)/(profile)/settings/_components/
 import { inputs } from "@/app/(with-navbar)/(profile)/settings/_schema/profileSchema";
 import { UserData } from "@/types/types";
 import { ResData } from "@/utils/getData";
+
 export const mockUserData: ResData<UserData> = {
   data: {
     id: 1,
@@ -16,7 +17,7 @@ export const mockUserData: ResData<UserData> = {
     firstName: "TestName",
     lastName: "",
     avatar: {
-      id: 0,
+      id: 1,
       name: "",
       alternativeText: "",
       caption: "",
@@ -55,6 +56,37 @@ export const mockUserData: ResData<UserData> = {
     },
   },
   error: "",
+};
+
+export const mockUserSessionData = {
+  user: {
+    name: "Jhon",
+    email: "Jhon@gmail.com",
+    id: 123,
+    jwt: "TestJWT",
+    rememberMe: false,
+  },
+  expires: "TestData",
+};
+
+export const mockAvatar: File = {
+  name: "avatar.jpg",
+  size: 1024,
+  type: "image/png",
+  lastModified: 0,
+  webkitRelativePath: "",
+  arrayBuffer: function (): Promise<ArrayBuffer> {
+    throw new Error("Function not implemented.");
+  },
+  slice: function (start?: number, end?: number, contentType?: string): Blob {
+    throw new Error("Function not implemented.");
+  },
+  stream: function (): ReadableStream<Uint8Array> {
+    throw new Error("Function not implemented.");
+  },
+  text: function (): Promise<string> {
+    throw new Error("Function not implemented.");
+  },
 };
 
 export function mockInitialData() {
