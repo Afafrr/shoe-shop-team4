@@ -1,7 +1,5 @@
-import { UserDataProvider } from "@/contexts/UserDataProvider";
 import { RecentlyProvider, useRecently } from "@/contexts/RecentlyViewed";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { mockUserData } from "../../my-wishlist/page.test";
 import RecentlyViewed from "@/app/(with-navbar)/(profile)/recently-viewed/_components/RecentlyViewed";
 import { useEffect, useState } from "react";
 import { ProductCardType } from "@/types/Product";
@@ -50,11 +48,9 @@ describe("RecentlyViewed Component", () => {
   it("renders", () => {
     // Render the component
     render(
-      <UserDataProvider data={mockUserData}>
-        <RecentlyProvider>
-          <RecentlyViewed />
-        </RecentlyProvider>
-      </UserDataProvider>
+      <RecentlyProvider>
+        <RecentlyViewed />
+      </RecentlyProvider>
     );
 
     // Test if the title is rendered
@@ -62,11 +58,9 @@ describe("RecentlyViewed Component", () => {
   });
   it("renders NoProductsInfo when no items in storage", () => {
     render(
-      <UserDataProvider data={mockUserData}>
-        <RecentlyProvider>
-          <RecentlyViewed />
-        </RecentlyProvider>
-      </UserDataProvider>
+      <RecentlyProvider>
+        <RecentlyViewed />
+      </RecentlyProvider>
     );
     expect(
       screen.getByText("You have not viewed any products recently")
@@ -74,11 +68,9 @@ describe("RecentlyViewed Component", () => {
   });
   it("renders products correctly when list is not empty", () => {
     render(
-      <UserDataProvider data={mockUserData}>
-        <RecentlyProvider>
-          <Wrapper />
-        </RecentlyProvider>
-      </UserDataProvider>
+      <RecentlyProvider>
+        <Wrapper />
+      </RecentlyProvider>
     );
     // Get div to manage recentlyViewedItems
     const exposer = screen.getByTestId("recently-exposer");
@@ -96,11 +88,9 @@ describe("RecentlyViewed Component", () => {
   });
   it("removes older products when the limit of recently viewed products(15) is exceeded", () => {
     render(
-      <UserDataProvider data={mockUserData}>
-        <RecentlyProvider>
-          <Wrapper />
-        </RecentlyProvider>
-      </UserDataProvider>
+      <RecentlyProvider>
+        <Wrapper />
+      </RecentlyProvider>
     );
     // Get div to manage recentlyViewedItems
     const exposer = screen.getByTestId("recently-exposer");
