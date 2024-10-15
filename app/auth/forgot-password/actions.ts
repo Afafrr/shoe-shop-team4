@@ -40,5 +40,9 @@ export async function recoverFn(
   const result: BackResponse = await response.json();
 
   if ("error" in result) return result;
-  return { ...result, redirect: "/auth/sign-in" };
+  return {
+    ...result,
+    redirect: "/auth/sign-in",
+    message: "Password reset link sent! Check your email.",
+  };
 }
