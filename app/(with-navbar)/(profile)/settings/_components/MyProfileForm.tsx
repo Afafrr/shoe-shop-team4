@@ -17,7 +17,6 @@ import { z } from "zod";
 
 type FieldValues = z.infer<typeof profileValidation>;
 
-
 export default function MyProfileForm({ formData }: { formData: ReducedData }) {
   const [response, setResponse] = useState<ResData<UserData>>();
   const session = useSession();
