@@ -20,7 +20,7 @@ export async function updateUserData(formData: ReducedData, { data }: any) {
     if (!imgRes.error) {
       reducedData["avatar"] = imgRes?.data[0].id;
     } else {
-      return imgRes.error;
+      return imgRes;
     }
   }
   // if formData has deleteImg:true and -> avatar will be deleted

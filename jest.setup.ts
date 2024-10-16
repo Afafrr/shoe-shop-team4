@@ -4,7 +4,3 @@ jest.mock("next-auth/react", () => ({
   ...jest.requireActual("next-auth/react"),
   useSession: jest.fn(),
 }));
-jest.mock("next-auth/react", () => ({
-  ...jest.requireActual("next-auth/react"),
-  useSession: jest.fn(),
-}));

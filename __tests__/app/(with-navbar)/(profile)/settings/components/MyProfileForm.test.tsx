@@ -7,7 +7,7 @@ import { inputs } from "@/app/(with-navbar)/(profile)/settings/_schema/profileSc
 import { act } from "@testing-library/react";
 import { updateUserData } from "@/app/(with-navbar)/(profile)/settings/actions";
 
-jest.mock("../../../../../../app/(with-navbar)/(profile)/settings/actions");
+jest.mock("@/app/(with-navbar)/(profile)/settings/actions");
 
 describe("MyProfileForm", () => {
   const formDataMock = {

@@ -5,9 +5,9 @@ import { mockAvatar } from "@/__mocks__/mocks";
 import { postImage, deleteImage } from "@/utils/imageOperations";
 import { getData } from "@/utils/getData";
 
-jest.mock("../../../../../../utils/postData");
-jest.mock("../../../../../../utils/imageOperations");
-jest.mock("../../../../../../utils/getData");
+jest.mock("@/utils/postData");
+jest.mock("@/utils/imageOperations");
+jest.mock("@/utils/getData");
 
 describe("updateUserData", () => {
   const formData = {
@@ -68,7 +68,7 @@ describe("updateUserData", () => {
       { data: mockUserSessionData }
     );
 
-    expect(res).toBe(errorMsg);
+    expect(res.error).toBe(errorMsg);
   });
 
   it("if formData has delete img call postData with avatar undefined", async () => {
