@@ -3,6 +3,7 @@ import React from "react";
 export const Logo = ({ color = "grey" }: { color?: string }) => {
   return (
     <svg
+      data-testid="logo-svg"
       width="26"
       height="20"
       viewBox="0 0 40 30"
