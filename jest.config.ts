@@ -16,10 +16,10 @@ const config: Config = {
   coverageThreshold: {
     global: {
       // We can increase the threshold gradually as we are implementing more tests.
-      statements: 5,
-      branches: 5,
-      functions: 5,
-      lines: 5,
+      statements: 15,
+      branches: 15,
+      functions: 15,
+      lines: 15,
     },
   },
   collectCoverageFrom: [
