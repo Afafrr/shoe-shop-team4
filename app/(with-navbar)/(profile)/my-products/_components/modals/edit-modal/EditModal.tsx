@@ -10,6 +10,7 @@ import { ContextType } from "@/types/types";
 import { useEffect, useState } from "react";
 import { emptyFormValues } from "../../ProductManager/ProductForm/FormPage";
 import { useQueryClient } from "@tanstack/react-query";
+import successToast from "@/components/Alerts/successToast";
 
 // This is a modal that pops when the user clicks on edit product. Uses same template as AddProduct page: 'ProductManager.tsx'
 // This component takes:
@@ -46,6 +47,8 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
     },
     successFn: async () => {
       queryClient.invalidateQueries({ queryKey: ["my-products"] });
+      queryClient.invalidateQueries({ queryKey: ["productDetails"] });
+      successToast("Product edited successfully!");
       return handleClose();
     },
     defaultForm: defaultValues,

@@ -22,7 +22,10 @@ const config: Config = {
       lines: 5,
     },
   },
-  collectCoverageFrom: ["<rootDir>/app/**/*.{js,ts,tsx}"],
+  collectCoverageFrom: [
+    "<rootDir>/app/**/*.{js,ts,tsx}",
+    "<rootDir>/components/**/*.{js,ts,tsx}",
+  ],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",

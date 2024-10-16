@@ -20,3 +20,7 @@ jest.mock("next/navigation", () => ({
 (useSearchParams as jest.Mock).mockReturnValue({
   get: jest.fn().mockReturnValue(null), // Return null or other values as needed
 });
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  useSession: jest.fn(),
+}));

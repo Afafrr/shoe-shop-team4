@@ -14,21 +14,33 @@ import SideBar from "./sidebar";
 import CartIcon from "./CartIcon";
 import { useCart } from "@/contexts/Cart";
 import NextMuiLink from "@/components/Profile/NextMuiLink";
-import { useUserData } from "@/contexts/UserDataProvider";
-import { useRouter } from "next/navigation";
 import WarningIcon from "@/components/Form/WarningIcon";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { getData } from "@/utils/getData";
+import { UserData } from "@/types/types";
+import type { ResData } from "@/utils/getData";
 
 export default function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { getCartItemCount } = useCart();
-  const userData = useUserData();
-  const data = userData?.data;
-  const error = userData?.error;
-  const avatar = data?.avatar?.url;
+  const session = useSession();
+  const { data, refetch } = useQuery<ResData<UserData>>({
+    queryKey: ["userData"],
+    queryFn: () => getData("users/me?populate=avatar", session?.data?.user.jwt),
+  });
+  const error = data?.error;
+  const userData = data?.data;
+  const avatar = userData?.avatar?.url;
 
   useEffect(() => {
-    setIsLoggedIn(Boolean(data));
-  }, [userData]);
+    const sessionStatus = session.status === "authenticated";
+    if (!userData && sessionStatus) {
+      refetch();
+    }
+    setIsLoggedIn(sessionStatus);
+  }, [session]);
+
   return (
     <AppBar position="static" color="inherit">
       <Container maxWidth={false} sx={{ my: { md: 1 } }}>
@@ -78,7 +90,7 @@ export default function NavBar() {
             )}
             <NextMuiLink href="/chart">
               <IconButton size="large" color="inherit">
-                <CartIcon count={getCartItemCount()} />
+                <CartIcon color="black" count={getCartItemCount()} />
               </IconButton>
             </NextMuiLink>
             {isLoggedIn && (
@@ -88,7 +100,7 @@ export default function NavBar() {
                   src={avatar}
                   sx={{ width: 24, height: 24 }}
                 >
-                  {avatar ? null : data?.firstName.slice(0, 1)}
+                  {avatar ? null : userData?.firstName?.slice(0, 1)}
                   {error ? <WarningIcon /> : null}
                 </Avatar>
               </NextMuiLink>
@@ -98,7 +110,7 @@ export default function NavBar() {
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
             <NextMuiLink href="/chart">
               <IconButton size="large" color="inherit">
-                <CartIcon count={getCartItemCount()} />
+                <CartIcon color="black" count={getCartItemCount()} />
               </IconButton>
             </NextMuiLink>
             <SideBar isLoggedIn={isLoggedIn} />

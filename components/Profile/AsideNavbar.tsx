@@ -7,16 +7,13 @@ import { SettingsIcon } from "@/public/svg/SettingsIcon";
 import CartIcon from "@/app/(with-navbar)/_components/CartIcon";
 import { signOut } from "next-auth/react";
 import NextMuiLink from "./NextMuiLink";
+import { usePathname } from "next/navigation";
 
 export type routes = "my-products" | "settings";
 
-export const AsideNavbar = ({
-  parentsSX,
-  activeBtnPath,
-}: {
-  parentsSX: SxProps;
-  activeBtnPath?: routes;
-}) => {
+export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
+  const pathname = usePathname();
+
   const { palette } = useTheme();
   const activeBtnColor = palette.primary.main;
   const defaultColor = "#000000";
@@ -24,12 +21,12 @@ export const AsideNavbar = ({
     {
       label: "My Products",
       Icon: CartIcon,
-      href: "my-products",
+      href: "/my-products",
     },
     {
       label: "Settings",
       Icon: SettingsIcon,
-      href: "settings",
+      href: "/settings",
     },
     {
       label: "Logout",
@@ -41,7 +38,7 @@ export const AsideNavbar = ({
   return (
     <Stack spacing={"36px"} sx={{ ...parentsSX }}>
       {asideButtons.map(({ label, Icon, href }) => {
-        const color = href === activeBtnPath ? activeBtnColor : defaultColor;
+        const color = href === `${pathname}` ? activeBtnColor : defaultColor;
 
         return label === "Logout" ? (
           <LogoutButton key={label} Icon={Icon} />

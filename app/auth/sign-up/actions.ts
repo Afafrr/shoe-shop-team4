@@ -32,6 +32,7 @@ export async function signUp(
       },
       body: JSON.stringify({
         username,
+        firstName: username,
         email,
         password,
       }),
@@ -40,5 +41,10 @@ export async function signUp(
   const result: BackResponse = await response.json();
 
   if ("error" in result) return result;
-  return { ...result, redirect: "/auth/sign-in" };
+  return {
+    ...result,
+    redirect: "/auth/sign-in",
+    message:
+      "Sign-up successful! Please check your email to confirm your account.",
+  };
 }

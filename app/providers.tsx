@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { SessionAuthProvider } from "@/contexts/SessionAuthProvider";
 import ContextWrapper from "@/contexts/ContextWrapper";
+import { Toaster } from "sonner";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -43,6 +44,7 @@ export function Providers({ children }: { children: ReactNode }) {
           <ContextWrapper>{children}</ContextWrapper>
         </SessionAuthProvider>
       </ReactQueryStreamedHydration>
+      <Toaster richColors position="bottom-left" />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
