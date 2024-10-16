@@ -5,6 +5,7 @@ import WarningIcon from "@/components/Form/WarningIcon";
 import { useQuery } from "@tanstack/react-query";
 import { ResData } from "@/utils/getData";
 import { UserData } from "@/types/types";
+
 type ProfileAsideProps = {
   breakpoint?: string;
 };

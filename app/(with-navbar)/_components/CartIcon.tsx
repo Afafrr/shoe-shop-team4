@@ -11,6 +11,7 @@ export default function CartIcon({
     <SvgIcon>
       {count && count > 0 ? (
         <svg
+          data-testid="cart-icon"
           width="20"
           height="20"
           viewBox="0 0 20 20"
@@ -50,6 +51,7 @@ export default function CartIcon({
         </svg>
       ) : (
         <svg
+          data-testid="empty-cart-icon"
           width="24"
           height="25"
           viewBox="0 0 24 25"

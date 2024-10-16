@@ -71,5 +71,9 @@ export async function signIn(
       ? (context.searchParams.callbackUrl as string)
       : "/";
 
-  return { user: emptyUser, redirect: callBack };
+  return {
+    user: emptyUser,
+    redirect: callBack,
+    message: "Logged in successfully! Redirecting...",
+  };
 }

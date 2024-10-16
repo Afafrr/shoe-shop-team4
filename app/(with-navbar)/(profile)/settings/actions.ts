@@ -1,15 +1,8 @@
 import { ReducedData } from "./_components/PageClient";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/auth";
 import { getData } from "@/utils/getData";
 import { UserData } from "@/types/types";
 import { postData } from "@/utils/postData";
 import { postImage, deleteImage } from "@/utils/imageOperations";
-
-export async function getUserInfo() {
-  const session = await getServerSession(authOptions);
-  return getData<UserData>("users/me?populate=avatar", session?.user.jwt);
-}
 
 export async function updateUserData(formData: ReducedData, { data }: any) {
   //removing undefined values

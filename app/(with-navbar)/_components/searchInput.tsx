@@ -56,7 +56,12 @@ export default function SearchInput() {
     <>
       <Box>
         {isMobileScreen ? (
-          <IconButton size="large" color="inherit" onClick={handleDrawerToggle}>
+          <IconButton
+            size="large"
+            color="inherit"
+            onClick={handleDrawerToggle}
+            data-testid="screen-view-button"
+          >
             <Search />
           </IconButton>
         ) : (
