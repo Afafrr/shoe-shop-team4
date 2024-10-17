@@ -1,4 +1,5 @@
 "use client";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Box,
   Grid,
@@ -7,14 +8,12 @@ import {
   useTheme,
   Divider,
   Container,
-  Button,
 } from "@mui/material";
 import { FieldValues, FormContainer, useForm } from "react-hook-form-mui";
 import Input from "@/components/Input/Input";
 import { personalInfo, shippingInfo } from "./_schema/checkoutSchema";
 import { checkoutValidation } from "./_schema/checkoutValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutStripeForm, {
   confirmPaymentForm,
@@ -24,13 +23,6 @@ import { useState } from "react";
 import SummaryInfo from "../_components/SummaryInfo";
 import { useCart } from "@/contexts/Cart";
 
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
-  throw new Error("PUBLIC KEY not defined");
-}
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
-
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
@@ -38,6 +30,13 @@ export default function Page() {
   const { totalPrice, cartItems } = useCart();
   const { total } = totalPrice();
   const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
+
+  if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
+    throw new Error("PUBLIC KEY not defined");
+  }
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  );
 
   const formContext = useForm<FieldValues>({
     resolver: zodResolver(checkoutValidation),
