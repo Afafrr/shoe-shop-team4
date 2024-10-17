@@ -50,7 +50,7 @@ describe("Product Collection Component", () => {
     render(
       <ProductCollection title="My Test">
         {products.map((product) => {
-          return <ProductPreview product={product} />;
+          return <ProductPreview product={product} key={product.id} />;
         })}
       </ProductCollection>
     );

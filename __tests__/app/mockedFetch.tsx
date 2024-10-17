@@ -291,3 +291,18 @@ export const mockedColors = {
     },
   },
 };
+
+export const mockUser = {
+  id: 1,
+  username: "team",
+  email: "team@gmail.com",
+  provider: "",
+  confirmed: true,
+  blocked: false,
+  createdAt: "",
+  updatedAt: "",
+  phoneNumber: "911-6601-6056",
+  firstName: "team",
+  lastName: "four",
+  avatar: "",
+};

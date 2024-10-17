@@ -1,10 +1,4 @@
-import {
-  fireEvent,
-  getByText,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import SingleProductPage from "@/app/(with-navbar)/products/[id]/_components/SingleProductPage";
 import { PopulateField } from "@/utils/api/singleProduct";
 import { CartProvider } from "@/contexts/Cart";
@@ -19,7 +13,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { mockResponse, mockedColors } from "../../mockedFecth";
+import { mockResponse, mockedColors } from "../../../../mockedFetch";
 import { useEffect, useState } from "react";
 import { ProductContextItem } from "@/types/Product";
 

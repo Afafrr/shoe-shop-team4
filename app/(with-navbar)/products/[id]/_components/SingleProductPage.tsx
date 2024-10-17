@@ -90,21 +90,12 @@ export default function SingleProductPage({
     }
   }, [data]);
 
-  // The color API is broken and returns only one color, leading to a bad UI.
-  // The following simulates product colors by generating the Product's Available Colors based on the productID.
-  const productColorsIds = productId.split("");
-  const productColors = colors
-    ? colors.data.filter((_, index) =>
-        productColorsIds.includes(index.toString())
-      )
-    : [];
-
   if (isLoading) return <LoadingPage />;
   if (error) throw new Error("An error has occurred, please try again");
   if (!data) return null;
 
   const productData = data.data;
-  const { name, price, description, images, sizes, gender } =
+  const { name, price, description, images, sizes, gender, color } =
     productData.attributes;
 
   const mappedSizes =
@@ -114,6 +105,17 @@ export default function SingleProductPage({
         value: size.attributes.value,
       },
     })) || [];
+
+  const productColors = color?.data
+    ? [
+        {
+          id: color.data.id,
+          attributes: {
+            name: color.data.attributes.name,
+          },
+        },
+      ]
+    : [{ id: 1, attributes: { name: "Unspecified" } }];
 
   const productGender = gender?.data?.attributes?.name
     ? `${gender.data.attributes.name}'s Shoes`
@@ -283,10 +285,3 @@ export default function SingleProductPage({
     </Box>
   );
 }
-type Colors = {
-  id: number;
-  attributes: {
-    name: string;
-    [key: string]: any | undefined;
-  };
-};

@@ -1,12 +1,46 @@
-import { UserDataProvider } from "@/contexts/UserDataProvider";
 import { render, screen } from "@testing-library/react";
-import { mockUserData } from "../my-wishlist/page.test";
 import ProfileAside from "@/app/(with-navbar)/(profile)/_components/ProfileAside";
+import {
+  isServer,
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import { mockUser } from "../../../mockedFetch";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   usePathname: jest.fn(() => "/my-products"),
 }));
+// Mock only useQuery, leave QueryClient untouched
+jest.mock("@tanstack/react-query", () => {
+  const actualReactQuery = jest.requireActual("@tanstack/react-query");
+  return {
+    ...actualReactQuery,
+    useQuery: jest.fn(),
+  };
+});
+
+// Create client context
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  });
+}
+let browserQueryClient: QueryClient | undefined = undefined;
+function getQueryClient() {
+  if (isServer) {
+    return makeQueryClient();
+  } else {
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
+  }
+}
+const queryClient = getQueryClient();
 
 const Buttons = [
   "My Products",
@@ -18,14 +52,16 @@ const Buttons = [
 ];
 
 describe("ProfileAside Component", () => {
-  it("renders", () => {
+  (useQuery as jest.Mock).mockReturnValue({
+    data: { data: mockUser, error: "" },
+  });
+  it("renders", async () => {
     // Render the component
     render(
-      <UserDataProvider data={mockUserData}>
-        <ProfileAside />
-      </UserDataProvider>
+      <QueryClientProvider client={queryClient}>
+        <ProfileAside />;
+      </QueryClientProvider>
     );
-
     // Test if the User description is rendered
     expect(screen.getByText("team")).toBeInTheDocument();
     // Check AsideNavbar is correctly rendered by fetching it's buttons

@@ -4,6 +4,7 @@ import ProductPreview, {
 } from "@/components/Products/ProductPreview";
 import RemoveItem from "./RemoveItem";
 import { useWishlist, WishlistItem } from "@/contexts/Wishlist";
+import { Box } from "@mui/material";
 
 type Props = {
   product: WishlistItem;
@@ -22,9 +23,9 @@ export default function WishlistItemCard({ product }: Props) {
   };
 
   return (
-    <div data-testid={`wishlist-item-container-${productId}`}>
+    <Box data-testid={`wishlist-item-container-${productId}`}>
       <ProductPreview product={previewProduct} />
       <RemoveItem handleClick={() => handleRemove(product.id)} />
-    </div>
+    </Box>
   );
 }
