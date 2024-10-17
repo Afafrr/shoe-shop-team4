@@ -1,6 +1,10 @@
 import "@testing-library/jest-dom";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+// Mock fetch calls
+import fetchMock from "jest-fetch-mock";
+fetchMock.enableMocks();
+
 // Mock the useRouter function globally
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),

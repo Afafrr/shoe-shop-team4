@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 
 type ColorAttributes = {
   name: string;
@@ -29,29 +29,40 @@ export default function ColorSelector({
       <Typography variant="h6" gutterBottom>
         Color
       </Typography>
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 2 }}
+        columns={{ xs: 5, sm: 7, md: 4, lg: 5, xl: 6 }}
+      >
         {colors.map((color) => {
           return (
-            <Button
-              key={color.id}
-              onClick={() => handleColorClick(color)}
-              sx={{
-                width: 40,
-                height: 40,
-                backgroundColor: color.attributes.name.toLowerCase(),
-                border:
+            <Grid item xs={1} md={1} lg={1} xl={1} key={color.id}>
+              <Button
+                key={color.id}
+                variant={
                   selectedColor === color.attributes.name
-                    ? "1px solid #5C5C5C"
-                    : "none",
-                borderRadius: "10%",
-                "&:hover": {
+                    ? "contained"
+                    : "outlined"
+                }
+                onClick={() => handleColorClick(color)}
+                sx={{
+                  width: 40,
+                  height: 40,
                   backgroundColor: color.attributes.name.toLowerCase(),
-                },
-              }}
-            />
+                  border:
+                    selectedColor === color.attributes.name
+                      ? "1px solid red"
+                      : "1px solid black",
+                  borderRadius: "10%",
+                  "&:hover": {
+                    backgroundColor: color.attributes.name.toLowerCase(),
+                  },
+                }}
+              />
+            </Grid>
           );
         })}
-      </Box>
+      </Grid>
     </Box>
   );
 }
