@@ -7,11 +7,6 @@ import { render, screen, fireEvent, within } from "@testing-library/react";
 import Wishlist from "@/app/(with-navbar)/(profile)/my-wishlist/_components/Wishlist";
 import { useState } from "react";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-  usePathname: jest.fn(() => "/my-products"),
-}));
-
 const products: NewWishlistItem[] = [
   {
     productId: 1234,

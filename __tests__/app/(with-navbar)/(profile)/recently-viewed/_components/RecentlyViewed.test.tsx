@@ -4,11 +4,6 @@ import RecentlyViewed from "@/app/(with-navbar)/(profile)/recently-viewed/_compo
 import { useEffect, useState } from "react";
 import { ProductCardType } from "@/types/Product";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-  usePathname: jest.fn(() => "/my-products"),
-}));
-
 describe("RecentlyViewed Component", () => {
   // Wrapper component to add, remove and get items from recentlyViewedItems
   const Wrapper = () => {

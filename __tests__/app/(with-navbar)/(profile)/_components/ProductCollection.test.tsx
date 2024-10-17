@@ -4,11 +4,6 @@ import ProductPreview, {
   ProductPreviewType,
 } from "@/components/Products/ProductPreview";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-  usePathname: jest.fn(() => "/my-products"),
-}));
-
 const products: ProductPreviewType[] = [
   {
     id: 1234,
