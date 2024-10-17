@@ -22,6 +22,7 @@ export type BackResponse = ErrorResponse | SuccessResponse;
 
 export type ActionSuccess = SuccessResponse & {
   redirect: string;
+  message: string;
 };
 
 export type ActionResponse = ErrorResponse | ActionSuccess;
