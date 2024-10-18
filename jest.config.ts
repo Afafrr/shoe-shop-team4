@@ -27,6 +27,9 @@ const config: Config = {
     "<rootDir>/components/**/*.{js,ts,tsx}",
   ],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  testPathIgnorePatterns: [
+    "/__tests__/app/mockedFetch.tsx", // Ignore the specific file
+  ],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
   },

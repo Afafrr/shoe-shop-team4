@@ -1,4 +1,3 @@
-
 export interface Size {
   id: number;
   attributes: {
@@ -17,6 +16,9 @@ export interface Color {
   };
 }
 
+export interface Gender {
+  data: { id: number; attributes: { name: string } };
+}
 
 export interface ProductAttributes {
   name: string;
@@ -39,7 +41,7 @@ export interface ProductAttributes {
     }[];
   };
   sizes: { data: { id: number; attributes: { value: number } }[] };
-  gender: { data: { id: number; attributes: { name: string } } };
+  gender: Gender;
   color: { data: { id: number; attributes: { name: string } } };
 }
 
