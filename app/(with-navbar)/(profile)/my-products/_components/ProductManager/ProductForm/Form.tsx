@@ -3,7 +3,7 @@ import { Button, InputAdornment, Stack } from "@mui/material";
 import Input from "../inputs/Input";
 import { Box } from "@mui/material";
 import useIsMobile from "../../useIsMobile";
-
+import { useState } from "react";
 import ChipSelect from "../inputs/ChipSelect";
 import FileHandler from "../FileHandler/FileHandler";
 import SizeSelect from "../inputs/SizeSelect";
@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { JWT } from "next-auth/jwt";
 import { useSession } from "next-auth/react";
 import LoadingPage from "@/components/Loading/LoadingPage";
+import AiDescriptionButton from "../AiDescriptionButton";
 
 // This component contains the main form inputs for the product form.
 
@@ -23,6 +24,7 @@ type ProductFormProps = {
 export default function ProductForm({ isPending }: ProductFormProps) {
   const isMobile = useIsMobile();
   const { data: session } = useSession();
+  const [isGeneratingDesc, setIsGeneratingDesc] = useState(false);
 
   const { data: options, error: queryError } = useQuery({
     queryKey: ["options"],
@@ -117,12 +119,31 @@ export default function ProductForm({ isPending }: ProductFormProps) {
             props={{
               name: "description",
               required: true,
-              placeholder: "Best snickers in the market!",
+              placeholder: isGeneratingDesc
+                ? "Generating Description..."
+                : "Best snickers in the market!",
               multiline: true,
               autoComplete: "description",
               minRows: isMobile ? 1 : 10,
             }}
             isControlled
+            mutations={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{
+                    position: "absolute",
+                    bottom: 24,
+                    right: 6,
+                  }}
+                >
+                  <AiDescriptionButton
+                    setIsGeneratingDesc={setIsGeneratingDesc}
+                    isGeneratingDesc={isGeneratingDesc}
+                  />
+                </InputAdornment>
+              ),
+            }}
           />
           <SizeSelect
             props={{ name: "Sizes", required: true }}

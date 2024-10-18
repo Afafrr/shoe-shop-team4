@@ -49,5 +49,9 @@ export async function recoverFn(
     return result;
   }
   if (context.session) signOut({ redirect: false });
-  return { ...result, redirect: "/auth/sign-in" };
+  return {
+    ...result,
+    redirect: "/auth/sign-in",
+    message: "Password reset successfully!",
+  };
 }
