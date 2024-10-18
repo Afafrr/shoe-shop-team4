@@ -1,26 +1,34 @@
 import { Button, Box } from "@mui/material";
 
 type ActionButtonsProps = {
-  handleAddToBag: () => void;
+  buttonAction: () => void;
+  buttonText: string;
+  variant?: "text" | "contained" | "outlined";
 };
 
-export default function ActionButton({ handleAddToBag }: ActionButtonsProps) {
+export default function ActionButton({
+  buttonAction,
+  buttonText,
+  variant,
+}: ActionButtonsProps) {
   return (
     <Box
       display="flex"
       justifyContent="center"
       paddingBottom="70px"
-      paddingTop="36px"
+      paddingTop="20px"
+      sx={{ width: "50%" }}
     >
       <Button
-        variant="contained"
+        variant={variant || "contained"}
         size="large"
-        onClick={handleAddToBag}
+        onClick={buttonAction}
         sx={{
-          width: { xs: "50%", md: "80%" },
+          width: "100%",
+          height: "55px",
         }}
       >
-        Add to Bag
+        {buttonText}
       </Button>
     </Box>
   );

@@ -110,7 +110,7 @@ export default function NavBar() {
           <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
             <NextMuiLink href="/chart">
               <IconButton size="large" color="inherit">
-                <CartIcon count={getCartItemCount()} />
+                <CartIcon color="black" count={getCartItemCount()} />
               </IconButton>
             </NextMuiLink>
             <SideBar isLoggedIn={isLoggedIn} />
