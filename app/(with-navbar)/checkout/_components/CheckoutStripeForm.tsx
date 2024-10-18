@@ -61,7 +61,7 @@ export default function CheckoutStripeForm({
     createPaymentIntent();
   }, [amount, userId]);
 
-  confirmPaymentForm = async (metadata: any) => {
+  confirmPaymentForm = async (metadata: CheckoutForm) => {
     setIsLoading(true);
     if (!stripe || !elements) {
       // Stripe.js hasn't yet loaded.
@@ -81,6 +81,7 @@ export default function CheckoutStripeForm({
     //update payment intent with metadata
     const res = await postData<CheckoutForm>("/api/update-payment-intent", {
       metadata: metadata,
+      userId: userId,
       paymentId: paymentId,
     });
     if (res.error) {

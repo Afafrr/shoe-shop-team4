@@ -9,7 +9,12 @@ import {
   Container,
   Button,
 } from "@mui/material";
-import { FieldValues, FormContainer, useForm } from "react-hook-form-mui";
+import {
+  FieldValues,
+  FormContainer,
+  useForm,
+  SubmitHandler,
+} from "react-hook-form-mui";
 import Input from "@/components/Input/Input";
 import { personalInfo, shippingInfo } from "./_schema/checkoutSchema";
 import { checkoutValidation } from "./_schema/checkoutValidation";
@@ -23,6 +28,7 @@ import { calculateOrderAmount } from "./_lib/calculateOrderAmount";
 import { useState } from "react";
 import SummaryInfo from "../_components/SummaryInfo";
 import { useCart } from "@/contexts/Cart";
+import { CheckoutForm } from "@/types/types";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
   throw new Error("PUBLIC KEY not defined");
@@ -39,12 +45,13 @@ export default function Page() {
   const { total } = totalPrice();
   const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
 
-  const formContext = useForm<FieldValues>({
+  const formContext = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutValidation),
   });
   const { handleSubmit } = formContext;
 
-  async function onSubmit(data: any) {
+  type FormWithoutProducts = Omit<CheckoutForm, "products">;
+  async function onSubmit(data: FormWithoutProducts) {
     await confirmPaymentForm({ ...data, products: products });
   }
   return (
