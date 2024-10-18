@@ -36,7 +36,7 @@ export const inputs: FormInput[] = [
     label: "Email",
     props: {
       name: "email",
-      placeholder: "Meldrum",
+      placeholder: "Meldrum@gmail.com",
       type: "text",
       InputProps: {
         disabled: true,
