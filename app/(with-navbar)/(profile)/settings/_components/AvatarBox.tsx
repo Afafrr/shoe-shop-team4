@@ -57,7 +57,7 @@ export default function AvatarBox({
     <Box>
       <Box sx={{ display: "flex", mt: { xs: "12px", md: "35px" } }}>
         <Avatar
-          alt=""
+          alt="User profile image"
           src={image}
           sx={{
             width: { xs: "100px", md: "150px" },
@@ -66,6 +66,7 @@ export default function AvatarBox({
           }}
         />
         <input
+          data-testid="inputImage"
           style={{ display: "none" }}
           type="file"
           accept="image/*"

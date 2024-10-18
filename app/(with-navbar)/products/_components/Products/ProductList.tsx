@@ -1,5 +1,4 @@
 import LoadingPage from "@/components/Loading/LoadingPage";
-import ProductCard from "@/components/Products/ProductCard";
 import { FiltersType } from "@/types/types";
 import ProductContainer from "@/components/Products/ProductContainer";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -8,9 +7,9 @@ import { extractProductInfo, getProductsForCards } from "../../_lib/utils";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { ProductOverlay } from "./ProductOverlay";
 import { useInView } from "react-intersection-observer";
 import NoProductsInfo from "@/app/(with-navbar)/_components/NoProductsInfo";
+import ProductPreview from "@/components/Products/ProductPreview";
 
 type ProductListProps = {
   setShoesCount: (num: number) => void;
@@ -72,25 +71,7 @@ export default function ProductList({
           const productInfo = extractProductInfo(page.data);
           return productInfo.map((product) => (
             <ProductContainer key={product.id}>
-              <Box
-                position="relative"
-                sx={{
-                  "&:hover .hoverOverlay": {
-                    opacity: 0.75,
-                  },
-                }}
-              >
-                <ProductCard
-                  key={product.id}
-                  imageUrl={product.imageUrl || ""}
-                  name={product.name}
-                  gender={product.gender}
-                  price={product.price}
-                />
-                <ProductOverlay
-                  redirect={() => router.push(`/products/${product.id}`)}
-                />
-              </Box>
+              <ProductPreview product={product} />
             </ProductContainer>
           ));
         })}
