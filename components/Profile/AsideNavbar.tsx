@@ -7,9 +7,10 @@ import { SettingsIcon } from "@/public/svg/SettingsIcon";
 import CartIcon from "@/app/(with-navbar)/_components/CartIcon";
 import { signOut } from "next-auth/react";
 import NextMuiLink from "./NextMuiLink";
+import FavoriteIcon from "@/public/svg/FavoriteIcon";
+import OrderHistoryIcon from "@/public/svg/OrderHistoryIcon";
+import RecentIcon from "@/public/svg/RecentIcon";
 import { usePathname } from "next/navigation";
-
-export type routes = "my-products" | "settings";
 
 export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
   const pathname = usePathname();
@@ -22,6 +23,21 @@ export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
       label: "My Products",
       Icon: CartIcon,
       href: "/my-products",
+    },
+    {
+      label: "Order history",
+      Icon: OrderHistoryIcon,
+      href: "#",
+    },
+    {
+      label: "My Wishlist",
+      Icon: FavoriteIcon,
+      href: "/my-wishlist",
+    },
+    {
+      label: "Recently viewed",
+      Icon: RecentIcon,
+      href: "/recently-viewed",
     },
     {
       label: "Settings",

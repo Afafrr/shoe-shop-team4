@@ -9,8 +9,8 @@ import {
 import Image from "next/image";
 import React, { ReactNode } from "react";
 import noImage from "@public/product/NoProductImage.png";
-type ProductCardProps = {
-  imageUrl: string;
+export type ProductCardProps = {
+  imageUrl: string | null;
   name: string;
   gender?: string;
   price: number;
@@ -68,7 +68,7 @@ function PrimaryText({ children, breakWord = false }: PrimaryTextProps) {
   return (
     <Typography
       sx={{
-        fontSize: { xs: "10px", md: "22px" },
+        fontSize: { xs: "20px", sm: "22px", md: "22px" },
         fontWeight: 500,
         wordBreak: breakWord ? "break-word" : "normal",
       }}

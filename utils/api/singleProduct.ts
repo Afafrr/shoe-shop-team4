@@ -29,6 +29,7 @@ export const fetchProductDetails = async (
     { headers }
   );
   const data = await response.json();
+
   return data;
 };
 

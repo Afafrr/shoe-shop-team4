@@ -31,7 +31,10 @@ jobs:
 
       - name: Run build
         run: npm run build
-
+        env: 
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY : ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY  }}
+          
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v3
         with:
