@@ -6,11 +6,33 @@ const DynamicCartProvider = dynamic(
     ssr: false,
   }
 );
+export const DynamicWishlistProvider = dynamic(
+  () => import("@/contexts/Wishlist").then((module) => module.WishlistProvider),
+  {
+    ssr: false,
+  }
+);
+
+export const DynamicRecentlyProvider = dynamic(
+  () =>
+    import("@/contexts/RecentlyViewed").then(
+      (module) => module.RecentlyProvider
+    ),
+  {
+    ssr: false,
+  }
+);
 
 export default function ContextWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <DynamicCartProvider>{children}</DynamicCartProvider>;
+  return (
+    <DynamicWishlistProvider>
+      <DynamicRecentlyProvider>
+        <DynamicCartProvider>{children}</DynamicCartProvider>
+      </DynamicRecentlyProvider>
+    </DynamicWishlistProvider>
+  );
 }

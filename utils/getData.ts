@@ -19,7 +19,6 @@ export async function getData<T>(
     });
 
     if (!res.ok) {
-      console.error(res);
       return {
         data: null,
         error: `There was a problem with getting the data - ${res.statusText}`,

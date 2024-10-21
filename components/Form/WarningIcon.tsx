@@ -4,6 +4,7 @@ export default function WarningIcon() {
   return (
     <SvgIcon sx={{ width: 16, height: 16 }}>
       <svg
+        data-testid="WarningIcon"
         width="16"
         height="14"
         viewBox="0 0 16 14"
