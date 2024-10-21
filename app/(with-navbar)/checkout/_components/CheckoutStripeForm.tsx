@@ -22,9 +22,11 @@ type dataPI = {
 
 export default function CheckoutStripeForm({
   amount,
+  customerId,
   setIsLoading,
 }: {
   amount: number;
+  customerId: string | null;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 }) {
   const [paymentData, setPaymentData] = useState<dataPI | null>();
@@ -61,7 +63,7 @@ export default function CheckoutStripeForm({
     createPaymentIntent();
   }, [amount, userId]);
 
-  confirmPaymentForm = async (metadata: any) => {
+  confirmPaymentForm = async (metadata: CheckoutForm) => {
     setIsLoading(true);
     if (!stripe || !elements) {
       // Stripe.js hasn't yet loaded.
@@ -78,9 +80,10 @@ export default function CheckoutStripeForm({
       setIsLoading(false);
       return;
     }
-    //update payment intent with metadata
+    // update payment intent with metadata
     const res = await postData<CheckoutForm>("/api/update-payment-intent", {
       metadata: metadata,
+      customerId: customerId,
       paymentId: paymentId,
     });
     if (res.error) {

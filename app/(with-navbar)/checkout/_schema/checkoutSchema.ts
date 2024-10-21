@@ -1,5 +1,3 @@
-import { kMaxLength } from "buffer";
-
 export const personalInfo = [
   {
     label: "Name",

@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export async function POST(req: NextRequest) {
   try {
     const { amount, userId } = await req.json();
-    
+
     // Create a PaymentIntent with the order amount currency and User ID
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
@@ -36,7 +36,7 @@ export async function GET() {
   try {
     // search for paymentIntent by user ID
     const paymentIntent = await stripe.charges.search({
-      query: `metadata[\'userId\']:\'${userId}\'`,
+      query: `metadata['userId']: '${userId}'`,
     });
 
     return NextResponse.json({ data: paymentIntent });
