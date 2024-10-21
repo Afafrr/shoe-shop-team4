@@ -37,7 +37,13 @@ export default function Page() {
   const lastElShippingInfo = shippingInfo[shippingInfo.length - 1];
   const { totalPrice, cartItems } = useCart();
   const { total } = totalPrice();
-  const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
+  const products = JSON.stringify(
+    cartItems.map((item) => ({
+      id: item.productId,
+      size: item.size,
+      quantity: item.quantity,
+    }))
+  ); //String Array of products ids
 
   const formContext = useForm<FieldValues>({
     resolver: zodResolver(checkoutValidation),
