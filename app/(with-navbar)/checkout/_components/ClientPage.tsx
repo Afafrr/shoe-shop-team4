@@ -39,7 +39,13 @@ export default function ClientPage() {
   const lastElShippingInfo = shippingInfo[shippingInfo.length - 1];
   const { totalPrice, cartItems } = useCart();
   const { total } = totalPrice();
-  const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
+  const products = JSON.stringify(
+    cartItems.map((item) => ({
+      id: item.productId,
+      size: item.size,
+      quantity: item.quantity,
+    }))
+  );
   const { data } = useQuery<ResData<Stripe.Customer>>({
     queryKey: ["customer-info"],
   });
