@@ -18,7 +18,13 @@ jest.mock("@/app/(with-navbar)/checkout/actions", () => ({
 
 describe("CheckoutStripeForm without stripe and elements", () => {
   it("render loading", () => {
-    render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+    render(
+      <CheckoutStripeForm
+        amount={100}
+        setIsLoading={jest.fn()}
+        customerId={null}
+      />
+    );
     const loadingElement = screen.getByRole("progressbar");
     expect(loadingElement).toBeInTheDocument();
   });
@@ -48,7 +54,13 @@ describe("CheckoutStripeForm successes", () => {
 
   it("render loading without stripe and elements", async () => {
     await act(async () => {
-      render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+      render(
+        <CheckoutStripeForm
+          amount={100}
+          setIsLoading={jest.fn()}
+          customerId={null}
+        />
+      );
     });
 
     expect(screen.getByText("Pay with paymentElement")).toBeInTheDocument();
@@ -63,7 +75,13 @@ describe("CheckoutStripeForm successes", () => {
   //ERRORS
   async function renderAndRunConfirmPaymentForm() {
     await act(async () => {
-      render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+      render(
+        <CheckoutStripeForm
+          amount={100}
+          setIsLoading={jest.fn()}
+          customerId={null}
+        />
+      );
     });
     await act(async () => {
       await confirmPaymentForm();
@@ -73,7 +91,13 @@ describe("CheckoutStripeForm successes", () => {
   it("shows error if stripe doest not exists", async () => {
     (useElements as jest.Mock).mockReturnValue(null);
     await act(async () => {
-      render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+      render(
+        <CheckoutStripeForm
+          amount={100}
+          setIsLoading={jest.fn()}
+          customerId={null}
+        />
+      );
     });
     let res;
     await act(async () => {
@@ -85,7 +109,13 @@ describe("CheckoutStripeForm successes", () => {
 
   it("shows error if user not found", () => {
     (useSession as jest.Mock).mockReturnValue({ data: null });
-    render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+    render(
+      <CheckoutStripeForm
+        amount={100}
+        setIsLoading={jest.fn()}
+        customerId={null}
+      />
+    );
 
     expect(screen.getByText("User not found")).toBeInTheDocument();
   });
@@ -96,7 +126,13 @@ describe("CheckoutStripeForm successes", () => {
       error: "There was postData error",
     });
     await act(async () => {
-      render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+      render(
+        <CheckoutStripeForm
+          amount={100}
+          setIsLoading={jest.fn()}
+          customerId={null}
+        />
+      );
     });
 
     expect(screen.getByText("There was postData error")).toBeInTheDocument();
@@ -123,7 +159,13 @@ describe("CheckoutStripeForm successes", () => {
 
   it("shows error if there is no client secret", async () => {
     await act(async () => {
-      render(<CheckoutStripeForm amount={100} setIsLoading={jest.fn()} />);
+      render(
+        <CheckoutStripeForm
+          amount={100}
+          setIsLoading={jest.fn()}
+          customerId={null}
+        />
+      );
     });
     (postData as jest.Mock).mockReturnValue({
       data: { clientSecret: "123", paymentId: "234" },

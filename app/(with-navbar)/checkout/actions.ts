@@ -28,13 +28,13 @@ export async function getUserTransactions() {
     });
     
     if (!res.ok) {
-      return { data: {}, error: res.statusText };
+      return { data: null, error: res.statusText };
     }
     const data = await res.json();
     console.log(data);
     return { data: data, error: "" };
   } catch (error) {
     console.error(error);
-    return { data: {}, error: (error as Error).message };
+    return { data: null, error: (error as Error).message };
   }
 }

@@ -1,53 +1,30 @@
-import { render, screen } from "@testing-library/react";
 import Page from "@/app/(with-navbar)/checkout/page";
-import { useCart } from "@/contexts/Cart";
-
-const originalEnv = process.env;
-jest.mock(
-  "@/app/(with-navbar)/checkout/_components/CheckoutStripeForm",
-  () => ({
-    __esModule: true,
-    default: jest.fn(() => <div>Checkout</div>),
-    confirmPaymentForm: jest.fn(),
-  })
+import { getCustomerData } from "@/app/(with-navbar)/checkout/serverActions";
+import { QueryClient } from "@tanstack/react-query";
+import { render, screen, waitFor } from "@testing-library/react";
+import { HydrationBoundary } from "@tanstack/react-query";
+jest.mock("@/app/(with-navbar)/checkout/_components/ClientPage", () =>
+  jest.fn(() => <div>ClientPage</div>)
 );
-jest.mock("@stripe/react-stripe-js", () => ({
-  Elements: jest.fn(() => <div>Elements</div>),
-}));
-jest.mock("@/app/(with-navbar)/checkout/actions", () => ({
-  postData: jest.fn(),
-}));
-jest.mock("@/contexts/Cart");
-(useCart as jest.Mock).mockReturnValue({
-  totalPrice: () => ({ total: "100" }),
-  cartItems: [{ id: "item2", name: "Item 2", price: 50 }],
-  getCartItemCount: jest.fn(),
+
+jest.mock("@tanstack/react-query", () => {
+  return {
+    QueryClient: jest.fn(() => ({
+      prefetchQuery: jest.fn(),
+    })),
+    dehydrate: jest.fn(),
+    HydrationBoundary: jest.fn(({ children }) => <div>{children}</div>),
+  };
 });
 
 describe("Page", () => {
-  beforeEach(() => {
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "TestKey";
-  });
+  it("renders ClientPage component", async () => {
+    const queryClient = new QueryClient();
+    (queryClient.prefetchQuery as jest.Mock).mockResolvedValueOnce({});
+    render(await Page());
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    process.env = originalEnv;
-  });
-
-  it("stripePromise is defined", () => {
-    expect(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).toBeDefined();
-  });
-
-  it("renders", () => {
-    render(<Page />);
-    expect(screen.getByText("Elements")).toBeInTheDocument();
-  });
-});
-
-describe("Checkout Page", () => {
-  it("throws error if there is no stripe public key", () => {
-    delete process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-
-    expect(() => render(<Page />)).toThrow("PUBLIC KEY not defined");
+    await waitFor(() => {
+      expect(screen.getByText("ClientPage")).toBeInTheDocument();
+    });
   });
 });
