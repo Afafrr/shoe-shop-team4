@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { ProductCardType } from "@/types/Product";
 
 describe("RecentlyViewed Component", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
   // Wrapper component to add, remove and get items from recentlyViewedItems
   const Wrapper = () => {
     const { getRecentItems, addItem, removeItem } = useRecently();

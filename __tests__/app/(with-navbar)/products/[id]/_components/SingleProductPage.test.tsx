@@ -124,7 +124,7 @@ describe("SingleProductPage component", () => {
     expect(screen.getByText("Converse shoe 890")).toBeInTheDocument();
   });
 
-  it("stores product data in local storage under `recent` key when mounted", async () => {
+  it("stores product data in local storage under `recent_${userId}` key when mounted", async () => {
     // Wrapper component that allows to get items from local storage
     const Wrapper = () => {
       const { getRecentItems, removeItem } = useRecently();
@@ -177,8 +177,8 @@ describe("SingleProductPage component", () => {
       expect(loading).not.toBeInTheDocument();
     });
 
-    // Expect `setItem` method from localStorage to have been called with key = 'recent'.
-    expect(setItemSpy).toHaveBeenCalledWith("recent", expect.any(String));
+    // Expect `setItem` method from localStorage to have been called with key = `recent_${userId}`, with userId being mocked to '1'.
+    expect(setItemSpy).toHaveBeenCalledWith("recent_1", expect.any(String));
     // Expect the value of the `setItem` call to have been an array of length 1 with the only item equal to
     // our mock product formatted to type RecentlyViewedCard.
     const recentStorage: RecentlyViewedCard[] = [
@@ -194,11 +194,11 @@ describe("SingleProductPage component", () => {
       },
     ];
     // Check that at least one of the calls made to 'localStorage.setItem' has our product as Value
-    expect(callWasMade("recent", recentStorage[0])).toBe(true);
+    expect(callWasMade("recent_1", recentStorage[0])).toBe(true);
 
     // Check a different mock product evaluates to false
     const modifiedProduct = { ...recentStorage[0], gender: "Unisex" };
-    expect(callWasMade("recent", modifiedProduct)).toBe(false);
+    expect(callWasMade("recent_1", modifiedProduct)).toBe(false);
 
     // Check item stored in local storage is our expected mock product
     // Component in wrapper with data-testid of `recently-exposer` prints on screen the value of the first item on the local storage
@@ -258,7 +258,8 @@ describe("SingleProductPage component", () => {
       },
     ];
     // Check that at least one of the calls made to 'localStorage.setItem' has our product as Value
-    expect(callWasMade("wishlist", wishlistStorage[0])).toBe(true);
+    // and key equal to `wishlist_${userId}` where userId in this case is '1'
+    expect(callWasMade("wishlist_1", wishlistStorage[0])).toBe(true);
   });
 });
 
