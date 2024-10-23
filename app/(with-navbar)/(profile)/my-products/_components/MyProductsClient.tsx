@@ -18,6 +18,7 @@ import { useSession } from "next-auth/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingPage from "@/components/Loading/LoadingPage";
 import successToast from "@/components/Alerts/successToast";
+import DuplicateModal from "./modals/duplicate/DuplicateModal";
 
 type MyProductData = ResData<
   UserData & {
@@ -25,10 +26,17 @@ type MyProductData = ResData<
   }
 >;
 
+type ModalOptions = "edit" | "duplicate";
+
+export type Selected = {
+  id: number | null;
+  action: ModalOptions | null;
+};
+
 export default function MyProductsClient() {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editModalProduct, setEditModalProduct] = useState<EditProduct>();
+  const [selected, setSelected] = useState<Selected | null>(null);
+  const [modalOpen, setModalOpen] = useState<ModalOptions | null>(null);
+  const [modalProduct, setModalProduct] = useState<EditProduct>();
   const [errorMsg, setErrorMsg] = useState("");
   const session = useSession();
   const router = useRouter();
@@ -47,19 +55,19 @@ export default function MyProductsClient() {
   if (error) setErrorMsg(error.message);
 
   useEffect(() => {
-    if (selectedId && products) {
-      const product = products.find((product) => product.id === selectedId);
+    if (selected && products) {
+      const product = products.find((product) => product.id === selected.id);
       if (!product) return;
 
       reduceData(product).then((data) => {
-        setEditModalProduct(data as EditProduct);
-        setEditModalOpen(true);
+        setModalProduct(data as EditProduct);
+        setModalOpen(selected.action);
       });
     }
     return () => {
-      setSelectedId(null);
+      setSelected(null);
     };
-  }, [selectedId]);
+  }, [selected]);
 
   const handleDeleteBtn = async (productId: number | null) => {
     if (!productId) return;
@@ -103,9 +111,14 @@ export default function MyProductsClient() {
             My Products
           </Typography>
           <EditModal
-            open={editModalOpen}
-            handleClose={() => setEditModalOpen(false)}
-            product={editModalProduct}
+            open={modalOpen == "edit"}
+            handleClose={() => setModalOpen(null)}
+            product={modalProduct}
+          />
+          <DuplicateModal
+            open={modalOpen == "duplicate"}
+            handleClose={() => setModalOpen(null)}
+            product={modalProduct}
           />
           {products?.length ? (
             <Button
@@ -159,7 +172,7 @@ export default function MyProductsClient() {
                     >
                       <MenuModal
                         productId={product.id}
-                        setSelectedId={setSelectedId}
+                        setSelected={setSelected}
                         onDelete={handleDeleteBtn}
                       />
                     </ProductCard>

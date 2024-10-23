@@ -3,15 +3,16 @@ import { Box, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ThreeDotsIcon } from "@/public/svg/ThreeDotsIcon";
+import { Selected } from "./MyProductsClient";
 import ActionConfirmationModal from "./ProductManager/modals/ActionConfirmationModal";
 
 export default function MenuModal({
   productId,
-  setSelectedId,
+  setSelected,
   onDelete,
 }: {
   productId: number | null;
-  setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelected: React.Dispatch<React.SetStateAction<Selected | null>>;
   onDelete: (productId: number | null) => void;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -26,7 +27,11 @@ export default function MenuModal({
     },
     {
       name: "Edit",
-      action: () => setSelectedId(productId),
+      action: () => setSelected({ id: productId, action: "edit" }),
+    },
+    {
+      name: "Duplicate",
+      action: () => setSelected({ id: productId, action: "duplicate" }),
     },
     {
       name: "Delete",
