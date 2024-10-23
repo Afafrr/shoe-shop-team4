@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import { BoldTypography, SecondaryTypography } from "../ui/CustomTypographies";
 import Image from "next/image";
+import noImage from "@public/product/NoProductImage.png";
 import InfoBox from "../ui/InfoBox";
 
 type ProductDetailItemProps = {
@@ -45,7 +46,7 @@ export default function ProductDetailItem({ product }: ProductDetailItemProps) {
           }}
         >
           <Image
-            src={product.imageUrl || ""}
+            src={product.imageUrl || noImage}
             alt={product.name}
             width={104}
             height={104}
