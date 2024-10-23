@@ -6,6 +6,7 @@ import {
 describe("postData actions", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
     jest.clearAllMocks();

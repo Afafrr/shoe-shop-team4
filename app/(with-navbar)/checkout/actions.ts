@@ -26,12 +26,11 @@ export async function getUserTransactions() {
         "Content-Type": "application/json",
       },
     });
-    
+
     if (!res.ok) {
       return { data: null, error: res.statusText };
     }
     const data = await res.json();
-    console.log(data);
     return { data: data, error: "" };
   } catch (error) {
     console.error(error);

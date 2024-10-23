@@ -6,6 +6,7 @@ describe("getCustomerData server actions", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
     (headers as jest.Mock).mockReturnValue({});
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
     jest.clearAllMocks();
