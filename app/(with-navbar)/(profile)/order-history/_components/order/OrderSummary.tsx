@@ -49,7 +49,7 @@ export default function OrderSummary({
             textOverflow: "ellipsis",
           }}
         >
-          {id}
+          {id.slice(3)}
         </BoldTypography>
         <SecondaryTypography>{date}</SecondaryTypography>
       </Box>

@@ -96,6 +96,20 @@ export type UserData = {
   customerId: string;
 };
 
+export type CheckoutForm = {
+  firstName: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+  country: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  address: string;
+  products: string[];
+  customerId: string;
+};
+
 export type Order = {
   id: string;
   created: number;
