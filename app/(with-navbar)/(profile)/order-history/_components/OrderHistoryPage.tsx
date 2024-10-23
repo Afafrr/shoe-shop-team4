@@ -7,15 +7,25 @@ import OrderAccordion from "./order/OrderAccordion";
 
 type OrderHistoryPageProps = {
   orders: Order[];
+  orderIdOpened: string | undefined;
 };
 
-export default function OrderHistoryPage({ orders }: OrderHistoryPageProps) {
+export default function OrderHistoryPage({
+  orders,
+  orderIdOpened,
+}: OrderHistoryPageProps) {
   const router = useRouter();
   const hasOrders = orders.length > 0;
   return (
     <ProfileTitle title="Order history">
       {hasOrders ? (
-        orders.map((order) => <OrderAccordion key={order.id} order={order} />)
+        orders.map((order) => (
+          <OrderAccordion
+            key={order.id}
+            order={order}
+            defaultExpanded={order.id === orderIdOpened ? true : undefined}
+          />
+        ))
       ) : (
         <NoProductsInfo
           onBtnClick={() => router.push("/")}

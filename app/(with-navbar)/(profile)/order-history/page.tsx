@@ -1,30 +1,47 @@
-import { Order } from "@/types/types";
+import { Order, ProductFromOrder, SearchParamsType } from "@/types/types";
 import OrderHistoryPage from "./_components/OrderHistoryPage";
 import { getUserOrders } from "./actions";
+import {
+  getOrdersRelevantInfo,
+  getProductIdsFromOrder,
+  getProductsForOrders,
+} from "./_lib/utils";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: SearchParamsType;
+}) {
+  const queryClient = new QueryClient();
   const { data } = await getUserOrders();
-  let orders: Order[] = [];
 
-  if (data) {
-    data.data.forEach((order) => {
-      let paymentType = "";
-      if (order.payment_method && typeof order.payment_method !== "string") {
-        paymentType = order.payment_method.type;
-      }
+  const orderId = Array.isArray(searchParams.orderId)
+    ? searchParams.orderId[0]
+    : searchParams.orderId;
 
-      orders.push({
-        id: order.id,
-        created: order.created,
-        status: order.status,
-        paymentType,
-        metadata: {
-          ...order.metadata,
-        },
-        amount: order.amount,
+  const orders: Order[] = data ? getOrdersRelevantInfo(data) : [];
+
+  if (orderId) {
+    const order = orders.find((order) => order.id === orderId);
+
+    if (order) {
+      const productsIds = getProductIdsFromOrder(order);
+
+      await queryClient.prefetchQuery({
+        queryKey: ["productsForCard", productsIds],
+        queryFn: () => getProductsForOrders(productsIds),
       });
-    });
+    }
   }
 
-  return <OrderHistoryPage orders={orders} />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <OrderHistoryPage orders={orders} orderIdOpened={orderId} />
+    </HydrationBoundary>
+  );
 }

@@ -28,6 +28,7 @@ export default function OrderAccordion({
       sx={{
         backgroundColor: "#FAFAFA",
       }}
+      defaultExpanded={defaultExpanded}
     >
       <AccordionSummary
         expandIcon={<ExpandMore />}
