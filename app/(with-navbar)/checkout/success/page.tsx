@@ -26,13 +26,14 @@ export default function Page() {
 
   const paymentId = params.get("payment_intent");
   const orderNumber = paymentId?.split("_")[1];
+  const orderIdParam = new URLSearchParams();
+  orderIdParam.append("orderId", orderNumber || "");
 
   return (
     <Container
       maxWidth={false}
       sx={{
         display: "flex",
-        gap: "100px",
         width: "100%",
         maxWidth: "1440px",
         mt: { xs: "30px", md: "80px" },
@@ -77,6 +78,7 @@ export default function Page() {
           variant="h5"
           sx={{
             mt: { xs: "40px", md: "77px" },
+            maxWidth: "50ch",
             color: palette.text.secondary,
             fontWeight: 300,
           }}
@@ -95,7 +97,11 @@ export default function Page() {
             mt: { xs: "60px", md: "77px" },
           }}
         >
-          <Button variant="outlined" sx={{ width: "100%", height: "100%" }}>
+          <Button
+            variant="outlined"
+            onClick={() => push(`/order-history/?${orderIdParam}`)}
+            sx={{ width: "100%", height: "100%" }}
+          >
             View Order
           </Button>
           <Button
@@ -111,10 +117,11 @@ export default function Page() {
         <Box
           sx={{
             alignSelf: "flex-end",
-            maxWidth: "500px",
+            maxWidth: "490px",
             maxHeight: "450px",
             width: "100%",
             height: "100%",
+            pl: "100px",
           }}
         >
           <Image
