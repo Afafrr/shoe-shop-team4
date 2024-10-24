@@ -12,6 +12,8 @@ export const config = {
     "/settings/:path*",
     "/my-products/:path*",
     "/chart/:path*",
+    "/my-wishlist/:path*",
+    "/recently-viewed/:path*",    
     "/checkout/:path*",
   ],
 };
