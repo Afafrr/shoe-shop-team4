@@ -31,7 +31,6 @@ export async function getUserTransactions() {
       return { data: {}, error: res.statusText };
     }
     const data = await res.json();
-    console.log(data);
     return { data: data, error: "" };
   } catch (error) {
     console.error(error);
