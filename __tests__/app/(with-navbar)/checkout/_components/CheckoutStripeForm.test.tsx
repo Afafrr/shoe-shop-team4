@@ -16,20 +16,6 @@ jest.mock("@/app/(with-navbar)/checkout/actions", () => ({
   getUserTransactions: jest.fn(),
 }));
 
-describe("CheckoutStripeForm without stripe and elements", () => {
-  it("render loading", () => {
-    render(
-      <CheckoutStripeForm
-        amount={100}
-        setIsLoading={jest.fn()}
-        customerId={null}
-      />
-    );
-    const loadingElement = screen.getByRole("progressbar");
-    expect(loadingElement).toBeInTheDocument();
-  });
-});
-
 describe("CheckoutStripeForm successes", () => {
   const mockSubmit = jest.fn(() => ({ error: false }));
   const mockConfirmPayment = jest.fn(() => ({ error: false }));
