@@ -50,7 +50,7 @@ export default function MyProductsClient() {
         session?.data?.user.jwt
       ),
   });
-  const products = data?.data?.products;
+  const products: MyProduct[] | undefined = data?.data?.products;
   const userData = data?.data;
   if (error) setErrorMsg(error.message);
 
@@ -152,33 +152,36 @@ export default function MyProductsClient() {
           ) : null}
           {!isLoading ? (
             products?.length ? (
-              products?.map((product) => {
-                const { images, name, gender, price } = product;
-                return (
-                  <Grid
-                    key={product.id}
-                    item
-                    xs={6}
-                    sm={4}
-                    md={4}
-                    lg={3}
-                    sx={{ position: "relative" }}
-                  >
-                    <ProductCard
-                      imageUrl={images ? images[0].url : ""}
-                      name={name || ""}
-                      gender={gender?.name || ""}
-                      price={price}
+              products
+                .slice()
+                .reverse()
+                .map((product) => {
+                  const { images, name, gender, price } = product;
+                  return (
+                    <Grid
+                      key={product.id}
+                      item
+                      xs={6}
+                      sm={4}
+                      md={4}
+                      lg={3}
+                      sx={{ position: "relative" }}
                     >
-                      <MenuModal
-                        productId={product.id}
-                        setSelected={setSelected}
-                        onDelete={handleDeleteBtn}
-                      />
-                    </ProductCard>
-                  </Grid>
-                );
-              })
+                      <ProductCard
+                        imageUrl={images ? images[0].url : ""}
+                        name={name || ""}
+                        gender={gender?.name || ""}
+                        price={price}
+                      >
+                        <MenuModal
+                          productId={product.id}
+                          setSelected={setSelected}
+                          onDelete={handleDeleteBtn}
+                        />
+                      </ProductCard>
+                    </Grid>
+                  );
+                })
             ) : (
               <NoProductsInfo onBtnClick={handleAddBtn} />
             )
