@@ -26,14 +26,13 @@ import Stripe from "stripe";
 import { ResData } from "@/utils/getData";
 import { convertCustomerToForm } from "../_lib/convertCustomerToForm";
 
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
-  throw new Error("PUBLIC KEY not defined");
-}
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
-
 export default function ClientPage() {
+  if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
+    throw new Error("PUBLIC KEY not defined");
+  }
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  );
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
   const lastElShippingInfo = shippingInfo[shippingInfo.length - 1];
@@ -49,6 +48,7 @@ export default function ClientPage() {
   const { data } = useQuery<ResData<Stripe.Customer>>({
     queryKey: ["customer-info"],
   });
+
   const defaultValues = data?.data ? convertCustomerToForm(data.data) : {};
   const formContext = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutValidation),

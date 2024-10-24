@@ -105,8 +105,11 @@ export default function CheckoutStripeForm({
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message || "");
+    if (
+      (error.type === "card_error" || error.type === "validation_error") &&
+      error.message
+    ) {
+      setMessage(error.message);
     } else {
       setMessage("An unexpected error occurred.");
     }

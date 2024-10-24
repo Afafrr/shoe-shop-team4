@@ -9,8 +9,8 @@ export function convertCustomerToForm(
   const firstName = fullName[0];
   const surname = fullName[1];
   const personalInfo = {
-    firstName,
-    surname,
+    firstName: firstName || "",
+    surname: surname || "",
     email: email || "",
     phoneNumber: phone || "",
   };

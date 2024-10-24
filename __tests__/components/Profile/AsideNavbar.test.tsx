@@ -5,10 +5,6 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "@mui/material";
 import { signOut } from "next-auth/react";
 
-jest.mock("next-auth/react", () => ({
-  signOut: jest.fn(), // Mock signOut function
-}));
-
 // Mock `useTheme` to control theme colors
 jest.mock("@mui/material", () => ({
   ...jest.requireActual("@mui/material"),

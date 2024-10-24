@@ -28,12 +28,12 @@ export default function ProductsDetails({ products }: ProductsDetailsProps) {
     ));
   }
 
-  const detailedOrderProducts = data?.data.map((product) => {
-    const orderProduct = products.find((p) => p.id === product.id)!;
+  const detailedOrderProducts = products.map((product) => {
+    const orderProduct = data?.data.find((p) => p.id === product.id)!;
     return {
-      ...getProductInfo(product),
-      size: orderProduct?.size,
-      quantity: orderProduct?.quantity,
+      ...getProductInfo(orderProduct),
+      size: product.size,
+      quantity: product.quantity,
     };
   });
 
