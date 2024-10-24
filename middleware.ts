@@ -8,5 +8,11 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/settings/:path*", "/my-products/:path*", "/chart/:path*"],
+  matcher: [
+    "/settings/:path*",
+    "/my-products/:path*",
+    "/chart/:path*",
+    "/my-wishlist/:path*",
+    "/recently-viewed/:path*",
+  ],
 };
