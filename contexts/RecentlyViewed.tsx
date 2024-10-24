@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { ProductCardType, ProductContextItem } from "@/types/Product";
+import { useSession } from "next-auth/react";
 
 export type RecentlyViewedCard = ProductContextItem & {
   viewedAt: number;
@@ -16,8 +17,6 @@ const RecentlyContext = createContext<RecentlyViewedContextType | undefined>(
   undefined
 );
 
-const LOCAL_STORAGE_KEY = "recent";
-
 /**
  * A React context provider for managing recently-viewed items.
  *
@@ -27,18 +26,33 @@ const LOCAL_STORAGE_KEY = "recent";
 export const RecentlyProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [storageKey, setStorageKey] = useState<string>("");
+
   const [recentlyViewedItems, setRecentlyViewedItems] = useState<
     RecentlyViewedCard[]
-  >(() => {
-    const savedRecentlyViewed = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return savedRecentlyViewed ? JSON.parse(savedRecentlyViewed) : [];
-  });
+  >([]);
+  const { data: session, status } = useSession();
 
+  // Sets local storage key based on userId
+  // Will update storage key if user changes
   useEffect(() => {
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify(recentlyViewedItems)
-    );
+    if (status !== "authenticated") return;
+    const new_key = `recent_${session.user.id}`;
+    setStorageKey(new_key);
+  }, [session]);
+
+  // Retrieves the users saved Recently Viewed Items.
+  // If user changes, it updates RecentlyViewedItems to represent the new localStorage values.
+  useEffect(() => {
+    const savedRecent = localStorage.getItem(storageKey);
+    const recent = savedRecent ? JSON.parse(savedRecent) : [];
+    setRecentlyViewedItems(recent);
+  }, [storageKey]);
+
+  // Updates local storage every time a new item is added to recently viewed.
+  useEffect(() => {
+    if (!storageKey) return;
+    localStorage.setItem(storageKey, JSON.stringify(recentlyViewedItems));
   }, [recentlyViewedItems]);
 
   /**

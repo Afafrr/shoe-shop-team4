@@ -3,10 +3,6 @@ import { fireEvent } from "@testing-library/react";
 import { AsideNavbar } from "@/components/Profile/AsideNavbar";
 import { signOut } from "next-auth/react";
 
-jest.mock("next-auth/react", () => ({
-  signOut: jest.fn(), // Mock signOut function
-}));
-
 describe("AsideNavbar", () => {
   let myProductsBtn: HTMLElement;
   let settingsBtn: HTMLElement;
