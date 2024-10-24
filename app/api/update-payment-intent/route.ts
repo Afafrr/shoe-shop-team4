@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   } = await req.json();
   let customerId = receivedId;
   const customerObj = customerObjFromForm(metadata);
-  
+
   try {
     const session = await getServerSession(authOptions);
     if (!session) throw new Error("Session not found");

@@ -2,12 +2,12 @@
 import {
   Box,
   Grid,
-  Link,
   Typography,
   useTheme,
   Divider,
   Container,
 } from "@mui/material";
+import NextMuiLink from "@/components/Profile/NextMuiLink";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import Input from "@/components/Input/Input";
 import { personalInfo, shippingInfo } from "../_schema/checkoutSchema";
@@ -38,7 +38,13 @@ export default function ClientPage() {
   const lastElShippingInfo = shippingInfo[shippingInfo.length - 1];
   const { totalPrice, cartItems } = useCart();
   const { total } = totalPrice();
-  const products = JSON.stringify(cartItems.map((item) => item.productId)); //String Array of products ids
+  const products = JSON.stringify(
+    cartItems.map((item) => ({
+      id: item.productId,
+      size: item.size,
+      quantity: item.quantity,
+    }))
+  );
   const { data } = useQuery<ResData<Stripe.Customer>>({
     queryKey: ["customer-info"],
   });
@@ -82,8 +88,8 @@ export default function ClientPage() {
             maxWidth: { xs: "388px", sm: "500px", md: "800px" },
           }}
         >
-          <Link
-            href="/cart"
+          <NextMuiLink
+            href="/chart"
             sx={{
               m: { xs: "20px 0px 16px 0px", md: "39px 0px 23px 0px" },
               fontSize: "15px",
@@ -93,7 +99,7 @@ export default function ClientPage() {
             }}
           >
             Back to cart
-          </Link>
+          </NextMuiLink>
 
           <Typography
             fontSize={{ xs: "35px", md: "45px" }}

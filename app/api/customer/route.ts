@@ -20,9 +20,9 @@ export async function GET() {
     }
     const { customerId } = data;
     if (!customerId) {
-      throw new Error("User don't have a customer id");
+      return NextResponse.json(null);
     }
-
+    
     const customer = await stripe.customers.retrieve(customerId);
     return NextResponse.json(customer);
   } catch (error: any) {
