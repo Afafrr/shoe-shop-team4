@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 export async function getCustomerData() {
   const authHeaders = headers();
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/customer`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/customer`, {
       method: "GET",
       headers: authHeaders,
     });
