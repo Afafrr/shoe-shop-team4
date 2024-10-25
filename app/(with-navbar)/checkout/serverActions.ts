@@ -1,10 +1,11 @@
 import { headers } from "next/headers";
 
 export async function getCustomerData() {
+  const authHeaders = headers();
   try {
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/customer`, {
       method: "GET",
-      headers: headers(),
+      headers: authHeaders,
     });
 
     if (!res.ok) {
@@ -17,4 +18,3 @@ export async function getCustomerData() {
     return { data: null, error: (error as Error).message };
   }
 }
-
