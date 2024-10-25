@@ -96,7 +96,7 @@ export default function CheckoutStripeForm({
       clientSecret,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `http://localhost:3000/checkout/success`,
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success`,
       },
     });
 
