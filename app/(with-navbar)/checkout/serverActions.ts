@@ -1,20 +1,31 @@
-import { headers } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/auth";
+import Stripe from "stripe";
+import { getData } from "@/utils/getData";
+import { UserData } from "@/types/types";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export async function getCustomerData() {
+  const session = await getServerSession(authOptions);
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/customer`, {
-      method: "GET",
-      headers: headers(),
-    });
-
-    if (!res.ok) {
-      throw new Error(res.statusText);
+    const { data, error } = await getData<UserData>(
+      "users/me",
+      session?.user.jwt
+    );
+    if (!data || error) {
+      throw new Error("Cannot get user data");
     }
-    const data = await res.json();
-    return { data: data, error: "" };
+    const { customerId } = data;
+    if (!customerId) {
+      return JSON.stringify({ data: null, error: "" });
+    }
+    const customer = await stripe.customers.retrieve(customerId);
+
+    return JSON.stringify({ data: customer, error: "" });
   } catch (error) {
     console.error(error);
-    return { data: null, error: (error as Error).message };
+    return JSON.stringify({ data: null, error: (error as Error).message });
   }
 }
 

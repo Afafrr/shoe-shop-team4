@@ -4,6 +4,7 @@ import { authOptions } from "@/utils/auth";
 import Stripe from "stripe";
 import { CheckoutForm } from "@/types/types";
 import { postData } from "@/utils/postData";
+import { getCustomerData } from "@/app/(with-navbar)/checkout/serverActions";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 function customerObjFromForm(metadata: {
@@ -53,6 +54,11 @@ export async function POST(req: NextRequest) {
     if (!session) throw new Error("Session not found");
     //if customer ID not found create new and update DB,
     //otherwise update old customer obj
+    //second check for customerId
+    if (!customerId) {
+      const customerData = await getCustomerData();
+      customerId = JSON.parse(customerData).data?.id;
+    }
     if (!customerId) {
       const newCustomer = await stripe.customers.create(customerObj);
       customerId = newCustomer.id;
