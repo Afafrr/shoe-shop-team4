@@ -27,7 +27,7 @@ export default function Page() {
   const paymentId = params.get("payment_intent");
   const orderNumber = paymentId?.split("_")[1];
   const orderIdParam = new URLSearchParams();
-  orderIdParam.append("orderId", orderNumber || "");
+  orderIdParam.append("orderId", paymentId || "");
 
   return (
     <Container
