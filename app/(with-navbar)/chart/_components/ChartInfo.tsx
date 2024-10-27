@@ -62,7 +62,7 @@ export default function ChartInfo() {
           }}
         >
           <Typography fontWeight={500} fontSize={"30px"}>
-            Chart
+            Cart
           </Typography>
         </Box>
         <Divider sx={{ display: { xs: "block", md: "none" } }} />

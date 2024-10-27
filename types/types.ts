@@ -1,5 +1,6 @@
 import { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import Stripe from "stripe";
 
 export type ErrorResponse = {
   data: {};
@@ -106,4 +107,34 @@ export type CheckoutForm = {
   zipCode: string;
   address: string;
   products: string[];
+  customerId: string;
+};
+
+export type Order = {
+  id: string;
+  created: number;
+  amount: number;
+  status: Stripe.PaymentIntent.Status;
+  paymentType: string;
+  metadata: MetadataDetails;
+};
+
+export type MetadataDetails = {
+  address?: string;
+  city?: string;
+  country?: string;
+  email?: string;
+  firstName?: string;
+  phoneNumber?: string;
+  products?: string;
+  state?: string;
+  surname?: string;
+  userId?: string;
+  zipCode?: string;
+};
+
+export type ProductFromOrder = {
+  id: number;
+  size: number;
+  quantity: number;
 };

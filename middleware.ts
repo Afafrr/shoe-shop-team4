@@ -13,7 +13,8 @@ export const config = {
     "/my-products/:path*",
     "/chart/:path*",
     "/my-wishlist/:path*",
-    "/recently-viewed/:path*",    
+    "/recently-viewed/:path*",
     "/checkout/:path*",
+    "/order-history/:path*",
   ],
 };

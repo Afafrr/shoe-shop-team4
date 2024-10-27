@@ -40,6 +40,28 @@ export async function getProducts(
   return data;
 }
 
+export async function getProductsByIds(
+  fieldsToPopulate: PopulateField[] = [],
+  filters: FiltersType = {},
+  token?: JWT | null | undefined
+): Promise<ProductListResponse> {
+  const populateFields = fieldsToPopulate.join(",");
+
+  const query = createFiltersQuery(filters);
+
+  const responseData = await getData<ProductListResponse>(
+    `products?populate=${populateFields}&${query}`,
+    token
+  );
+  const data = responseData.data;
+
+  if (!data) {
+    throw new Error("Error fetching the products");
+  }
+
+  return data;
+}
+
 function createFiltersQuery(filters: FiltersType) {
   const dynamicFilters = Object.entries(filters).reduce(
     (acc, [key, values]) => {
@@ -59,6 +81,11 @@ function createFiltersQuery(filters: FiltersType) {
         case "price":
           acc["price"] = {
             $lt: values,
+          };
+          break;
+        case "productId":
+          acc["id"] = {
+            $in: values,
           };
           break;
         default:

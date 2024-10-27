@@ -1,5 +1,5 @@
 import RecentlyViewed from "./_components/RecentlyViewed";
 
-export default function MyWishlist() {
+export default function RecentlyViewedPage() {
   return <RecentlyViewed />;
 }

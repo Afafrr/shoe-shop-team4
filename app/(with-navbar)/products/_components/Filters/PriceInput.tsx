@@ -1,4 +1,3 @@
-import { PlainAccordion } from "./CheckBoxInputGroup";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -8,6 +7,7 @@ import {
 import { ExpandMore } from "@mui/icons-material";
 import { SliderElement } from "react-hook-form-mui";
 import React from "react";
+import PlainAccordion from "@/components/Display/PlainAccordion";
 
 function PriceInput() {
   return (
