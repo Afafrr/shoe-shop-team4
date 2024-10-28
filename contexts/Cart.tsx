@@ -1,6 +1,5 @@
 "use client";
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { useSession } from "next-auth/react";
 
 export type NewCartItem = {
   productId: number;
@@ -36,6 +35,8 @@ type CartTotals = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const LOCAL_STORAGE_KEY = "cart";
+
 /**
  * A React context provider for managing cart items.
  *
@@ -45,30 +46,14 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [storageKey, setStorageKey] = useState<string>("");
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const { data: session, status } = useSession();
-
-  // Sets local storage key based on userId
-  // Will update storage key if user changes
-  useEffect(() => {
-    if (status !== "authenticated") return;
-    const new_key = `cart_${session.user.id}`;
-    setStorageKey(new_key);
-  }, [session]);
-
-  // Retrieves the users saved Cart.
-  // If user changes, it updates Cart to represent the new localStorage values.
-  useEffect(() => {
-    const savedCart = localStorage.getItem(storageKey);
-    const cart = savedCart ? JSON.parse(savedCart) : [];
-    setCartItems(cart);
-  }, [storageKey]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const savedCart = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
   // Updates local storage every time a new item is added to Cart.
   useEffect(() => {
-    if (!storageKey) return;
-    localStorage.setItem(storageKey, JSON.stringify(cartItems));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
   /**
