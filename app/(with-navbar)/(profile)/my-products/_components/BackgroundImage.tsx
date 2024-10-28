@@ -6,9 +6,7 @@ import theme from "@/theme";
 
 export default function BackgroundImage() {
   let breakPointMd = theme.breakpoints.values.md;
-  let breakPointSm = theme.breakpoints.values.sm;
   const isDesktop = useMediaQuery(theme.breakpoints.up(breakPointMd));
-  //background image changes to smaller on small breakpoint
   return (
     <Box
       sx={{
