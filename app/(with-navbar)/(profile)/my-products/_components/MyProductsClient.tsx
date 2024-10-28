@@ -52,7 +52,9 @@ export default function MyProductsClient() {
   });
   const products: MyProduct[] | undefined = data?.data?.products;
   const userData = data?.data;
-  if (error) setErrorMsg(error.message);
+  useEffect(() => {
+    if (error) setErrorMsg(error.message);
+  }, [error]);
 
   useEffect(() => {
     if (selected && products) {
