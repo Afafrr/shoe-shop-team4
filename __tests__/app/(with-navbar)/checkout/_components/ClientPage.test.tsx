@@ -24,10 +24,7 @@ jest.mock("@/contexts/Cart");
   cartItems: [{ id: "item2", name: "Item 2", price: 50 }],
   getCartItemCount: jest.fn(),
 });
-jest.mock("@tanstack/react-query");
-(useQuery as jest.Mock).mockReturnValue({
-  data: { data: null },
-});
+const customerInfo = { data: null, error: "" };
 
 describe("Page", () => {
   beforeEach(() => {
@@ -44,7 +41,7 @@ describe("Page", () => {
   });
 
   it("renders", () => {
-    render(<ClientPage />);
+    render(<ClientPage customerInfo={customerInfo} />);
     expect(screen.getByText("Elements")).toBeInTheDocument();
   });
 });
@@ -56,7 +53,7 @@ describe("Checkout Page", () => {
       .mockImplementation(() => {});
     delete process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
     const throwEr = () => {
-      render(<ClientPage />);
+      render(<ClientPage customerInfo={customerInfo} />);
     };
     expect(throwEr).toThrow("PUBLIC KEY not defined");
     consoleErrorSpy.mockRestore();

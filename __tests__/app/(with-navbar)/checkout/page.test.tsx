@@ -1,29 +1,22 @@
 import Page from "@/app/(with-navbar)/checkout/page";
-import { QueryClient } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import { getCustomerData } from "@/app/(with-navbar)/checkout/serverActions";
 
 jest.mock("@/app/(with-navbar)/checkout/_components/ClientPage", () =>
   jest.fn(() => <div>ClientPage</div>)
 );
 
-jest.mock("@tanstack/react-query", () => {
-  return {
-    QueryClient: jest.fn(() => ({
-      prefetchQuery: jest.fn(),
-    })),
-    dehydrate: jest.fn(),
-    HydrationBoundary: jest.fn(({ children }) => <div>{children}</div>),
-  };
-});
+jest.mock("@/app/(with-navbar)/checkout/serverActions", () => ({
+  getCustomerData: jest.fn(),
+}));
 
 describe("Page", () => {
   it("renders ClientPage component", async () => {
-    const queryClient = new QueryClient();
-    (queryClient.prefetchQuery as jest.Mock).mockResolvedValueOnce({});
+    (getCustomerData as jest.Mock).mockResolvedValue(
+      JSON.stringify({ value: "value" })
+    );
     render(await Page());
 
-    await waitFor(() => {
-      expect(screen.getByText("ClientPage")).toBeInTheDocument();
-    });
+    expect(screen.getByText("ClientPage")).toBeInTheDocument();
   });
 });

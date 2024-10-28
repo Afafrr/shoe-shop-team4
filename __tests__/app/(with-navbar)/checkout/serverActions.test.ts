@@ -1,44 +1,68 @@
 import { getCustomerData } from "@/app/(with-navbar)/checkout/serverActions";
-import { headers } from "next/headers";
+import { getData } from "@/utils/getData";
 
-jest.mock("next/headers");
+jest.mock("next-auth", () => ({
+  getServerSession: jest.fn(() => ({
+    user: {
+      jwt: "jwt",
+    },
+  })),
+}));
+jest.mock("stripe", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      customers: {
+        retrieve: jest.fn((customer) => customer),
+      },
+    };
+  });
+});
+jest.mock("@/utils/getData");
+
 describe("getCustomerData server actions", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
-    (headers as jest.Mock).mockReturnValue({});
     jest.spyOn(console, "error").mockImplementation(() => {});
+    process.env.STRIPE_SECRET_KEY = "secret";
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it("returns data if successful", async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue("data"),
-    });
-    expect(await getCustomerData()).toEqual({
-      data: "data",
+    (getData as jest.Mock).mockResolvedValue({
+      data: { customerId: "data" },
       error: "",
     });
+
+    expect(await getCustomerData()).toEqual(
+      JSON.stringify({
+        data: "data",
+        error: "",
+      })
+    );
   });
 
-  it("returns error on not ok", async () => {
-    (fetch as jest.Mock).mockReturnValue({
-      ok: false,
-      statusText: "error is here",
-    });
-    expect(await getCustomerData()).toEqual({
+  it("returns error if session not found", async () => {
+    (getData as jest.Mock).mockResolvedValue({
       data: null,
-      error: "error is here",
+      error: "err",
     });
+    expect(await getCustomerData()).toEqual(
+      JSON.stringify({
+        data: null,
+        error: "Cannot get user data",
+      })
+    );
   });
 
-  it("returns error on error", async () => {
-    (fetch as jest.Mock).mockRejectedValue(new Error("error is here"));
-    expect(await getCustomerData()).toEqual({
-      data: null,
-      error: "error is here",
+  it("returns error if customerId not found", async () => {
+    (getData as jest.Mock).mockResolvedValue({
+      data: { customerId: "" },
+      error: "",
     });
+    expect(await getCustomerData()).toEqual(
+      JSON.stringify({ data: null, error: "" })
+    );
   });
 });

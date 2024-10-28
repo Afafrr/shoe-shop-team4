@@ -21,12 +21,15 @@ import { useState } from "react";
 import SummaryInfo from "../../_components/SummaryInfo";
 import { useCart } from "@/contexts/Cart";
 import { CheckoutForm } from "@/types/types";
-import { useQuery } from "@tanstack/react-query";
-import Stripe from "stripe";
-import { ResData } from "@/utils/getData";
 import { convertCustomerToForm } from "../_lib/convertCustomerToForm";
+import { ResData } from "@/utils/getData";
+import Stripe from "stripe";
 
-export default function ClientPage() {
+export default function ClientPage({
+  customerInfo,
+}: {
+  customerInfo: ResData<Stripe.Customer>;
+}) {
   if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
     throw new Error("PUBLIC KEY not defined");
   }
@@ -45,11 +48,10 @@ export default function ClientPage() {
       quantity: item.quantity,
     }))
   );
-  const { data } = useQuery<ResData<Stripe.Customer>>({
-    queryKey: ["customer-info"],
-  });
 
-  const defaultValues = data?.data ? convertCustomerToForm(data.data) : {};
+  const defaultValues = customerInfo?.data
+    ? convertCustomerToForm(customerInfo.data)
+    : {};
   const formContext = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutValidation),
     defaultValues,
@@ -173,7 +175,7 @@ export default function ClientPage() {
             >
               <CheckoutStripeForm
                 amount={calculateOrderAmount(Number(total))}
-                customerId={data?.data?.id || null}
+                customerId={customerInfo?.data?.id || null}
                 setIsLoading={setIsLoading}
               />
             </Elements>

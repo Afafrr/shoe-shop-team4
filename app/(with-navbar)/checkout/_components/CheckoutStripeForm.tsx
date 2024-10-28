@@ -37,6 +37,14 @@ export default function CheckoutStripeForm({
   const clientSecret = paymentData?.clientSecret;
   const paymentId = paymentData?.paymentId;
   const userId = session?.data?.user.id;
+  const [baseUrl, setBaseUrl] = useState("");
+
+  useEffect(() => {
+    //get base url for success return
+    if (window) {
+      setBaseUrl(window.location.origin);
+    }
+  }, []);
 
   useEffect(() => {
     getUserTransactions();
@@ -95,8 +103,7 @@ export default function CheckoutStripeForm({
       elements,
       clientSecret,
       confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success`,
+        return_url: `${baseUrl}/checkout/success`,
       },
     });
 
