@@ -22,7 +22,7 @@ import { UserData } from "@/types/types";
 import type { ResData } from "@/utils/getData";
 
 export default function NavBar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { getCartItemCount } = useCart();
   const session = useSession();
   const { data, refetch } = useQuery<ResData<UserData>>({
@@ -39,7 +39,7 @@ export default function NavBar() {
       refetch();
     }
     setIsLoggedIn(sessionStatus);
-  }, [session]);
+  }, [session, userData]);
 
   return (
     <AppBar position="static" color="inherit">

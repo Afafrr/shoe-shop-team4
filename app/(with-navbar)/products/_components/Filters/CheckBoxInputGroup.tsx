@@ -1,16 +1,15 @@
 import { ExpandMore } from "@mui/icons-material";
 import {
-  Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
   Divider,
-  styled,
 } from "@mui/material";
 import { CheckboxButtonGroup } from "react-hook-form-mui";
 import { useQuery } from "@tanstack/react-query";
 import { capitalizeWord, FieldOption, getFieldOptions } from "../../_lib/utils";
 import React, { useMemo, useState } from "react";
+import PlainAccordion from "@/components/Display/PlainAccordion";
 
 type CheckBoxInputGroupProps = {
   name: FieldOption | "gender" | "brand" | "color";
@@ -66,11 +65,3 @@ function CheckBoxInputGroup({ name }: CheckBoxInputGroupProps) {
 }
 
 export default React.memo(CheckBoxInputGroup);
-
-export const PlainAccordion = styled(Accordion)({
-  boxShadow: "none",
-  border: "none",
-  "&:before": {
-    display: "none",
-  },
-});

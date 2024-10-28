@@ -28,7 +28,7 @@ export default async function Layout({ children }: LayoutType) {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <NavBar />
       </HydrationBoundary>
-      <Suspense fallback={<Loading />}>{children}</Suspense>;
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </>
   );
 }

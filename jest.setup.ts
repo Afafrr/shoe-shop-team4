@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 // Mock fetch calls
 import fetchMock from "jest-fetch-mock";
@@ -32,4 +33,12 @@ jest.mock("next/navigation", () => ({
 jest.mock("next-auth/react", () => ({
   ...jest.requireActual("next-auth/react"),
   useSession: jest.fn(),
+  signOut: jest.fn(),
 }));
+
+(useSession as jest.Mock).mockReturnValue({
+  data: {
+    user: { id: "1" },
+  },
+  status: "authenticated",
+});

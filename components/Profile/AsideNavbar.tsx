@@ -27,7 +27,7 @@ export const AsideNavbar = ({ parentsSX }: { parentsSX: SxProps }) => {
     {
       label: "Order history",
       Icon: OrderHistoryIcon,
-      href: "#",
+      href: "/order-history",
     },
     {
       label: "My Wishlist",

@@ -38,6 +38,7 @@ export default function EditModal({ open, handleClose, product }: ModalType) {
     successFn: async () => {
       queryClient.invalidateQueries({ queryKey: ["my-products"] });
       queryClient.invalidateQueries({ queryKey: ["productDetails"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       successToast("Product edited successfully!");
       return handleClose();
     },
