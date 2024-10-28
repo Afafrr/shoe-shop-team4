@@ -75,6 +75,8 @@ export default function MyProductsClient() {
 
     if (!res.error) {
       queryClient.invalidateQueries({ queryKey: ["my-products"] });
+      queryClient.invalidateQueries({ queryKey: ["productDetails"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       successToast("Product deleted Successfully");
     } else setErrorMsg(res.error);
   };

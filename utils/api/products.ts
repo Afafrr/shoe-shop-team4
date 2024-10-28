@@ -13,7 +13,7 @@ type PopulateField =
   | "sizes"
   | "userID";
 
-const pageSize = 24;
+const pageSize = 16;
 
 export async function getProducts(
   fieldsToPopulate: PopulateField[] = [],
@@ -24,11 +24,12 @@ export async function getProducts(
   const populateFields = fieldsToPopulate.join(",");
 
   const pagination = `pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
+  const sort = `sort=createdAt:desc`;
 
-  const query = createFiltersQuery(filters);
+  const query = createFiltersQueryWithTeam(filters);
 
   const responseData = await getData<ProductListResponse>(
-    `products?populate=${populateFields}&${pagination}&${query}`,
+    `products?populate=${populateFields}&${pagination}&${query}&${sort}`,
     token
   );
   const data = responseData.data;
@@ -112,4 +113,21 @@ function createFiltersQuery(filters: FiltersType) {
       encodeValuesOnly: true,
     }
   );
+}
+
+function createFiltersQueryWithTeam(filters: FiltersType) {
+  const query = createFiltersQuery(filters);
+
+  const parsedQuery = qs.parse(query);
+
+  const filtersQuery =
+    parsedQuery.filters && typeof parsedQuery.filters === "object"
+      ? (parsedQuery.filters as qs.ParsedQs)
+      : {};
+
+  filtersQuery["teamName"] = { $eq: "team-4" };
+
+  parsedQuery.filters = filtersQuery;
+
+  return qs.stringify(parsedQuery, { encodeValuesOnly: true });
 }

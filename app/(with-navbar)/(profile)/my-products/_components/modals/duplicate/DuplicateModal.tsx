@@ -43,6 +43,7 @@ export default function DuplicateModal({
     successFn: async () => {
       queryClient.invalidateQueries({ queryKey: ["my-products"] });
       queryClient.invalidateQueries({ queryKey: ["productDetails"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       successToast("Product added successfully!");
       return handleClose();
     },

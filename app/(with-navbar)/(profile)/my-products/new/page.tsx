@@ -21,6 +21,7 @@ export default function AddProduct() {
       addProductAction(formData, context),
     successFn: () => {
       queryClient.invalidateQueries({ queryKey: ["my-products"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       successToast("Product added successfully");
     },
   };
