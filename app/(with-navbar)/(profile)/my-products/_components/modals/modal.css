@@ -1,0 +1,42 @@
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+}
+.close-button:hover {
+  cursor: pointer;
+}
+
+.modal {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 2px solid #000;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  padding: 16px;
+}
+
+@media (min-width: 900px) {
+  .modal {
+    top: 50px;
+    left: 80px;
+    right: 80px;
+  }
+}
+@media (min-width: 1200px) {
+  .close-button {
+    top: 10px;
+    left: 10px;
+    right: unset;
+  }
+}
+@media (min-width: 1400px) {
+  .modal {
+    left: 165px;
+    right: 165px;
+  }
+}
